@@ -1,0 +1,92 @@
+{% load static %}
+
+<!doctype html>
+<html>
+  <head>
+    <title>Cocina</title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{% static 'pedidos/css/cocina.css' %}"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
+  <body>
+    <div class="logo-container">
+      <img
+        src="{% static 'core/img/logo_nexagest.png' %}"
+        alt="Logo Nexagest"
+        class="logo-admin"
+      />
+      <form action="{% url 'logout' %}" method="post" style="display: inline;">
+          {% csrf_token %}
+           <button type="submit" class="btn-logout">Cerrar Sesión</button>
+      </form>
+    </div>
+    <h1>Pedidos Cocina</h1>
+
+    {% if user.perfil.rol == 'administrador' %}
+    <div class="contenedor-volver">
+      <a href="{% url 'menu_admin' %}" class="btn-volver">
+        ⚙️ Volver al Panel Maestro
+      </a>
+    </div>
+    {% endif %}
+
+    <div class="cocina-container">
+      {% for pedido in pedidos_pendientes %}
+      <div
+        class="pedido prioridad-verde"
+        id="pedido-{{ pedido.id }}"
+        {%
+        if
+        pedido.enviado_a_cocina
+        %}
+        data-desde="{{ pedido.enviado_a_cocina.isoformat }}"
+        {%
+        endif
+        %}
+      >
+        <div class="pedido-header">
+        <h3>
+         {% if restaurante.tipo_local == 'local' %}
+            Pedido: {{ pedido.mesa.numero }} - <strong>{{ pedido.nombre_cliente|default:"Sin nombre" }}</strong>
+         {% else %}
+            Mesa {{ pedido.mesa.numero }}
+         {% endif %}
+        </h3>
+         <div class="cronometro-cocina">
+           ⏱ <span class="tiempo">--:--</span>
+         </div>
+        </div>
+
+        <ul>
+          {% for item in pedido.items_cocina %}
+          <li>
+            <span class="cantidad">{{ item.cantidad }}x</span>
+            {{ item.producto }} {% if item.observacion %}
+            <span class="observacion">📝 {{ item.observacion }}</span>
+            {% endif %}
+          </li>
+          {% endfor %}
+        </ul>
+
+        <button
+          class="btn-cocina-listo"
+          onclick="marcarPedidoListo({{ pedido.id }})"
+        >
+          ✅ Listo
+        </button>
+      </div>
+      {% empty %}
+      <p class="sin-pedidos">No hay pedidos en cocina por el momento.</p>
+      {% endfor %}
+    </div>
+
+    <script>
+      setInterval(() => location.reload(), 60000);
+    </script>
+    <script src="{% static 'pedidos/js/botones_cocina.js' %}"></script>
+    <script src="{% static 'pedidos/js/cronometro_cocina.js' %}"></script>
+  </body>
+</html>

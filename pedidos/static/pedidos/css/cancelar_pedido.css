@@ -1,0 +1,85 @@
+/* Fondo general */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f8ff;
+    margin: 0;
+    padding: 20px;
+}
+
+/* Título */
+h1 {
+    text-align: center;
+    color: #dc3545; /* rojo para cancelar */
+    font-size: 28px;
+    margin-bottom: 20px;
+}
+
+/* Contenedor general */
+body > ul,
+body > p {
+    max-width: 700px;
+    margin: 10px auto;
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+}
+
+/* Lista de productos */
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+/* Item del pedido */
+ul li {
+    padding: 8px;
+    border-bottom: 1px solid #eee;
+    font-size: 14px;
+}
+
+/* Último item sin borde */
+ul li:last-child {
+    border-bottom: none;
+}
+
+/* Total destacado */
+p {
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+}
+
+/* Botón cancelar */
+button {
+    display: block;
+    width: 100%;
+    max-width: 700px;
+    margin: 20px auto;
+    padding: 12px;
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #b02a37;
+}
+
+/* Link volver */
+a {
+    display: block;
+    text-align: center;
+    margin-top: 10px;
+    color: #007BFF;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}

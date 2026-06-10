@@ -1,0 +1,54 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eliminar Producto</title>
+
+    <link rel="stylesheet" href="{% static 'administracion/css/eliminar_producto.css' %}">
+</head>
+<body>
+
+    <div class="header">
+        <div class="logo-container">
+            <img src="{% static 'core/img/logo_nexagest.png' %}"
+                 alt="Logo Nexagest"
+                 class="logo-admin">
+        </div>
+
+        <h1>🗑️ Eliminar Producto</h1>
+    </div>
+
+    <div class="confirmacion-container">
+
+        <h2>{{ producto.nombre }}</h2>
+
+        <p>
+            ¿Estás seguro de que deseas eliminar este producto?
+        </p>
+
+        <div class="info-producto">
+            <p><strong>Precio:</strong> ${{ producto.precio }}</p>
+            <p><strong>Categoría:</strong> {{ producto.categoria }}</p>
+            <p><strong>Disponibilidad:</strong> {{ producto.disponibilidad }}</p>
+        </div>
+
+        <form method="post">
+            {% csrf_token %}
+
+            <button type="submit" class="btn-eliminar">
+                🗑️ Sí, Eliminar Producto
+            </button>
+        </form>
+
+        <div class="contenedor-volver">
+            <a href="{% url 'lista_productos' %}" class="btn-volver">
+                ← Cancelar
+            </a>
+        </div>
+
+    </div>
+
+</body>
+</html>

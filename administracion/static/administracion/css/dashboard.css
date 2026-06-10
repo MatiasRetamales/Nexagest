@@ -1,0 +1,122 @@
+/* dashboard.css */
+
+/* Estilos Generales */
+body { 
+    font-family: Arial, sans-serif; 
+    background-color: #f0f8ff; 
+    margin: 0; 
+    padding: 20px; 
+}
+
+/* Cabecera y Navegación de fechas */
+.header { 
+    margin-bottom: 30px; 
+}
+
+.header h1 {
+    color: #2c3e50;
+    margin-bottom: 10px;
+}
+
+.navegacion { 
+    display: flex; 
+    gap: 15px; 
+    align-items: center; 
+    margin-top: 15px; 
+}
+
+.navegacion a { 
+    text-decoration: none; 
+    background: #3498db; 
+    color: white; 
+    padding: 8px 16px; 
+    border-radius: 5px; 
+    font-size: 14px;
+    transition: background 0.3s ease;
+}
+
+.navegacion a:hover {
+    background: #2980b9;
+}
+
+.navegacion span {
+    font-size: 16px;
+    color: #7f8c8d;
+}
+
+/* Contenedor de Tarjetas (Dashboard) */
+.card-container { 
+    display: flex; 
+    gap: 20px; 
+    flex-wrap: wrap; 
+}
+
+.card { 
+    background: white; 
+    padding: 20px; 
+    border-radius: 10px; 
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1); 
+    flex: 1; 
+    min-width: 200px; 
+}
+
+.card h2 { 
+    margin: 0; 
+    color: #7f8c8d; 
+    font-size: 14px; 
+    text-transform: uppercase; 
+    letter-spacing: 1px;
+}
+
+.card p { 
+    font-size: 28px; 
+    font-weight: bold; 
+    margin: 10px 0 0; 
+    color: #2c3e50; 
+}
+
+
+.btn-volver {
+    display: inline-block;
+    margin-top: 30px;
+    padding: 12px 24px; /* Espacio interno para que sea fácil de presionar */
+    background-color: #007BFF;
+    color: white !important; /* Letras blancas (forzado para evitar conflictos) */
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 8px; /* Bordes redondeados modernos */
+    text-align: center;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1); /* Sombra para que se vea "arriba" del fondo */
+    
+}
+
+.btn-volver:hover {
+    background-color: #2980b9; /* Un celeste más oscuro al pasar el mouse */
+    text-decoration: none; /* Quitamos el subrayado */
+    transform: translateY(-2px); /* Pequeño efecto de levantamiento */
+}
+
+.btn-volver:active {
+    transform: translateY(0); /* Efecto de "presionado" */
+}
+
+
+.logo-container {
+    display: flex;
+    justify-content: center; /* Centramos el conjunto */
+    align-items: center;    /* Alineamos verticalmente */
+    margin-top: 5px;        /* Muy poca separación desde arriba */
+    margin-bottom: 20px;     /* Espacio mínimo antes de los botones */
+}
+
+/* El logo ahora es un ícono transparente */
+.logo-admin {
+    width: 280px;             
+    height: auto;
+    object-fit: contain;
+    background-color: transparent !important; /* Forzamos la transparencia */
+    margin-right: 15px;       /* Separación mínima con el texto */
+    /* Mantenemos una sombra suave para que destaque */
+    filter: drop-shadow(0 3px 6px rgba(0,0,0,0.06));
+}

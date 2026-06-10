@@ -1,0 +1,42 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Restaurante</title>
+    <link rel="stylesheet" href="{% static 'administracion/css/dashboard.css' %}">
+</head>
+<body>
+
+    <div class="header">
+    <div class="logo-container">
+        <img src="{% static 'core/img/logo_nexagest.png' %}" alt="Logo Nexagest" class="logo-admin">
+    </div> 
+      <h1>Reporte de Ventas</h1>
+    
+      <form method="GET" action="" class="form-calendario">
+        <label for="fecha">Seleccionar Día:</label>
+        <input type="date" id="fecha" name="fecha" value="{{ fecha|date:'d-m-Y' }}" onchange="this.form.submit()">
+      </form>
+    
+      <p class="subtitulo">Mostrando datos del: <strong>{{ fecha }}</strong></p>
+    </div>
+
+    <div class="card-container">
+        <div class="card">
+            <h2>Ventas del Día</h2>
+            <p>${{ total_ventas }}</p>
+        </div>
+        
+        <div class="card">
+            <h2>Pedidos Cerrados</h2>
+            <p>{{ cantidad_pedidos }}</p>
+        </div>
+    </div>
+
+    <br>
+    <a href="{% url 'menu_admin' %}" class="btn-volver">← Volver a Menu</a>
+
+</body>
+</html>

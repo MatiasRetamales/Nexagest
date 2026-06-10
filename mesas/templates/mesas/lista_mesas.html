@@ -1,0 +1,76 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Lista de Mesas</title>
+    <link rel="stylesheet" href="{% static 'mesas/css/lista_mesas.css' %}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <div class="logo-container">
+        <img src="{% static 'core/img/logo_nexagest.png' %}" alt="Logo Nexagest" class="logo-admin">
+        <form action="{% url 'logout' %}" method="post" style="display: inline;">
+          {% csrf_token %}
+           <button type="submit" class="btn-logout">Cerrar Sesión</button>
+        </form>
+    </div>
+    {% if restaurante.tipo_local == 'restaurante' %}
+     <h1 id="titulo_lista_mesas">Mesas</h1>
+    {% elif restaurante.tipo_local == 'local' %}
+    <h1 id="titulo_lista_mesas">Pedidos</h1>
+    {% endif %}
+
+    {% if user.perfil.rol == 'administrador' %}
+        <div class="contenedor-volver">
+            <a href="{% url 'menu_admin' %}" class="btn-volver">
+                ⚙️ Volver al Panel Maestro
+            </a>
+        </div>
+    {% endif %}
+
+    <div id="mesas-live" class="mesas-container">
+    {% for mesa in mesas %}
+        <div class="mesa {% if mesa.estado == 'ocupada' %}mesa--ocupada{% endif %}">
+            
+            {% if restaurante.tipo_local == 'restaurante' %}
+                <span class="numero">Mesa {{ mesa.numero }}</span>
+                <span class="estado">{{ mesa.get_estado_display }}</span>
+            
+            {% elif restaurante.tipo_local == 'local' %}
+                <span class="numero">Pedido {{ mesa.numero }}</span>
+                <span class="estado">
+                    {% if mesa.estado == 'ocupada' %}
+                        {% if mesa.pedido_activo and mesa.pedido_activo.nombre_cliente %}
+                            <strong>{{ mesa.pedido_activo.nombre_cliente }}</strong>
+                        {% else %}
+                            En Espera
+                        {% endif %}
+                    {% else %}
+                        Disponible
+                    {% endif %}
+                </span>
+            {% endif %}
+
+            {% if mesa.pedido_activo and mesa.pedido_activo.enviado_a_cocina and mesa.pedido_activo.estado == 'en_preparacion' %}
+                <div class="cronometro" data-desde="{{ mesa.pedido_activo.enviado_a_cocina.isoformat }}">
+                    ⏱ <span class="tiempo">--:--</span>
+                </div>
+            {% endif %}
+
+            <a href="{% url 'detalle_mesa' mesa.id %}">Ver detalles</a>
+        </div>
+    {% endfor %}
+    </div>
+
+
+    <script src="{% static 'mesas/js/cronometro.js' %}"></script>
+    <script>
+      // Se ejecuta cada 30 segundos (30000 milisegundos)
+      // Recomendación: 30s es un buen equilibrio para no saturar el servidor
+      setInterval(function() {
+        location.reload();
+      }, 10000); 
+    </script>
+
+</body>
+</html>

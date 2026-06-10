@@ -1,0 +1,104 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f8ff;
+    margin: 0;
+    padding: 20px;
+}
+
+/* HEADER */
+
+.header {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.logo-admin {
+    width: 300px;
+    height: auto;
+}
+
+h1 {
+    color: #dc3545;
+}
+
+/* TARJETA */
+
+.confirmacion-container {
+    max-width: 600px;
+    margin: auto;
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+}
+
+.confirmacion-container h2 {
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.confirmacion-container p {
+    color: #666;
+}
+
+/* DATOS DEL PRODUCTO */
+
+.info-producto {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 10px;
+    margin: 20px 0;
+    text-align: left;
+}
+
+/* BOTÓN ELIMINAR */
+
+.btn-eliminar {
+    width: 100%;
+    padding: 14px;
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.btn-eliminar:hover {
+    background-color: #b02a37;
+}
+
+/* BOTÓN VOLVER */
+
+.contenedor-volver {
+    margin-top: 15px;
+}
+
+.btn-volver {
+    display: inline-block;
+    padding: 12px 24px;
+    background-color: #007BFF;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: bold;
+}
+
+.btn-volver:hover {
+    background-color: #0056b3;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 768px) {
+
+    body {
+        padding: 10px;
+    }
+
+    .confirmacion-container {
+        padding: 20px;
+    }
+}

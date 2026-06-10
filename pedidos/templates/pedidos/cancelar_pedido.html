@@ -1,0 +1,39 @@
+
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cerrar Pedido</title>
+    <link rel="stylesheet" href="{% static 'pedidos/css/cancelar_pedido.css' %}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+<h1>Cancelar Pedido</h1> 
+{% if pedido_actual  %}
+    <ul>
+      {% for item in items %}
+       <li>
+        {{ item.cantidad }} x {{ item.producto }} - Precio Unitario: ${{ item.precio_unitario }} - Subtotal: ${{ item.subtotal }} 
+       </li>
+      {% endfor %}
+    </ul>
+    <p>Total: ${{ total }}</p>
+    <ul>
+       <li>Mesa: {{ pedido_actual.mesa }}</li>
+       <li>Personal: {{ pedido_actual.garzon }}</li>
+       <li>Fecha Pedido: {{ pedido_actual.fecha|date:"d/m/Y H:i" }}</li>
+    </ul>
+
+    <!-- Formulario para cerrar el pedido -->
+    <form action="{% url 'cancelar_pedido' mesa.id %}" method="POST">
+        {% csrf_token %}
+        <button type="submit">Cancelar Pedido</button>
+    </form>
+
+{% else %}
+    <p>No hay pedidos pendientes para esta mesa.</p>
+{% endif %}
+<a href="{% url 'detalle_mesa' mesa.id %}">Volver</a>
+</body>
+</html>

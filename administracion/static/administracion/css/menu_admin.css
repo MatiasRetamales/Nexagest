@@ -1,0 +1,137 @@
+/* menu_admin.css */
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f0f8ff; 
+    margin: 0;
+    padding: 40px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+h1 {
+    color: #2c3e50;
+    margin-bottom: 40px;
+    text-align: center;
+    font-size: 2rem;
+    letter-spacing: 1px;
+}
+
+/* Contenedor principal en Grilla */
+.menu-admin-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 25px;
+    width: 100%;
+    max-width: 900px; /* Para que en PC no se estire infinito */
+}
+
+/* Estilo de los Botones Grandes (Cards) */
+.btn-admin {
+    background-color: white;
+    color: #2c3e50;
+    text-decoration: none;
+    padding: 40px 20px;
+    border-radius: 15px;
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: bold;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Efectos al pasar el mouse */
+.btn-admin:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    border-color: #3498db; /* Color azul de tu dashboard */
+    color: #3498db;
+}
+
+/* Iconos un poco más grandes */
+.btn-admin span {
+    display: block;
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+}
+
+
+.logo-container {
+    display: flex;
+    justify-content: center; /* Centramos el conjunto */
+    align-items: center;    /* Alineamos verticalmente */
+    margin-top: 5px;        /* Muy poca separación desde arriba */
+    margin-bottom: 20px;     /* Espacio mínimo antes de los botones */
+}
+
+/* El logo ahora es un ícono transparente */
+.logo-admin {
+    width: 280px;             
+    height: auto;
+    object-fit: contain;
+    background-color: transparent !important; /* Forzamos la transparencia */
+    margin-right: 15px;       /* Separación mínima con el texto */
+    /* Mantenemos una sombra suave para que destaque */
+    filter: drop-shadow(0 3px 6px rgba(0,0,0,0.06));
+}
+
+
+.btn-logout {
+    background-color: #e74c3c;
+    color: white;
+    padding: 8px 15px;
+    border: none;      /* Quita el borde del botón */
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;   /* Hace que aparezca la manito al pasar el mouse */
+    font-family: inherit; /* Para que use la misma letra que tu app */
+}
+
+.btn-logout:hover {
+    background-color: #c0392b;
+}
+
+
+form {
+    display: inline; /* Para que el formulario no salte de línea */
+    margin: 0;
+    padding: 0;
+}
+
+/* Botones de Estado del Local (Réplica exacta) */
+.btn-rojo, .btn-verde {
+    padding: 8px 15px;    /* Igual al logout */
+    border: none;
+    border-radius: 5px;   /* Igual al logout */
+    font-weight: bold;
+    cursor: pointer;
+    font-family: inherit; /* Misma fuente */
+    transition: 0.3s;
+    color: white;
+    margin-top: 10px; /* Un poco de espacio desde los botones principales */
+}
+
+/* Colores específicos para que se diferencien */
+.btn-rojo { background-color: #d9534f; } 
+.btn-verde { background-color: #5cb85c; } 
+
+.btn-rojo:hover { background-color: #c9302c; }
+.btn-verde:hover { background-color: #449d44; }
+
+
+/* Optimización para Celulares */
+@media (max-width: 600px) {
+    .menu-admin-container {
+        grid-template-columns: 1fr; /* Una sola columna en el celular */
+    }
+    
+    h1 {
+        font-size: 1.5rem;
+    }
+}

@@ -1,0 +1,98 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Pedido Mesa {{ mesa.numero }}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'pedidos/css/gestionar_pedido.css' %}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+</head>
+<body>
+    <header class="header-pedido">
+        <h1>Mesa {{ mesa.numero }}</h1>
+        <div class="contenedor-volver">
+        <a href="{% url 'detalle_mesa' mesa.id %}" class="btn-volver">Volver</a>
+        </div>
+    </header>
+
+    <main class="contenedor-principal">
+        <form action="{% url 'gestionar_pedido' mesa.id %}" method="POST" id="form-pedido">
+            {% csrf_token %}
+
+            {% if restaurante.tipo_local == 'local' %}
+              <div class="input-nombre-cliente">
+                <label for="nombre_cliente">Nombre del Cliente:</label>
+                  <input type="text" name="nombre_cliente" id="nombre_cliente" 
+                   placeholder="Ej: Juan Pérez" 
+                   value="{{ pedido_actual.nombre_cliente|default:'' }}" 
+                   required>
+              </div>
+            {% endif %}
+
+            <!-- 1. BUSCADOR -->
+            <div class="buscador-container">
+                <input type="text" id="buscador" placeholder="🔍 Buscar producto..." autocomplete="off" inputmode="search" enterkeyhint="search">
+            </div>
+
+            <!-- 2. CATEGORÍAS -->
+            <nav class="categorias-nav">
+                <button type="button" class="btn-cat active" onclick="filtrarProductos('todos', this)">TODOS LOS PRODUCTOS</button>
+                {% for cat in categorias %}
+                    <button type="button" class="btn-cat" onclick="filtrarProductos('{{ cat.id }}', this)">
+                        {{ cat.nombre }}
+                    </button>
+                {% endfor %}
+            </nav>
+
+            <!-- 3. LISTA DE PRODUCTOS -->
+            <div class="contenedor-productos">
+                {% for producto in productos %}
+                <!-- Agregamos la clase hidden para que no carguen todos de golpe -->
+                <div class="product-card categoria-{{ producto.categoria.id }} hidden" 
+                     data-nombre="{{ producto.nombre|lower }}"
+                     onclick="sumarUno('{{ producto.id }}')">
+                    
+                    <div class="product-info">
+                        <strong>{{ producto.nombre }}</strong>
+                        <span class="precio">${{ producto.precio }}</span>
+                        
+                        <input type="text" 
+                               name="obs_{{ producto.id }}" 
+                               placeholder="Nota..." 
+                               class="input-obs"
+                               onclick="event.stopPropagation();">
+                    </div>
+
+                    <div class="product-controls">
+                        <!-- IMPORTANTE: event.stopPropagation() evita que se active el clic de la tarjeta -->
+                        <button type="button" class="btn-accion minus" 
+                                onclick="event.stopPropagation(); restarUno('{{ producto.id }}')">−</button>
+                        
+                        <div class="product-counter" id="badge_{{ producto.id }}">0</div>
+                        
+                        <button type="button" class="btn-accion plus" 
+                                onclick="event.stopPropagation(); sumarUno('{{ producto.id }}')">+</button>
+                    </div>
+
+                    <input type="number" 
+                           id="cant_{{ producto.id }}" 
+                           name="cantidad_{{ producto.id }}" 
+                           value="0" 
+                           min="0"
+                           style="display: none;">
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="footer-acciones">
+                <button type="submit" class="btn-enviar">Confirmar Pedido</button>
+            </div>
+        </form>
+    </main>
+
+    <script src="{% static 'pedidos/js/filtro_productos.js' %}"></script> 
+    <script src="{% static 'pedidos/js/seleccion_productos.js' %}"></script>
+</body>
+</html>

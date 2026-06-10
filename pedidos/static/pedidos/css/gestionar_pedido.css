@@ -1,0 +1,317 @@
+/* Fondo general */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f8ff;
+    margin: 0;
+    padding: 20px;
+}
+
+/* Título */
+h1 {
+    text-align: center;
+    color: #007BFF;
+    font-size: 28px;
+    margin-bottom: 20px;
+}
+
+/* Formulario principal */
+form {
+    max-width: 900px;
+    margin: 0 auto;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+}
+
+/* Buscador */
+#buscador {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 2px solid #007BFF;
+    border-radius: 6px;
+    font-size: 16px;
+}
+
+.buscador-container {
+    margin-right: 20px;
+}
+
+/* Contenedor principal de los productos */
+.contenedor-productos {
+    display: grid;
+    /* Crea tantas columnas como quepan, con un mínimo de 150px cada una */
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 12px;
+    padding: 12px;
+}
+
+/* Estilo de la Tarjeta Individual */
+.product-card {
+    background-color: #007BFF;
+    border-radius: 12px;
+    padding: 15px;
+    display: flex;
+    flex-direction: column; /* Nombre arriba, contador abajo */
+    align-items: center;    /* Centramos todo */
+    text-align: center;
+    justify-content: space-between;
+    min-height: 140px;      /* Un poco más altas para que quepa todo */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+    border: 1px solid #eee;
+    position: relative;     /* Para posicionar cosas adentro si quieres */
+}
+
+/* Efecto al tocar la tarjeta */
+.product-card:active {
+    transform: scale(0.96);
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+/* Información del producto (Nombre y Precio) */
+.product-info {
+    flex: 1;
+}
+
+.product-info strong {
+    display: block;
+    font-size: 1.1rem;
+    color: #ffffff;
+    margin-bottom: 4px;
+}
+
+.product-info span {
+    color: #ffffff;
+    font-weight: bold;
+}
+
+.product-info input {
+    width: 70%;
+    padding: 6px;
+    margin-top: 8px;
+    border: 2px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+/* Contenedor de la cantidad (el numerito) */
+.product-counter {
+    background-color: #f0f2f5;
+    color: #333;
+    min-width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1.2rem;
+    border: 2px solid #ddd;
+    border-radius: 50%; /* Lo hace un círculo perfecto */
+    margin: 0;          /* IMPORTANTE: Quitamos el margin-left: 15px */
+}
+
+.product-controls {
+    display: flex;
+    align-items: center;      /* Alinea verticalmente al centro */
+    justify-content: center;   /* Centra el grupo horizontalmente */
+    gap: 10px;                /* Espacio uniforme entre los elementos */
+    margin-top: 15px;
+    width: 100%;
+}
+
+/* Label */
+.producto label {
+    flex: 1;
+    margin-left: 10px;
+    font-size: 14px;
+}
+
+/* Botón principal */
+button {
+    width: 100%;
+    padding: 12px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 15px;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+/* Link volver */
+a {
+    display: inline-block;
+    margin-top: 30px;
+    padding: 12px 24px; /* Espacio interno para que sea fácil de presionar */
+    background-color: #007BFF;
+    color: white !important; /* Letras blancas (forzado para evitar conflictos) */
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 8px; /* Bordes redondeados modernos */
+    text-align: center;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1); /* Sombra para que se vea "arriba" del fondo */
+}
+
+.contenedor-volver {
+    text-align: center; /* Esto centra cualquier cosa 'inline-block' que esté adentro */
+    width: 100%;
+}
+
+a:hover {
+    background-color: #0056b3;
+    text-decoration: underline;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* Asegúrate que el contenedor siempre sea grid en PC */
+.contenedor-productos {
+    display: grid !important; 
+    grid-template-columns: repeat(4, 1fr); /* 4 columnas en PC */
+    gap: 15px;
+}
+
+.btn-accion {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    line-height: 1;
+}
+
+.btn-accion:active {
+    transform: scale(0.9);
+    background-color: white;
+    color: #007BFF;
+}
+
+
+.input-nombre-cliente {
+    margin: 20px 0;
+    padding: 15px;
+    background-color: #f9f9f9;
+    border-radius: 12px;
+    border: 2px solid #e0e0e0;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    margin-bottom: 25px;
+}
+
+.input-nombre-cliente label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #333;
+    font-size: 0.95rem;
+}
+
+.input-nombre-cliente input {
+    width: 100%;
+    padding: 12px;
+    font-size: 1.1rem;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    box-sizing: border-box; /* Importante para que no se salga del contenedor */
+    transition: border-color 0.3s ease;
+}
+
+.input-nombre-cliente input:focus {
+    border-color: #007bff; /* El color de tu marca o sistema */
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+}
+
+
+
+
+
+
+/* Responsive */
+@media (max-width: 768px) {
+    body {
+        padding: 10px; /* Menos espacio en los bordes para ganar pantalla */
+    }
+
+    .contenedor-productos {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    form {
+        padding: 15px;
+        border-radius: 0; /* Opcional: que el formulario ocupe todo el ancho */
+    }
+
+    h1 {
+        font-size: 22px; /* Título más pequeño */
+    }
+
+    .contenedor-productos {
+        /* En celulares pequeños, mejor 2 columnas fijas para que no se vea minúsculo */
+        grid-template-columns: repeat(2, 1fr); 
+        gap: 8px;
+        padding: 5px;
+    }
+
+    
+
+    .product-card {
+        min-height: 160px; /* Un poco más de aire para los dedos */
+        padding: 10px;
+    }
+
+    .product-counter {
+        min-width: 30px;
+        height: 30px;
+        font-size: 1rem;
+    }
+
+    .product-info strong {
+        font-size: 0.95rem; /* Letra un poco más chica para que no se corte el nombre */
+    }
+
+    /* Hacer que el input de nota ocupe más ancho en móvil */
+    .product-info input {
+        width: 90%;
+    }
+
+    /* Botón de enviar más grande para el pulgar */
+    button {
+        padding: 15px;
+        font-size: 18px;
+    }
+
+   button[type="submit"] {
+        position: sticky;
+        bottom: 10px;
+        z-index: 100;
+        box-shadow: 0 -4px 10px rgba(0,0,0,0.1);
+    }
+
+    #buscador {
+        font-size: 15px;
+        box-sizing: border-box;
+    }
+
+    .buscador-container {
+        margin-right: 0;
+    }
+}

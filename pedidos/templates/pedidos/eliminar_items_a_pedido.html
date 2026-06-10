@@ -1,0 +1,32 @@
+
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Eliminar Productos</title>
+    <link rel="stylesheet" href="{% static 'pedidos/css/eliminar_items_a_pedido.css' %}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+<h1>Eliminar Productos</h1> 
+{% if items %}
+  <ul>
+    {% for item in items %}
+      <li>
+        {{ item.cantidad }} x {{ item.producto }} – ${{ item.subtotal }}
+        
+        <form action="{% url 'eliminar_item_especifico' item.id %}" method="POST">
+          {% csrf_token %}
+          <button type="submit">Eliminar</button>
+        </form>
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p>Este pedido no tiene productos.</p>
+{% endif %}
+
+<a href="{% url 'detalle_mesa' mesa.id %}">Volver</a>
+</body>
+</html>

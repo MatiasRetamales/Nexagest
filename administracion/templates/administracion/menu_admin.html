@@ -1,0 +1,40 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'administracion/css/menu_admin.css' %}">
+    <title>Menu de Administración</title>
+</head>
+<body>
+
+    <div class="logo-container">
+        <img src="{% static 'core/img/logo_nexagest.png' %}" alt="Logo Nexagest" class="logo-admin">
+    </div>
+    <form action="{% url 'logout' %}" method="post" style="display: inline;">
+          {% csrf_token %}
+           <button type="submit" class="btn-logout">Cerrar Sesión</button>
+    </form> 
+    <form action="{% url 'url_cambiar_estado' %}" method="POST">
+    {% csrf_token %} {% if restaurante.estado == 'abierto' %}
+        <button type="submit" class="btn-rojo">CERRAR LOCAL</button>
+    {% else %}
+        <button type="submit" class="btn-verde">ABRIR LOCAL</button>
+    {% endif %}
+    </form>
+    <h1>Menu de Administración</h1>
+
+    <div class="menu-admin-container">
+        <a href="{% url 'dashboard' %}" class="btn-admin">📈 Ver Reportes</a>
+        <a href="{% url 'cocina' %}" class="btn-admin">🍳 Ir a Cocina</a>
+        {% if restaurante.tipo_local == 'restaurante' %}
+        <a href="{% url 'lista_mesas' %}" class="btn-admin">🪑 Ver Mesas</a>
+        {% elif restaurante.tipo_local == 'local' %}
+        <a href="{% url 'lista_mesas' %}" class="btn-admin">📦 Ver Pedidos</a>
+        {% endif %}
+        <a href="{% url 'lista_productos' %}" class="btn-admin">🛒 Gestión de Productos</a>
+    </div>
+
+</body>
+</html>

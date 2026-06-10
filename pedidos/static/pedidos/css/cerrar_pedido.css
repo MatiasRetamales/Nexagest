@@ -1,0 +1,78 @@
+/* Fondo general */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f8ff;
+    margin: 0;
+    padding: 20px;
+}
+
+/* Título */
+h1 {
+    text-align: center;
+    color: #007BFF;
+    margin-bottom: 20px;
+}
+
+/* Lista de productos */
+ul {
+    list-style: none;
+    padding: 0;
+    max-width: 700px;
+    margin: 0 auto 20px auto;
+}
+
+li {
+    background: white;
+    padding: 10px;
+    margin-bottom: 8px;
+    border-radius: 8px;
+    border: 1px solid #e6e6e6;
+    font-size: 14px;
+}
+
+/* Total */
+p {
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+/* Info del pedido */
+ul:nth-of-type(2) li {
+    background: #f4faff;
+    font-size: 14px;
+}
+
+/* Botón cerrar pedido */
+form {
+    text-align: center;
+    margin-top: 20px;
+}
+
+button {
+    padding: 10px 20px;
+    background-color: #28a745; /* verde éxito */
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #218838;
+}
+
+/* Link volver */
+a {
+    display: block;
+    text-align: center;
+    margin-top: 15px;
+    color: #007BFF;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+a:hover {
+    text-decoration: underline;
+}

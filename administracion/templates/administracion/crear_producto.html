@@ -1,0 +1,44 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nuevo Producto</title>
+
+    <link rel="stylesheet" href="{% static 'administracion/css/crear_producto.css' %}">
+</head>
+<body>
+
+    <div class="header">
+        <div class="logo-container">
+            <img src="{% static 'core/img/logo_nexagest.png' %}"
+                 alt="Logo NexaGest"
+                 class="logo-admin">
+        </div>
+
+        <h1>➕ Nuevo Producto</h1>
+    </div>
+
+    <div class="form-container">
+
+        <form method="post">
+            {% csrf_token %}
+
+            {{ form.as_p }}
+
+            <button type="submit">
+                ➕ Guardar Producto
+            </button>
+        </form>
+
+        <div class="contenedor-volver">
+            <a href="{% url 'lista_productos' %}" class="btn-volver">
+                ← Volver
+            </a>
+        </div>
+
+    </div>
+
+</body>
+</html>
