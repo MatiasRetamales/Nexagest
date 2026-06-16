@@ -1,0 +1,47 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'administracion/css/gestion_propinas.css' %}">
+    <title>Configuración de Propina</title>
+
+
+</head>
+<body>
+
+    <div class="card">
+        <h3>Configuración de Propina</h3>
+
+        <form method="post">
+            {% csrf_token %}
+
+            <label>
+                <input type="checkbox" name="propina_activa"
+                       {% if restaurante.propina_activa %}checked{% endif %}>
+                Activar propina sugerida
+            </label>
+
+            <br><br>
+
+            <label>Porcentaje de propina:</label>
+
+            <input
+                placeholder="Solo numeros"
+                type="number"
+                name="porcentaje_propina"
+                value="{{ restaurante.porcentaje_propina }}"
+                min="0"
+                max="100"
+                step="0.1"
+            >
+
+            <button type="submit">
+               Guardar configuración de propina
+            </button>
+        </form>
+    </div>
+
+</body>
+</html>

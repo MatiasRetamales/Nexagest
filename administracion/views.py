@@ -161,3 +161,18 @@ def eliminar_producto(request, producto_id):
         'administracion/eliminar_producto.html',
         {'producto': producto}
     )
+
+
+@solo_admin_restaurante
+def gestion_propinas(request):
+    restaurante = request.user.perfil.restaurante
+
+    if request.method == "POST":
+        restaurante.propina_activa = 'propina_activa' in request.POST
+        restaurante.porcentaje_propina = request.POST.get('porcentaje_propina', 10)
+        restaurante.save()
+        return redirect('menu_admin')
+
+    return render(request, 'administracion/gestion_propinas.html', {
+        "restaurante": restaurante
+    })

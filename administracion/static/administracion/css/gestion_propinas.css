@@ -1,0 +1,53 @@
+    body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f9;
+            padding: 30px;
+        }
+
+        .card {
+            background: white;
+            max-width: 500px;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .card h3 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .card label {
+            font-weight: 600;
+            color: #555;
+        }
+
+        .card input[type="checkbox"] {
+            margin-right: 8px;
+            cursor: pointer;
+        }
+
+        .card input[type="number"] {
+            width: 100%;
+            margin-top: 10px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-sizing: border-box;
+        }
+
+        .card button {
+            margin-top: 20px;
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .card button:hover {
+            opacity: 0.9;
+        }

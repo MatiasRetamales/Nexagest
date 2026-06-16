@@ -12,17 +12,50 @@
 <h1>Cerrar pedido</h1>
 
 {% if pedido_actual %}
+
     <ul>
         {% for item in items %}
             <li>
                 {{ item.cantidad }} x {{ item.producto }} -
-                Precio Unitario: ${{ item.precio_unitario }} -
-                Subtotal: ${{ item.subtotal }}
+                Precio Unitario: ${{ item.precio_unitario|floatformat:0 }} -
+                Subtotal: ${{ item.subtotal|floatformat:0 }}
             </li>
         {% endfor %}
     </ul>
 
-    <p>Total: ${{ total }}</p>
+    <p>Subtotal: ${{ total }}</p>
+
+    {% if pedido_actual.restaurante.propina_activa %}
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <p>
+                Propina ({{ pedido_actual.restaurante.porcentaje_propina }}%): ${{ propina|floatformat:0 }}
+            </p>
+
+            <p>
+                <strong>Total con propina: ${{ total_con_propina|floatformat:0 }}</strong>
+            </p>
+            <button type="submit" name="usar_propina" value="1">
+               Cobrar con propina
+            </button>
+
+            <button type="submit" name="usar_propina" value="0">
+                 Cobrar sin propina
+            </button>
+
+        </form>
+
+    {% else %}
+
+        <p><strong>Total: ${{ total }}</strong></p>
+        <form method="POST">
+          {% csrf_token %}
+          <button type="submit">Cobrar</button>
+        </form>
+
+    {% endif %}
 
     <ul>
         <li>Mesa: {{ pedido_actual.mesa }}</li>
@@ -30,16 +63,16 @@
         <li>Fecha: {{ pedido_actual.fecha|date:"d/m/Y H:i" }}</li>
     </ul>
 
-    <!-- Formulario para cerrar el pedido -->
-    <form action="{% url 'cerrar_pedido' mesa.id %}" method="POST">
-        {% csrf_token %}
-        <button type="submit">Cerrar Pedido</button>
-    </form>
-
 {% else %}
+
     <p>No hay pedidos pendientes para esta mesa.</p>
+
 {% endif %}
+
 <a href="{% url 'detalle_mesa' mesa.id %}">Volver</a>
+
+
+
 
 </body>
 </html>

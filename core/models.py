@@ -17,6 +17,8 @@ class Restaurante(models.Model):
         default='cerrado'
     )
     tipo_local = models.CharField(max_length=20, choices=TIPO_LOCAL, default='restaurante')
+    propina_activa = models.BooleanField(default=False)
+    porcentaje_propina = models.DecimalField(max_digits=5, decimal_places=2, default=10)
 
     def __str__(self):
         return f"{self.nombre} - ({self.estado})"

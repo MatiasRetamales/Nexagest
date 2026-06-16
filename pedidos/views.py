@@ -83,48 +83,66 @@ def cerrar_pedido(request, id):
 
     mesa = get_object_or_404(Mesa, id=id, restaurante=restaurante)
 
-    # MODIFICACIÓN: Buscamos el pedido en cualquier estado "activo"
-    # Pendiente (si no pasó por cocina) o En Preparación (si ya se envió)
     pedido_actual = Pedido.objects.filter(
         mesa=mesa,
         estado__in=["pendiente", "en_preparacion", "listo"],
         restaurante=restaurante
     ).first()
 
-    # Si no hay pedido en esos estados, devolvemos la vista vacía
     if not pedido_actual:
         return render(request, "pedidos/cerrar_pedido.html", {
             "mesa": mesa,
             "pedido_actual": None,
             "items": [],
-            "total": 0
+            "total": 0,
+            "propina": 0,
+            "total_con_propina": 0
         })
 
     items = PedidoItem.objects.filter(pedido=pedido_actual)
     total = sum(item.subtotal() for item in items)
 
+    # 🔥 CALCULO DE PROPINA
+    propina = 0
+
+    if pedido_actual.restaurante.propina_activa:
+        propina = total * (pedido_actual.restaurante.porcentaje_propina / 100)
+
+    total_con_propina = total + propina
+
     if request.method == "POST":
-     pedido_actual.estado = "pagado"
-     pedido_actual.total = total 
-     # Si no quieres crear un campo nuevo aún, 
-     # asegúrate de que el dashboard use 'fecha'
-     pedido_actual.fecha = timezone.now() 
-     pedido_actual.fecha_pago = timezone.now()  # También actualizamos la fecha de pago
-     pedido_actual.save()
 
-        # Liberamos la mesa para el siguiente cliente de Cartagena
-     mesa.estado = "libre"
-     mesa.save()
+        usar_propina = request.POST.get("usar_propina") == "1"
 
-     return redirect('lista_mesas') # Mejor volver a la lista para ver qué otra mesa atender
+        if pedido_actual.restaurante.propina_activa and usar_propina:
+            pedido_actual.propina_aplicada = True
+            pedido_actual.monto_propina = propina
+            total_final = total_con_propina
+        else:
+            pedido_actual.propina_aplicada = False
+            pedido_actual.monto_propina = 0
+            total_final = total
+
+        pedido_actual.estado = "pagado"
+        pedido_actual.total = total_final
+        pedido_actual.fecha = timezone.now()
+        pedido_actual.fecha_pago = timezone.now()
+
+        pedido_actual.save()
+
+        mesa.estado = "libre"
+        mesa.save()
+
+        return redirect('lista_mesas')
 
     return render(request, "pedidos/cerrar_pedido.html", {
         "mesa": mesa,
         "pedido_actual": pedido_actual,
         "items": items,
         "total": total,
+        "propina": propina,
+        "total_con_propina": total_con_propina
     })
-
 
 def cancelar_pedido(request, id):
     restaurante = request.user.perfil.restaurante
