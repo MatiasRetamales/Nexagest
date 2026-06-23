@@ -4,9 +4,9 @@ from pedidos.models import Pedido, PedidoItem
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404  # busca o lanza 404
 from core.models import Restaurante
-from usuarios.decoradores import solo_garzon
+from usuarios.decoradores import tiene_acceso
 
-@solo_garzon
+@tiene_acceso(['garzon', 'encargado'])
 def lista_mesas(request):
     restaurante = request.user.perfil.restaurante
     mesas = Mesa.objects.filter(restaurante=restaurante)
@@ -24,7 +24,7 @@ def lista_mesas(request):
 
 
 
-@solo_garzon
+@tiene_acceso(['garzon', 'encargado'])
 def mesa_detalle(request, id):
     mesa = get_object_or_404(Mesa, id=id)
     restaurante = mesa.restaurante
@@ -64,3 +64,22 @@ def mesa_detalle(request, id):
     })
 
 
+
+
+
+def liberar_pedido(request, mesa_id):
+    mesa = get_object_or_404(Mesa, id=mesa_id)
+
+    pedido = Pedido.objects.filter(
+        mesa=mesa,
+        esta_pagado=True
+    ).order_by("-id").first()
+
+    if pedido:
+        pedido.estado = "entregado"
+        pedido.save()
+
+        mesa.estado = "libre"
+        mesa.save()
+
+    return redirect("lista_mesas")

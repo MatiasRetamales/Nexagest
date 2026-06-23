@@ -58,6 +58,14 @@
             {% endif %}
 
             <a href="{% url 'detalle_mesa' mesa.id %}">Ver detalles</a>
+            {% if mesa.pedido_activo.esta_pagado == True %}
+              <form method="POST" action="{% url 'liberar_pedido' mesa.id %}">
+              {% csrf_token %}
+                <button type="submit" class="btn-liberar">
+                   Liberar Pedido
+                </button>
+               </form>
+            {% endif %}            
         </div>
     {% endfor %}
     </div>

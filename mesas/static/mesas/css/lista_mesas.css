@@ -176,6 +176,19 @@ body {
     background-color: #c0392b;
 }
 
+
+.btn-liberar {
+    background-color: #28a745; /* Verde */
+    color: white;
+    padding: 8px 15px;
+    border: none;      /* Quita el borde del botón */
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;   /* Hace que aparezca la manito al pasar el mouse */
+    margin-top: 10px;   /* Espacio superior para separar del enlace */
+}
+
+
 @keyframes pulso {
     0%, 100% { opacity: 1; }
     50%       { opacity: 0.55; }

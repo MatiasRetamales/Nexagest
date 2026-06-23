@@ -6,7 +6,7 @@ from core.models import Restaurante
 from django.contrib import messages
 from datetime import datetime
 from django.http import JsonResponse
-from usuarios.decoradores import solo_cocinero, solo_admin_restaurante
+from usuarios.decoradores import tiene_acceso
 from django.utils import timezone # Importante usar este
 
 
@@ -86,7 +86,8 @@ def cerrar_pedido(request, id):
     pedido_actual = Pedido.objects.filter(
         mesa=mesa,
         estado__in=["pendiente", "en_preparacion", "listo"],
-        restaurante=restaurante
+        restaurante=restaurante,
+        esta_pagado=False
     ).first()
 
     if not pedido_actual:
@@ -102,7 +103,7 @@ def cerrar_pedido(request, id):
     items = PedidoItem.objects.filter(pedido=pedido_actual)
     total = sum(item.subtotal() for item in items)
 
-    # 🔥 CALCULO DE PROPINA
+    #  CALCULO DE PROPINA
     propina = 0
 
     if pedido_actual.restaurante.propina_activa:
@@ -123,14 +124,14 @@ def cerrar_pedido(request, id):
             pedido_actual.monto_propina = 0
             total_final = total
 
-        pedido_actual.estado = "pagado"
+        pedido_actual.esta_pagado = True
         pedido_actual.total = total_final
         pedido_actual.fecha = timezone.now()
         pedido_actual.fecha_pago = timezone.now()
 
         pedido_actual.save()
 
-        mesa.estado = "libre"
+        mesa.estado = "ocupada"
         mesa.save()
 
         return redirect('lista_mesas')
@@ -154,6 +155,7 @@ def cancelar_pedido(request, id):
     pedido_actual = Pedido.objects.filter(
         mesa=mesa,
         estado__in=["pendiente", "en_preparacion", "listo"],
+        esta_pagado=False,
         restaurante=restaurante
     ).first()
 
@@ -192,7 +194,8 @@ def eliminar_items(request, id):
     pedido_actual = Pedido.objects.filter(
         mesa=mesa,
         estado__in=["pendiente", "en_preparacion", "listo"],  # Consideramos estos estados como "activos"
-        restaurante=restaurante
+        restaurante=restaurante,
+        esta_pagado=False,
     ).first()
 
     items = []
@@ -237,7 +240,7 @@ def eliminar_item_especifico(request, id):
         return redirect('detalle_mesa', id=mesa.id)
   
     
-@solo_cocinero
+@tiene_acceso(['cocinero', 'administrador', 'encargado'])
 def cocina(request):
     restaurante = request.user.perfil.restaurante
     pedidos_pendientes = Pedido.objects.filter(
@@ -257,7 +260,7 @@ def enviar_cocina(request, pedido_id):
     restaurante = request.user.perfil.restaurante
     pedido = get_object_or_404(Pedido, id=pedido_id, restaurante=restaurante)
 
-    if pedido.estado in ["pendiente", "listo"]:
+    if pedido.estado in ["pendiente", "listo", "en_preparacion"]:
         pedido.total_envios += 1
         pedido.estado = "en_preparacion"
         pedido.enviado_a_cocina = timezone.now()

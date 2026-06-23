@@ -7,6 +7,7 @@ class Perfil(models.Model):
         ('garzon', 'Garzón'),
         ('cocinero', 'Cocinero'),
         ('administrador', 'Administrador'),
+        ('encargado', 'Encargado'),
     )
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)  # Relación uno a uno con el modelo User

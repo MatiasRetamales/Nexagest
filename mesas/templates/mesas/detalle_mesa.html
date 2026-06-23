@@ -113,7 +113,7 @@
                         Cerrar Pedido
                     </a>
 
-                    {% if user.perfil.rol == 'administrador' %}
+                    {% if user.perfil.rol == 'administrador' or user.perfil.rol == 'encargado' %}
                         <a href="{% url 'cancelar_pedido' mesa.id %}"
                            class="btn-link btn-cancelar">
                             Cancelar Pedido

@@ -5,13 +5,13 @@ from datetime import datetime, timedelta # Necesitamos estas para los cálculos
 from django.contrib import messages
 from pedidos.models import Pedido
 from core.models import Restaurante
-from usuarios.decoradores import solo_admin_restaurante
+from usuarios.decoradores import tiene_acceso
 from django.shortcuts import render, redirect
 from pedidos.forms import ProductoForm
 
 
 
-@solo_admin_restaurante
+@tiene_acceso(['administrador'])
 def dashboard(request):
     restaurante = request.user.perfil.restaurante
     
@@ -30,7 +30,7 @@ def dashboard(request):
     pedidos_dia = Pedido.objects.filter(
         restaurante=restaurante,
         fecha_pago__date=fecha_actual,
-        estado="pagado"
+        esta_pagado=True
     )
     
     total_ventas = pedidos_dia.aggregate(Sum('total'))['total__sum'] or 0
@@ -52,7 +52,7 @@ def dashboard(request):
 
 
 
-@solo_admin_restaurante
+@tiene_acceso(['administrador'])
 def menu_admin(request):
     # 1. Buscamos el restaurante en la base de datos
     restaurante = request.user.perfil.restaurante
@@ -66,7 +66,7 @@ def menu_admin(request):
     return render(request, 'administracion/menu_admin.html', context)
 
 
-@solo_admin_restaurante
+@tiene_acceso(['administrador'])
 def toggle_estado_local(request):
     if request.method == "POST":
         # Traemos el primer restaurante (asumiendo que solo tienes uno configurado)
@@ -83,7 +83,7 @@ def toggle_estado_local(request):
     return redirect('menu_admin') # Te devuelve a la pantalla donde está el botón
 
 
-@solo_admin_restaurante
+@tiene_acceso(['administrador'])
 def lista_productos(request):
     restaurante = request.user.perfil.restaurante
     productos = restaurante.productos.all()
@@ -92,7 +92,7 @@ def lista_productos(request):
 
 
 
-@solo_admin_restaurante
+@tiene_acceso(['administrador'])
 def crear_producto(request):
     if request.method == 'POST':
         form = ProductoForm(request.POST)
@@ -117,7 +117,7 @@ def crear_producto(request):
     )
 
 
-@solo_admin_restaurante
+@tiene_acceso(['administrador'])
 def editar_producto(request, producto_id):
     restaurante = request.user.perfil.restaurante
     producto = restaurante.productos.filter(id=producto_id).first()
@@ -143,7 +143,7 @@ def editar_producto(request, producto_id):
     )
 
 
-@solo_admin_restaurante
+@tiene_acceso(['administrador'])
 def eliminar_producto(request, producto_id):
     restaurante = request.user.perfil.restaurante
     producto = restaurante.productos.filter(id=producto_id).first()
@@ -163,7 +163,7 @@ def eliminar_producto(request, producto_id):
     )
 
 
-@solo_admin_restaurante
+@tiene_acceso(['administrador'])
 def gestion_propinas(request):
     restaurante = request.user.perfil.restaurante
 

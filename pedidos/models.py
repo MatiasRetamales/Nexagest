@@ -11,7 +11,6 @@ class Pedido(models.Model):
         ('listo', 'Para Entregar'),
         ('entregado', 'Servido'),
         ('cancelado', 'Cancelado'),
-        ('pagado', 'Pagado'),
     )
 
     mesa = models.ForeignKey(Mesa, on_delete=models.SET_NULL, null=True, blank=True)
@@ -19,6 +18,7 @@ class Pedido(models.Model):
     estado = models.CharField(max_length=20, choices=ESTADOS, default='pendiente')
     fecha = models.DateTimeField(auto_now_add=True)
     fecha_pago = models.DateTimeField(null=True, blank=True)
+    esta_pagado = models.BooleanField(default=False)
     enviado_a_cocina = models.DateTimeField(null=True, blank=True)
     total_envios = models.PositiveIntegerField(default=0)
     restaurante = models.ForeignKey("core.Restaurante", on_delete=models.CASCADE)
