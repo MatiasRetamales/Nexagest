@@ -10,11 +10,13 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
+import os
 from pathlib import Path
+
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 
 # Configuración de autenticación
@@ -26,13 +28,27 @@ LOGOUT_REDIRECT_URL = '/login/'
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-$jvl79bbx*^67o*m*qilpa^**v!!#br9zwr7^b1wn(cx*95$qi'
+# En local, si no defines la variable de entorno, usa la clave insegura de siempre
+# para que no se te rompa el dev. En Railway SIEMPRE vas a definir SECRET_KEY.
+SECRET_KEY = os.environ.get(
+    'SECRET_KEY',
+    'django-insecure-$jvl79bbx*^67o*m*qilpa^**v!!#br9zwr7^b1wn(cx*95$qi'
+)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# En local sigue siendo True por defecto. En Railway defines DEBUG=False.
+DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = ["*"] # Permitir todas las direcciones IP (no recomendado para producción)
-#ALLOWED_HOSTS = ["192.168.1.6"] 
+# ALLOWED_HOSTS se arma desde una variable de entorno separada por comas.
+# Ejemplo en Railway: ALLOWED_HOSTS=nexagest-production.up.railway.app,tudominio.cl
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '*').split(',')
+
+# Necesario para que Django confíe en el dominio de Railway al recibir
+# formularios (POST) por HTTPS. Sin esto, el login y otros formularios
+# van a fallar con error de CSRF en producción.
+CSRF_TRUSTED_ORIGINS = [
+    f"https://{host}" for host in ALLOWED_HOSTS if host and host != '*'
+]
 
 
 # Application definition
@@ -56,6 +72,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -86,13 +103,25 @@ WSGI_APPLICATION = 'nexagest.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
+#
+# Si existe la variable DATABASE_URL (Railway la genera sola al crear el
+# servicio de Postgres), la usamos. Si no existe (o sea, estás trabajando
+# en tu notebook en local), sigue usando SQLite como hasta ahora.
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+if os.environ.get('DATABASE_URL'):
+    DATABASES = {
+        'default': dj_database_url.parse(
+            os.environ.get('DATABASE_URL'),
+            conn_max_age=600,
+        )
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 
 # Password validation
@@ -130,6 +159,18 @@ USE_TZ = False
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# STATIC_ROOT es donde 'collectstatic' junta todos los estáticos para
+# que whitenoise los sirva en producción. Sin esto, Railway no va a
+# encontrar tus CSS/JS/imágenes una vez desplegado.
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+# Compresión + cache-busting automático para los estáticos servidos por whitenoise
+STORAGES = {
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
