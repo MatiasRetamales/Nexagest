@@ -37,7 +37,7 @@ SECRET_KEY = os.environ.get(
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # En local sigue siendo True por defecto. En Railway defines DEBUG=False.
-DEBUG = 'False'
+DEBUG = False
 
 # ALLOWED_HOSTS se arma desde una variable de entorno separada por comas.
 # Ejemplo en Railway: ALLOWED_HOSTS=nexagest-production.up.railway.app,tudominio.cl
