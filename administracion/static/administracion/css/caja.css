@@ -1,0 +1,132 @@
+/* caja.css */
+
+body {
+    background-color: #f4f7f6;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.container {
+    background-color: #ffffff;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    max-width: 600px; /* Tamaño perfecto para un panel de administración */
+    margin-top: 50px;
+    margin-left: auto;
+    margin-right: auto;
+
+     
+
+}
+
+h2 {
+    color: #333;
+    text-align: center;
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+}
+
+/* Estilo para el resumen de caja */
+.alert-info {
+    border-left: 5px solid #0dcaf0;
+    background-color: #e7faff;
+    padding: 1.5rem;
+    border-radius: 8px;
+}
+
+.alert-warning {
+    border-left: 5px solid #ffc107;
+    background-color: #fff9e6;
+    padding: 2px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+
+h4 {
+    color: #2c3e50;
+}
+
+/* Mejora de botones */
+.btn {
+    width: 100%;
+    padding: 12px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    transition: transform 0.2s, background-color 0.2s;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.1);
+}
+
+.btn-success {
+    background-color: #28a745;
+    border: none;
+    margin-top: 10px;
+    border-radius: 8px;
+    color: #fff;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    border: none;
+    margin-top: 14px;
+    border-radius: 8px;
+    color: #fff;
+}
+
+/* Estilo para los inputs */
+.form-control {
+    padding: 12px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+}
+
+.form-control:focus {
+    border-color: #0dcaf0;
+    box-shadow: none;
+}
+
+.boton-volver {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    padding: 10px 20px;
+    background-color: #61bbf3;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: background-color 0.3s, transform 0.2s;
+    margin-top: 10px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.boton-volver:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.1);
+}
+
+.boton-historial {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    padding: 10px 20px;
+    background-color: #f0ad4e; /* Color naranja */
+    color: #fff;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: background-color 0.3s, transform 0.2s;
+    margin-top: 10px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.boton-historial:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.1);
+}

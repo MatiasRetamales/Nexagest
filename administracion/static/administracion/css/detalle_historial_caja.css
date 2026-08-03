@@ -1,0 +1,100 @@
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f6f9;
+    margin: 0;
+    padding: 25px;
+    color: #333;
+}
+
+/* Botón volver */
+.boton-volver {
+    display: inline-block;
+    margin-bottom: 15px;
+    padding: 10px 16px;
+    background: #6c757d;
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    transition: 0.2s;
+}
+
+.boton-volver:hover {
+    background: #5a6268;
+}
+
+/* Título */
+h1 {
+    margin-bottom: 10px;
+}
+
+h2 {
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+/* Contenedores */
+.resumen,
+.totales {
+    background: white;
+    padding: 15px 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    margin-bottom: 15px;
+}
+
+/* textos dentro */
+.resumen p,
+.totales p {
+    margin: 6px 0;
+    font-size: 15px;
+}
+
+/* tabla */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.table thead {
+    background: #0d6efd;
+    color: white;
+}
+
+.table th,
+.table td {
+    padding: 12px;
+    text-align: center;
+    border-bottom: 1px solid #eee;
+}
+
+.table tbody tr:hover {
+    background: #f1f3f5;
+}
+
+/* estado */
+.estado-abierta {
+    color: #198754;
+    font-weight: bold;
+}
+
+.estado-cerrada {
+    color: #dc3545;
+    font-weight: bold;
+}
+
+/* responsive */
+@media (max-width: 768px) {
+    body {
+        padding: 12px;
+    }
+
+    .table th,
+    .table td {
+        font-size: 13px;
+        padding: 8px;
+    }
+}

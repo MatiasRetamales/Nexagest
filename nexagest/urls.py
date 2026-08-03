@@ -10,10 +10,17 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     
     # 1. Ahora el Login es la raíz (al entrar al sitio, ves el login)
-    path('', auth_views.LoginView.as_view(template_name='registration/login.html'), name='login'),
+    path('', auth_views.LoginView.as_view(
+        template_name='registration/login.html',
+        redirect_authenticated_user=True   #
+    ), name='login'),
 
     # 2. Mantenemos también /login/ por si acaso
-    path('login/', auth_views.LoginView.as_view(template_name='registration/login.html')),
+    path('login/', auth_views.LoginView.as_view(
+        template_name='registration/login.html',
+        redirect_authenticated_user=True   # 
+    )),
+    
     
     # 2. Las demás rutas se mantienen igual
     path('mesas/', include('mesas.urls')),

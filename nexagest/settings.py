@@ -18,8 +18,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 # Configuración de autenticación
-LOGIN_REDIRECT_URL = 'despacho'  
-LOGOUT_REDIRECT_URL = 'login'
+LOGIN_REDIRECT_URL = '/despacho/'
+LOGOUT_REDIRECT_URL = '/login/'
 
 
 # Quick-start development settings - unsuitable for production

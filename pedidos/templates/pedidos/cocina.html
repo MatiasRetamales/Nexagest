@@ -25,10 +25,18 @@
     </div>
     <h1>Pedidos Cocina</h1>
 
-    {% if user.perfil.rol == 'administrador' %}
+    {% if user.perfil.rol == 'administrador' or user.perfil.rol == 'encargado'  %}
     <div class="contenedor-volver">
       <a href="{% url 'menu_admin' %}" class="btn-volver">
         ⚙️ Volver al Panel Maestro
+      </a>
+    </div>
+    {% endif %}
+
+    {% if user.perfil.rol == 'operador' %}
+    <div class="contenedor-volver">
+      <a href="{% url 'lista_mesas' %}" class="btn-volver">
+        Volver a Pedidos
       </a>
     </div>
     {% endif %}

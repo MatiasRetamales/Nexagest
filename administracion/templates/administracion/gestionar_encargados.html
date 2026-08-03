@@ -1,0 +1,79 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestión de Encargados</title>
+    <link rel="stylesheet" href="{% static 'administracion/css/gestionar_encargados.css' %}">
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Gestión de Encargados</h1>
+    <a href="{% url 'gestion_personal' %}" class="btn-back">⬅ Volver</a>
+
+    <!-- FORMULARIO -->
+    <div class="card">
+        <form action="{% url 'agregar_encargado' %}" method="post">
+            {% csrf_token %}
+
+            <label for="nombre">Nombre</label>
+            <input type="text" id="nombre" name="nombre" required>
+
+            <label for="contraseña">Contraseña</label>
+            <input type="password" id="contraseña" name="contraseña" required>
+
+            <button type="submit">Agregar Encargado</button>
+        </form>
+    </div>
+
+    <hr>
+
+    <!-- LISTA -->
+    {% if encargados %}
+        <h2>Encargados Registrados</h2>
+
+        <div class="list">
+            {% for encargado in encargados %}
+                <div class="item">
+                    <div class="info">
+                        <strong>{{ encargado.user.username }}</strong>
+
+                        {% if encargado.activo %}
+                            <span class="activo">🟢 Activo</span>
+                        {% else %}
+                            <span class="inactivo">🔴 Desactivado</span>
+                        {% endif %}
+                    </div>
+
+                    <div class="actions">
+                        {% if encargado.activo %}
+                            <form action="{% url 'desactivar_encargado' encargado.id %}" method="post">
+                                {% csrf_token %}
+                                <button class="btn-danger" type="submit">Desactivar</button>
+                            </form>
+                        {% else %}
+                            <form action="{% url 'activar_encargado' encargado.id %}" method="post">
+                                {% csrf_token %}
+                                <button class="btn-success" type="submit">Activar</button>
+                            </form>
+                        {% endif %}
+                            <!-- ir a reset password -->
+                            <a href="{% url 'reset_password_encargado' encargado.id %}" class="btn-warning">
+                               Restablecer contraseña
+                            </a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+    {% else %}
+        <p>No hay encargados registrados.</p>
+    {% endif %}
+
+</div>
+
+</body>
+</html>

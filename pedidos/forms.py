@@ -1,5 +1,6 @@
 from django import forms
 from .models import Producto
+from carta.models import Categoria
 
 class ProductoForm(forms.ModelForm):
     class Meta:
@@ -13,3 +14,11 @@ class ProductoForm(forms.ModelForm):
             'disponibilidad': '¿Está disponible?',
             'categoria': 'Categoría'
         }
+
+
+class CategoriaForm(forms.ModelForm):
+    class Meta:
+        model = Categoria
+        fields = ['nombre']
+
+        labels = {'nombre': 'Nombre de la categoria'}

@@ -189,6 +189,18 @@ body {
 }
 
 
+.alerta-caja {
+    background-color: #fff3cd; /* Amarillo claro */
+    color: #856404; /* Texto oscuro */
+    border: 1px solid #ffeeba; /* Borde amarillo */
+    padding: 15px;
+    border-radius: 5px;
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+
 @keyframes pulso {
     0%, 100% { opacity: 1; }
     50%       { opacity: 0.55; }

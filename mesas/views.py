@@ -5,11 +5,13 @@ from django.http import HttpResponse
 from django.shortcuts import get_object_or_404  # busca o lanza 404
 from core.models import Restaurante
 from usuarios.decoradores import tiene_acceso
+from administracion.models import Caja
 
-@tiene_acceso(['garzon', 'encargado'])
+@tiene_acceso(['garzon', 'encargado', 'operador'])
 def lista_mesas(request):
     restaurante = request.user.perfil.restaurante
     mesas = Mesa.objects.filter(restaurante=restaurante)
+    caja = Caja.objects.filter(restaurante=restaurante, esta_abierta=True).first()
 
     # Para cada mesa, adjuntamos su pedido activo si existe
     for mesa in mesas:
@@ -18,13 +20,13 @@ def lista_mesas(request):
             estado__in=['pendiente', 'en_preparacion', 'listo']
         ).first()
 
-    return render(request, "mesas/lista_mesas.html", {"mesas": mesas, "restaurante": restaurante})
+    return render(request, "mesas/lista_mesas.html", {"mesas": mesas, "restaurante": restaurante, "caja": caja})
 
 
 
 
 
-@tiene_acceso(['garzon', 'encargado'])
+@tiene_acceso(['garzon', 'encargado', 'operador'])
 def mesa_detalle(request, id):
     mesa = get_object_or_404(Mesa, id=id)
     restaurante = mesa.restaurante
@@ -67,6 +69,7 @@ def mesa_detalle(request, id):
 
 
 
+@tiene_acceso(['garzon', 'encargado', 'operador'])
 def liberar_pedido(request, mesa_id):
     mesa = get_object_or_404(Mesa, id=mesa_id)
 

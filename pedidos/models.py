@@ -27,6 +27,7 @@ class Pedido(models.Model):
     total = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     propina_aplicada = models.BooleanField(default=False)
     monto_propina = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    sesion_caja = models.ForeignKey('administracion.Caja', on_delete=models.SET_NULL, null=True, blank=True)
 
     def total_con_propina(self):
         return self.total + self.monto_propina

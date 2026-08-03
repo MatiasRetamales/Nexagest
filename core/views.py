@@ -17,8 +17,10 @@ def despacho_usuario(request):
             return redirect('cocina')
         elif rol == 'garzon':
             return redirect('lista_mesas')
-        elif rol == 'encargado':
+        elif rol == 'operador':
             return redirect('lista_mesas')
+        elif rol == 'encargado':
+            return redirect('menu_admin')
 
     # Si no tiene perfil o el rol es desconocido, al menú principal
     return redirect('menu_admin') # O la que prefieras por defecto

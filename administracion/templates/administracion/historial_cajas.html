@@ -1,0 +1,39 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="administracion/css/historial_cajas.css">
+    <title>Historial de Cajas</title>
+
+    <link rel="stylesheet" href="{% static 'administracion/css/historial_cajas.css' %}">
+</head>
+<body>
+<a href="{% url 'caja' %}" class="boton-volver">
+    ← Volver a Caja
+</a>
+<h2>Historial de Cajas Cerradas</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Fecha Apertura</th>
+            <th>Cajero</th>
+            <th>Total Ventas</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for caja in cajas %}
+        <tr>
+            <td>{{ caja.fecha_apertura|date:"d/m/Y H:i" }}</td>
+            <td>{{ caja.nombre_cajero }}</td>
+            <td>${{ caja.saldo_actual }}</td>
+            <td><a href="{% url 'detalle_historial_caja' caja.id %}" class="boton-detalle-cajas">Ver detalle</a></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+</body>
+</html>

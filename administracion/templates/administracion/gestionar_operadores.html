@@ -1,0 +1,77 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestion de Operadores</title>
+    <link rel="stylesheet" href="{% static 'administracion/css/gestionar_operadores.css' %}">
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Gestion de Operadores</h1>
+    <a href="{% url 'gestion_personal' %}" class="btn-back">Volver</a>
+
+    <div class="card">
+        <form action="{% url 'agregar_operador' %}" method="post">
+            {% csrf_token %}
+
+            <label for="nombre">Nombre</label>
+            <input type="text" id="nombre" name="nombre" required>
+
+            <label for="contraseña">Contraseña</label>
+            <input type="password" id="contraseña" name="contraseña" required>
+
+            <button type="submit">Agregar Operador</button>
+        </form>
+    </div>
+
+    <hr>
+
+    {% if operadores %}
+        <h2>Operadores Registrados</h2>
+
+        <div class="list">
+            {% for operador in operadores %}
+                <div class="item">
+                    <div class="info">
+                        <strong>{{ operador.user.username }}</strong>
+
+                        {% if operador.activo %}
+                            <span class="activo">Activo</span>
+                        {% else %}
+                            <span class="inactivo">Desactivado</span>
+                        {% endif %}
+                    </div>
+
+                    <div class="actions">
+                        {% if operador.activo %}
+                            <form action="{% url 'desactivar_operador' operador.id %}" method="post">
+                                {% csrf_token %}
+                                <button class="btn-danger" type="submit">Desactivar</button>
+                            </form>
+                        {% else %}
+                            <form action="{% url 'activar_operador' operador.id %}" method="post">
+                                {% csrf_token %}
+                                <button class="btn-success" type="submit">Activar</button>
+                            </form>
+                        {% endif %}
+                             <!-- ir a reset password -->
+                            <a href="{% url 'reset_password_operador' operador.id %}" class="btn-warning">
+                               Restablecer contraseña
+                            </a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+    {% else %}
+        <p>No hay operadores registrados.</p>
+    {% endif %}
+
+</div>
+
+</body>
+</html>

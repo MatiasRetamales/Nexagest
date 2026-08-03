@@ -1,6 +1,6 @@
 {% load static %}
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
     <title>Lista de Mesas</title>
     <link rel="stylesheet" href="{% static 'mesas/css/lista_mesas.css' %}">
@@ -14,71 +14,79 @@
            <button type="submit" class="btn-logout">Cerrar Sesión</button>
         </form>
     </div>
+
     {% if restaurante.tipo_local == 'restaurante' %}
-     <h1 id="titulo_lista_mesas">Mesas</h1>
+        <h1 id="titulo_lista_mesas">Mesas</h1>
     {% elif restaurante.tipo_local == 'local' %}
-    <h1 id="titulo_lista_mesas">Pedidos</h1>
+        <h1 id="titulo_lista_mesas">Pedidos</h1>
     {% endif %}
 
-    {% if user.perfil.rol == 'administrador' %}
+    {% if user.perfil.rol == 'administrador' or user.perfil.rol == 'encargado' %}
         <div class="contenedor-volver">
-            <a href="{% url 'menu_admin' %}" class="btn-volver">
-                ⚙️ Volver al Panel Maestro
-            </a>
+            <a href="{% url 'menu_admin' %}" class="btn-volver">⚙️ Volver al Panel Maestro</a>
         </div>
     {% endif %}
 
-    <div id="mesas-live" class="mesas-container">
-    {% for mesa in mesas %}
-        <div class="mesa {% if mesa.estado == 'ocupada' %}mesa--ocupada{% endif %}">
-            
-            {% if restaurante.tipo_local == 'restaurante' %}
-                <span class="numero">Mesa {{ mesa.numero }}</span>
-                <span class="estado">{{ mesa.get_estado_display }}</span>
-            
-            {% elif restaurante.tipo_local == 'local' %}
-                <span class="numero">Pedido {{ mesa.numero }}</span>
-                <span class="estado">
-                    {% if mesa.estado == 'ocupada' %}
-                        {% if mesa.pedido_activo and mesa.pedido_activo.nombre_cliente %}
-                            <strong>{{ mesa.pedido_activo.nombre_cliente }}</strong>
-                        {% else %}
-                            En Espera
-                        {% endif %}
-                    {% else %}
-                        Disponible
-                    {% endif %}
-                </span>
-            {% endif %}
-
-            {% if mesa.pedido_activo and mesa.pedido_activo.enviado_a_cocina and mesa.pedido_activo.estado == 'en_preparacion' %}
-                <div class="cronometro" data-desde="{{ mesa.pedido_activo.enviado_a_cocina.isoformat }}">
-                    ⏱ <span class="tiempo">--:--</span>
-                </div>
-            {% endif %}
-
-            <a href="{% url 'detalle_mesa' mesa.id %}">Ver detalles</a>
-            {% if mesa.pedido_activo.esta_pagado == True %}
-              <form method="POST" action="{% url 'liberar_pedido' mesa.id %}">
-              {% csrf_token %}
-                <button type="submit" class="btn-liberar">
-                   Liberar Pedido
-                </button>
-               </form>
-            {% endif %}            
+    {% if user.perfil.rol == 'operador' %}
+        <div class="contenedor-volver">
+            <a href="{% url 'cocina' %}" class="btn-volver">Ir a Cocina</a>
         </div>
-    {% endfor %}
-    </div>
+    {% endif %}
 
+    {% if caja and caja.esta_abierta %}
+        
+        <div id="mesas-live" class="mesas-container">
+            {% for mesa in mesas %}
+                <div class="mesa {% if mesa.estado == 'ocupada' %}mesa--ocupada{% endif %}">
+                    
+                    {% if restaurante.tipo_local == 'restaurante' %}
+                        <span class="numero">Mesa {{ mesa.numero }}</span>
+                        <span class="estado">{{ mesa.get_estado_display }}</span>
+                    
+                    {% elif restaurante.tipo_local == 'local' %}
+                        <span class="numero">Pedido {{ mesa.numero }}</span>
+                        <span class="estado">
+                            {% if mesa.estado == 'ocupada' %}
+                                {% if mesa.pedido_activo and mesa.pedido_activo.nombre_cliente %}
+                                    <strong>{{ mesa.pedido_activo.nombre_cliente }}</strong>
+                                {% else %}
+                                    En Espera
+                                {% endif %}
+                            {% else %}
+                                Disponible
+                            {% endif %}
+                        </span>
+                    {% endif %}
+
+                    {% if mesa.pedido_activo and mesa.pedido_activo.enviado_a_cocina and mesa.pedido_activo.estado == 'en_preparacion' %}
+                        <div class="cronometro" data-desde="{{ mesa.pedido_activo.enviado_a_cocina.isoformat }}">
+                            ⏱ <span class="tiempo">--:--</span>
+                        </div>
+                    {% endif %}
+
+                    <a href="{% url 'detalle_mesa' mesa.id %}">Ver detalles</a>
+                    
+                    {% if mesa.pedido_activo.esta_pagado == True %}
+                        <form method="POST" action="{% url 'liberar_pedido' mesa.id %}">
+                        {% csrf_token %}
+                            <button type="submit" class="btn-liberar">Liberar Pedido</button>
+                        </form>
+                    {% endif %}           
+                </div>
+            {% endfor %}
+        </div>
+
+    {% else %}
+        <div class="alerta-caja" style="text-align: center; padding: 20px; background: #fff3cd; border: 1px solid #ffeeba; margin: 20px;">
+            <p style="font-size: 1.2rem; color: #856404;">⚠️ La caja está cerrada. Por favor, abre la caja para poder gestionar pedidos.</p>
+        </div>
+    {% endif %}
 
     <script src="{% static 'mesas/js/cronometro.js' %}"></script>
     <script>
-      // Se ejecuta cada 30 segundos (30000 milisegundos)
-      // Recomendación: 30s es un buen equilibrio para no saturar el servidor
       setInterval(function() {
         location.reload();
       }, 10000); 
     </script>
-
 </body>
 </html>

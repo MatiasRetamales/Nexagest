@@ -3,6 +3,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from carta.models import Categoria
 from .models import Mesa, Producto, Pedido, PedidoItem
 from core.models import Restaurante
+from administracion.models import Caja
 from django.contrib import messages
 from datetime import datetime
 from django.http import JsonResponse
@@ -10,6 +11,7 @@ from usuarios.decoradores import tiene_acceso
 from django.utils import timezone # Importante usar este
 
 
+@tiene_acceso(['garzon', 'encargado', 'operador'])
 def gestionar_pedido(request, id):
     restaurante = request.user.perfil.restaurante
     mesa = get_object_or_404(Mesa, id=id, restaurante=restaurante)
@@ -78,11 +80,12 @@ def gestionar_pedido(request, id):
         "pedido_actual": pedido_actual,
     })
 
+@tiene_acceso(['garzon', 'encargado', 'operador'])
 def cerrar_pedido(request, id):
     restaurante = request.user.perfil.restaurante
-
     mesa = get_object_or_404(Mesa, id=id, restaurante=restaurante)
 
+    # Buscamos el pedido activo de la mesa
     pedido_actual = Pedido.objects.filter(
         mesa=mesa,
         estado__in=["pendiente", "en_preparacion", "listo"],
@@ -90,6 +93,7 @@ def cerrar_pedido(request, id):
         esta_pagado=False
     ).first()
 
+    # Si no hay pedido, retornamos vacío
     if not pedido_actual:
         return render(request, "pedidos/cerrar_pedido.html", {
             "mesa": mesa,
@@ -100,10 +104,9 @@ def cerrar_pedido(request, id):
             "total_con_propina": 0
         })
 
+    # Calculamos items y totales
     items = PedidoItem.objects.filter(pedido=pedido_actual)
     total = sum(item.subtotal() for item in items)
-
-    #  CALCULO DE PROPINA
     propina = 0
 
     if pedido_actual.restaurante.propina_activa:
@@ -111,8 +114,8 @@ def cerrar_pedido(request, id):
 
     total_con_propina = total + propina
 
+    # Procesamiento del pago
     if request.method == "POST":
-
         usar_propina = request.POST.get("usar_propina") == "1"
 
         if pedido_actual.restaurante.propina_activa and usar_propina:
@@ -124,14 +127,27 @@ def cerrar_pedido(request, id):
             pedido_actual.monto_propina = 0
             total_final = total
 
+        # --- AQUÍ ESTÁ LA VINCULACIÓN A LA CAJA ---
+        # Buscamos la caja que esté abierta para este restaurante
+        caja_activa = Caja.objects.filter(
+            restaurante=restaurante, 
+            esta_abierta=True
+        ).first()
+
+        # Si existe una caja abierta, le asignamos el pedido
+        if caja_activa:
+            pedido_actual.sesion_caja = caja_activa
+        # ------------------------------------------
+
+        # Finalizamos el pedido
         pedido_actual.esta_pagado = True
         pedido_actual.total = total_final
         pedido_actual.fecha = timezone.now()
         pedido_actual.fecha_pago = timezone.now()
-
         pedido_actual.save()
 
-        mesa.estado = "ocupada"
+        # Actualizamos mesa
+        mesa.estado = "ocupada" # O "libre" si prefieres que se libere al pagar
         mesa.save()
 
         return redirect('lista_mesas')
@@ -145,6 +161,7 @@ def cerrar_pedido(request, id):
         "total_con_propina": total_con_propina
     })
 
+@tiene_acceso(['encargado'])
 def cancelar_pedido(request, id):
     restaurante = request.user.perfil.restaurante
 
@@ -186,6 +203,7 @@ def cancelar_pedido(request, id):
     })
 
 
+@tiene_acceso(['garzon', 'encargado', 'operador'])
 def eliminar_items(request, id):
     restaurante = request.user.perfil.restaurante
 
@@ -211,6 +229,7 @@ def eliminar_items(request, id):
 
 
 
+@tiene_acceso(['garzon', 'encargado', 'operador'])
 def eliminar_item_especifico(request, id):
     restaurante = request.user.perfil.restaurante
 
@@ -240,7 +259,7 @@ def eliminar_item_especifico(request, id):
         return redirect('detalle_mesa', id=mesa.id)
   
     
-@tiene_acceso(['cocinero', 'administrador', 'encargado'])
+@tiene_acceso(['cocinero', 'administrador', 'encargado', 'operador'])
 def cocina(request):
     restaurante = request.user.perfil.restaurante
     pedidos_pendientes = Pedido.objects.filter(
@@ -256,6 +275,7 @@ def cocina(request):
         "restaurante": restaurante, # <--- ¡Solo faltaba esto!
     })
 
+@tiene_acceso(['garzon', 'encargado', 'operador'])
 def enviar_cocina(request, pedido_id):
     restaurante = request.user.perfil.restaurante
     pedido = get_object_or_404(Pedido, id=pedido_id, restaurante=restaurante)
@@ -277,9 +297,10 @@ def enviar_cocina(request, pedido_id):
     return redirect('detalle_mesa', id=pedido.mesa.id)
 
 
+@tiene_acceso(['cocinero', 'encargado', 'operador'])
 def marcar_pedido_listo(request, pedido_id):
     restaurante = request.user.perfil.restaurante
     pedido = get_object_or_404(Pedido, id=pedido_id, restaurante=restaurante)
     pedido.estado = 'listo'
     pedido.save()
-    return redirect('vista_cocina')
+    return redirect('cocina')

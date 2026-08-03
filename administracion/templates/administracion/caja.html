@@ -1,0 +1,56 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Panel de Caja</title>
+    <link rel="stylesheet" href="{% static 'administracion/css/caja.css' %}">
+</head>
+<body>
+
+
+<div class="container mt-4">
+    
+    <h2>Panel de Caja</h2>
+    <a href="{% url 'historial_cajas' %}" class="boton-historial">Ver Historial de Cajas</a>
+
+    {% if caja %}
+        <div class="alert alert-info">
+            <h3>Resumen de Sesión Actual</h3>
+            <p><strong>Cajero:</strong> {{ caja.nombre_cajero }}</p>
+            <p><strong>Saldo Inicial:</strong> ${{ caja.saldo_actual }}</p>
+            
+            
+            <hr>
+            <h4>Ventas acumuladas: ${{ ventas_actuales }}</h4>
+            <hr>
+            
+            <p><strong>Total en caja esperado:</strong> ${{ caja.saldo_actual|add:ventas_actuales }}</p>
+        </div>
+        
+        <form method="POST" action="{% url 'cerrar_caja' %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Cerrar Caja</button>
+        </form>
+        <a href="{% url 'menu_admin' %}" class="boton-volver">Volver</a>
+
+    {% else %}
+        <div class="alert alert-warning">
+            <p>No hay ninguna caja abierta actualmente.</p>
+        </div>
+
+        <form method="POST" action="{% url 'abrir_caja' %}">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label>Monto inicial de apertura:</label>
+                <input type="number" name="monto_inicial" class="form-control" value="0" required>
+            </div>
+            <button type="submit" class="btn btn-success">Abrir Caja</button>
+        </form>
+        <a href="{% url 'menu_admin' %}" class="boton-volver">Volver</a>
+    {% endif %}
+
+</div>
+
+</body>
+</html>

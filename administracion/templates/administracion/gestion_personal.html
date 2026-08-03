@@ -1,0 +1,46 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestión de Personal</title>
+    <link rel="stylesheet" href="{% static 'administracion/css/gestion_personal.css' %}">
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Gestión de Personal</h1>
+    <div class="top-bar">
+    <a href="{% url 'menu_admin' %}" class="btn-back">⬅ Volver</a>
+    </div>
+
+    <div class="menu">
+
+        <a href="{% url 'gestionar_garzones' %}" class="card">
+            👨‍🍳
+            <span>Gestionar Garzones</span>
+        </a>
+
+        <a href="{% url 'gestionar_cocineros' %}" class="card">
+            👩‍🍳
+            <span>Gestionar Cocineros</span>
+        </a>
+
+        <a href="{% url 'gestionar_encargados' %}" class="card">
+            👔
+            <span>Gestionar Encargados</span>
+        </a>
+
+        <a href="{% url 'gestionar_operadores' %}" class="card">
+            OP
+            <span>Gestionar Operadores</span>
+        </a>
+
+    </div>
+
+</div>
+
+</body>
+</html>

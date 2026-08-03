@@ -1,0 +1,79 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestión de Cocineros</title>
+    <link rel="stylesheet" href="{% static 'administracion/css/gestionar_cocineros.css' %}">
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Gestión de Cocineros</h1>
+    <a href="{% url 'gestion_personal' %}" class="btn-back">⬅ Volver</a>
+
+    <!-- FORMULARIO -->
+    <div class="card">
+        <form action="{% url 'agregar_cocinero' %}" method="post">
+            {% csrf_token %}
+
+            <label for="nombre">Nombre</label>
+            <input type="text" id="nombre" name="nombre" required>
+
+            <label for="contraseña">Contraseña</label>
+            <input type="password" id="contraseña" name="contraseña" required>
+
+            <button type="submit">Agregar Cocinero</button>
+        </form>
+    </div>
+
+    <hr>
+
+    <!-- LISTA -->
+    {% if cocineros %}
+        <h2>Cocineros Registrados</h2>
+
+        <div class="list">
+            {% for cocinero in cocineros %}
+                <div class="item">
+                    <div class="info">
+                        <strong>{{ cocinero.user.username }}</strong>
+
+                        {% if cocinero.activo %}
+                            <span class="activo">🟢 Activo</span>
+                        {% else %}
+                            <span class="inactivo">🔴 Desactivado</span>
+                        {% endif %}
+                    </div>
+
+                    <div class="actions">
+                        {% if cocinero.activo %}
+                            <form action="{% url 'desactivar_cocinero' cocinero.id %}" method="post">
+                                {% csrf_token %}
+                                <button class="btn-danger" type="submit">Desactivar</button>
+                            </form>
+                        {% else %}
+                            <form action="{% url 'activar_cocinero' cocinero.id %}" method="post">
+                                {% csrf_token %}
+                                <button class="btn-success" type="submit">Activar</button>
+                            </form>
+                        {% endif %}
+                            <!-- ir a reset password -->
+                            <a href="{% url 'reset_password_cocinero' cocinero.id %}" class="btn-warning">
+                               Restablecer contraseña
+                            </a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+    {% else %}
+        <p>No hay cocineros registrados.</p>
+    {% endif %}
+
+</div>
+
+</body>
+</html>
