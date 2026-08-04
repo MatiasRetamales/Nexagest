@@ -272,7 +272,7 @@ def cocina(request):
 
     return render(request, "pedidos/cocina.html", {
         "pedidos_pendientes": pedidos_pendientes,
-        "restaurante": restaurante, # <--- ¡Solo faltaba esto!
+        "restaurante": restaurante, 
     })
 
 @tiene_acceso(['garzon', 'encargado', 'operador'])
