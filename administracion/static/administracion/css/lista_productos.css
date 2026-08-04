@@ -142,8 +142,10 @@ tbody tr:hover {
 
     .btn-secondary,
     .btn-danger {
-        display: block;
-        margin-bottom: 5px;
-        text-align: center;
+    display: inline-block;
+    padding: 6px 10px;
+    font-size: 12px;
+    margin: 2px;
+    text-align: center;
     }
 }
