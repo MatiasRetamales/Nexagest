@@ -35,38 +35,97 @@ body {
     font-size: 16px;
 }
 
-/* Pedido actual */
+/* ================================
+   PEDIDO ACTUAL
+================================ */
+
 .pedido-items {
-    margin-bottom: 20px;
+    margin-bottom: 25px;
 }
 
 .pedido-items h2 {
     color: #007BFF;
-    margin-bottom: 10px;
-    text-align: center;
+    margin: 0 0 18px;
+    text-align: left;
+    font-size: 22px;
+    font-weight: 700;
 }
 
 /* Lista de productos */
 .pedido-items ul {
     list-style: none;
     padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
+/* Cada producto */
 .pedido-items li {
-    background: #ffffff;
-    padding: 10px;
-    margin-bottom: 8px;
-    border-radius: 8px;
-    border: 1px solid #e6e6e6;
+    background: #f9fcff;
+    padding: 15px 18px;
+    margin: 0;
+    border-radius: 10px;
+    border: 1px solid #e5eef7;
     font-size: 14px;
+    line-height: 1.6;
+    transition: all 0.2s ease;
 }
 
-/* Total */
-.pedido-items p {
-    text-align: center;
-    font-size: 18px;
-    font-weight: bold;
-    margin-top: 10px;
+/* Efecto sutil en PC */
+.pedido-items li:hover {
+    border-color: #b9d9f7;
+    box-shadow: 0 3px 8px rgba(0, 123, 255, 0.06);
+}
+
+/* Observación */
+.pedido-items li small {
+    display: block;
+    margin-top: 7px;
+    padding: 7px 10px;
+    background: #fff8e6;
+    border-radius: 6px;
+    color: #6b5a2b;
+    font-size: 13px;
+}
+
+/* Total y personal */
+.pedido-items > p {
+    background: #f4faff;
+    margin: 10px 0 0;
+    padding: 12px 15px;
+    border-radius: 8px;
+    font-size: 16px;
+    text-align: right;
+    color: #333;
+}
+
+.pedido-items > p strong {
+    color: #007BFF;
+}
+
+/* Total más destacado */
+.pedido-items > p:first-of-type {
+    margin-top: 18px;
+    font-size: 21px;
+    border: 1px solid #d8ebfb;
+}
+
+.pedido-items > p:first-of-type strong {
+    color: #007BFF;
+}
+
+/* Personal */
+.pedido-items > p:last-of-type {
+    text-align: left;
+    font-size: 14px;
+    background: #fafafa;
+    color: #555;
+}
+
+.pedido-items > p:last-of-type strong {
+    color: #333;
 }
 
 /* Acciones */
@@ -161,6 +220,34 @@ button:hover {
     .acciones-mesa option {
         font-size: 17px;
 
+    }
+
+     .pedido-items {
+        margin-bottom: 20px;
+    }
+
+    .pedido-items h2 {
+        font-size: 20px;
+        margin-bottom: 14px;
+    }
+
+    .pedido-items li {
+        padding: 13px 14px;
+        font-size: 13px;
+        line-height: 1.55;
+    }
+
+    .pedido-items li small {
+        font-size: 12px;
+        padding: 7px 9px;
+    }
+
+    .pedido-items > p {
+        padding: 11px 12px;
+    }
+
+    .pedido-items > p:first-of-type {
+        font-size: 19px;
     }
 
 }
