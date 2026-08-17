@@ -203,14 +203,86 @@ def gestion_propinas(request):
     restaurante = request.user.perfil.restaurante
 
     if request.method == "POST":
-        restaurante.propina_activa = 'propina_activa' in request.POST
-        restaurante.porcentaje_propina = request.POST.get('porcentaje_propina', 10)
+
+        # =========================
+        # PROPINA
+        # =========================
+
+        restaurante.propina_activa = (
+            'propina_activa' in request.POST
+        )
+
+        restaurante.porcentaje_propina = (
+            request.POST.get('porcentaje_propina', 10)
+        )
+
+        # =========================
+        # PEDIDOS ONLINE
+        # =========================
+
+        restaurante.pedidos_online_activos = (
+            'pedidos_online_activos' in request.POST
+        )
+
+        restaurante.acepta_delivery = (
+            'acepta_delivery' in request.POST
+        )
+
+        restaurante.acepta_retiro = (
+            'acepta_retiro' in request.POST
+        )
+
+        # =========================
+        # MÉTODOS DE PAGO
+        # =========================
+
+        restaurante.acepta_pago_local = (
+            'acepta_pago_local' in request.POST
+        )
+
+        restaurante.acepta_pago_transferencia = (
+            'acepta_pago_transferencia' in request.POST
+        )
+
+        # =========================
+        # DATOS TRANSFERENCIA
+        # =========================
+
+        restaurante.banco_transferencia = (
+            request.POST.get('banco_transferencia', '')
+        )
+
+        restaurante.tipo_cuenta_transferencia = (
+            request.POST.get('tipo_cuenta_transferencia', '')
+        )
+
+        restaurante.numero_cuenta_transferencia = (
+            request.POST.get('numero_cuenta_transferencia', '')
+        )
+
+        restaurante.titular_transferencia = (
+            request.POST.get('titular_transferencia', '')
+        )
+
+        restaurante.rut_transferencia = (
+            request.POST.get('rut_transferencia', '')
+        )
+
+        restaurante.correo_transferencia = (
+            request.POST.get('correo_transferencia', '')
+        )
+
         restaurante.save()
+
         return redirect('menu_admin')
 
-    return render(request, 'administracion/gestion_propinas.html', {
-        "restaurante": restaurante
-    })
+    return render(
+        request,
+        'administracion/gestion_propinas.html',
+        {
+            "restaurante": restaurante
+        }
+    )
 
 
 
@@ -221,23 +293,104 @@ def gestion_propinas(request):
 
 @tiene_acceso(['encargado'])
 def caja(request):
-    restaurante = request.user.perfil.restaurante
-    # Buscamos la caja abierta
-    caja_abierta = Caja.objects.filter(restaurante=restaurante, esta_abierta=True).first()
-    
-    ventas_actuales = 0
-    
-    if caja_abierta:
-        # Aquí hacemos el cálculo dinámico en tiempo real
-        ventas_actuales = Pedido.objects.filter(
-            sesion_caja=caja_abierta, 
-            esta_pagado=True
-        ).aggregate(Sum('total'))['total__sum'] or 0
 
-    return render(request, 'administracion/caja.html', {
-        'caja': caja_abierta,
-        'ventas_actuales': ventas_actuales # Enviamos el dato al template
-    })
+    restaurante = request.user.perfil.restaurante
+
+    caja_abierta = Caja.objects.filter(
+        restaurante=restaurante,
+        esta_abierta=True
+    ).first()
+
+    # Valores iniciales
+    ventas_actuales = 0
+    ventas_efectivo = 0
+    ventas_tarjeta = 0
+    ventas_transferencia = 0
+    propinas_actuales = 0
+    efectivo_esperado = 0
+    cantidad_pedidos = 0
+
+    # Si existe una caja abierta
+    if caja_abierta:
+
+        # Pedidos pagados pertenecientes a esta sesión de caja
+        pedidos_pagados = Pedido.objects.filter(
+            sesion_caja=caja_abierta,
+            esta_pagado=True
+        )
+
+        # Cantidad de pedidos cobrados
+        cantidad_pedidos = pedidos_pagados.count()
+
+        # =========================
+        # TOTAL DE VENTAS
+        # =========================
+
+        ventas_actuales = pedidos_pagados.aggregate(
+            total=Sum('total')
+        )['total'] or 0
+
+        # =========================
+        # EFECTIVO
+        # =========================
+
+        ventas_efectivo = pedidos_pagados.filter(
+            metodo_pago='efectivo'
+        ).aggregate(
+            total=Sum('total')
+        )['total'] or 0
+
+        # =========================
+        # TARJETA
+        # =========================
+
+        ventas_tarjeta = pedidos_pagados.filter(
+            metodo_pago='tarjeta'
+        ).aggregate(
+            total=Sum('total')
+        )['total'] or 0
+
+        # =========================
+        # TRANSFERENCIA
+        # =========================
+
+        ventas_transferencia = pedidos_pagados.filter(
+            metodo_pago='transferencia'
+        ).aggregate(
+            total=Sum('total')
+        )['total'] or 0
+
+        # =========================
+        # PROPINAS
+        # =========================
+
+        propinas_actuales = pedidos_pagados.aggregate(
+            total=Sum('monto_propina')
+        )['total'] or 0
+
+        # =========================
+        # EFECTIVO ESPERADO
+        # =========================
+
+        efectivo_esperado = (
+            caja_abierta.monto_inicial
+            + ventas_efectivo
+        )
+
+    return render(
+        request,
+        'administracion/caja.html',
+        {
+            'caja': caja_abierta,
+            'ventas_actuales': ventas_actuales,
+            'ventas_efectivo': ventas_efectivo,
+            'ventas_tarjeta': ventas_tarjeta,
+            'ventas_transferencia': ventas_transferencia,
+            'propinas_actuales': propinas_actuales,
+            'efectivo_esperado': efectivo_esperado,
+            'cantidad_pedidos': cantidad_pedidos,
+        }
+    )
 
 
 @tiene_acceso(['encargado'])
@@ -270,75 +423,274 @@ def abrir_caja(request):
 
 @tiene_acceso(['encargado'])
 def cerrar_caja(request):
+
     if request.method == "POST":
+
         restaurante = request.user.perfil.restaurante
-        
-        # 1. Buscamos la caja abierta
-        caja_abierta = Caja.objects.filter(restaurante=restaurante, esta_abierta=True).first()
-        
+
+        caja_abierta = Caja.objects.filter(
+            restaurante=restaurante,
+            esta_abierta=True
+        ).first()
+
         if not caja_abierta:
-            messages.warning(request, "No hay ninguna caja abierta para cerrar.")
+
+            messages.warning(
+                request,
+                "No hay ninguna caja abierta para cerrar."
+            )
+
             return redirect('caja')
-        
-        # 2. CALCULAMOS LAS VENTAS (Esto es lo que faltaba)
-        # Buscamos todos los pedidos pagados en esta sesión y sumamos su 'total'
-        ventas_totales = Pedido.objects.filter(
-            sesion_caja=caja_abierta, 
+
+        # ==========================================
+        # PEDIDOS PAGADOS DE ESTA SESIÓN
+        # ==========================================
+
+        pedidos_pagados = Pedido.objects.filter(
+            sesion_caja=caja_abierta,
             esta_pagado=True
-        ).aggregate(Sum('total'))['total__sum'] or 0
-        
-        # 3. Cerramos y guardamos los datos finales
+        )
+
+        cantidad_pedidos = pedidos_pagados.count()
+
+
+        # ==========================================
+        # TOTAL VENDIDO
+        # ==========================================
+
+        ventas_totales = pedidos_pagados.aggregate(
+            total=Sum('total')
+        )['total'] or 0
+
+
+        # ==========================================
+        # EFECTIVO
+        # ==========================================
+
+        ventas_efectivo = pedidos_pagados.filter(
+            metodo_pago='efectivo'
+        ).aggregate(
+            total=Sum('total')
+        )['total'] or 0
+
+
+        # ==========================================
+        # TARJETA
+        # ==========================================
+
+        ventas_tarjeta = pedidos_pagados.filter(
+            metodo_pago='tarjeta'
+        ).aggregate(
+            total=Sum('total')
+        )['total'] or 0
+
+
+        # ==========================================
+        # TRANSFERENCIA
+        # ==========================================
+
+        ventas_transferencia = pedidos_pagados.filter(
+            metodo_pago='transferencia'
+        ).aggregate(
+            total=Sum('total')
+        )['total'] or 0
+
+
+        # ==========================================
+        # PROPINAS
+        # ==========================================
+
+        propinas_totales = pedidos_pagados.aggregate(
+            total=Sum('monto_propina')
+        )['total'] or 0
+
+
+        # ==========================================
+        # EFECTIVO FÍSICO ESPERADO
+        # ==========================================
+
+        saldo_final = (
+            caja_abierta.monto_inicial
+            + ventas_efectivo
+        )
+
+
+        # ==========================================
+        # CERRAR CAJA
+        # ==========================================
+
+        caja_abierta.saldo_actual = saldo_final
         caja_abierta.esta_abierta = False
         caja_abierta.fecha_cierre = timezone.now()
-        
-        # Guardamos el total calculado para tener auditoría
-        # Opcional: caja_abierta.saldo_final = caja_abierta.saldo_actual + ventas_totales
-        caja_abierta.saldo_actual += ventas_totales 
-        
+
         caja_abierta.save()
-        
-        messages.success(request, f"Caja cerrada. Ventas del día: ${ventas_totales}")
+
+
+        # ==========================================
+        # MENSAJE FINAL
+        # ==========================================
+
+        messages.success(
+            request,
+            f"Caja cerrada correctamente. "
+            f"Pedidos: {cantidad_pedidos}. "
+            f"Ventas totales: ${ventas_totales}. "
+            f"Efectivo esperado: ${saldo_final}."
+        )
+
         return redirect('caja')
-    
+
 
 
 @tiene_acceso(['encargado'])
 def historial_cajas(request):
+
     restaurante = request.user.perfil.restaurante
-    # Buscamos todas las cajas que ya fueron cerradas
-    cajas_pasadas = Caja.objects.filter(restaurante=restaurante, esta_abierta=False).order_by('-fecha_apertura')
-    
-    return render(request, 'administracion/historial_cajas.html', {
-        'cajas': cajas_pasadas
-    })
+
+    cajas_pasadas = Caja.objects.filter(
+        restaurante=restaurante,
+        esta_abierta=False
+    ).order_by('-fecha_apertura')
+
+    cajas_data = []
+
+    for caja in cajas_pasadas:
+
+        pedidos = Pedido.objects.filter(
+            sesion_caja=caja,
+            restaurante=restaurante,
+            esta_pagado=True
+        )
+
+        total_ventas = pedidos.aggregate(
+            total=Sum('total')
+        )['total'] or 0
+
+        ventas_efectivo = pedidos.filter(
+            metodo_pago='efectivo'
+        ).aggregate(
+            total=Sum('total')
+        )['total'] or 0
+
+        ventas_tarjeta = pedidos.filter(
+            metodo_pago='tarjeta'
+        ).aggregate(
+            total=Sum('total')
+        )['total'] or 0
+
+        ventas_transferencia = pedidos.filter(
+            metodo_pago='transferencia'
+        ).aggregate(
+            total=Sum('total')
+        )['total'] or 0
+
+        cajas_data.append({
+            'caja': caja,
+            'cantidad_pedidos': pedidos.count(),
+            'total_ventas': total_ventas,
+            'ventas_efectivo': ventas_efectivo,
+            'ventas_tarjeta': ventas_tarjeta,
+            'ventas_transferencia': ventas_transferencia,
+        })
+
+    return render(
+        request,
+        'administracion/historial_cajas.html',
+        {
+            'cajas': cajas_data,
+            'restaurante': restaurante,
+        }
+    )
+
+
 
 @tiene_acceso(['encargado'])
 def detalle_caja(request, caja_id):
+
     restaurante = request.user.perfil.restaurante
 
-    caja = Caja.objects.filter(id=caja_id, restaurante=restaurante).first()
+    caja = Caja.objects.filter(
+        id=caja_id,
+        restaurante=restaurante
+    ).first()
 
     if not caja:
-        messages.error(request, "Caja no encontrada.")
+
+        messages.error(
+            request,
+            "Caja no encontrada."
+        )
+
         return redirect('historial_cajas')
 
-    pedidos = Pedido.objects.filter(sesion_caja=caja, restaurante=restaurante)
+    # Pedidos asociados a esta caja
+    pedidos = Pedido.objects.filter(
+        sesion_caja=caja,
+        restaurante=restaurante,
+        esta_pagado=True
+    )
 
     cantidad_pedidos = pedidos.count()
 
-    total_cobrado = pedidos.aggregate(total=Sum('total'))['total'] or 0  # venta + propina, ya cobrado junto
-    propinas_totales = pedidos.aggregate(total=Sum('monto_propina'))['total'] or 0
-    ventas_sin_propina = total_cobrado - propinas_totales
+    # Total cobrado
+    total_cobrado = pedidos.aggregate(
+        total=Sum('total')
+    )['total'] or 0
 
-    return render(request, 'administracion/detalle_historial_caja.html', {
-        'caja': caja,
-        'pedidos': pedidos,
-        'cantidad_pedidos': cantidad_pedidos,
-        'ventas_sin_propina': ventas_sin_propina,
-        'propinas_totales': propinas_totales,
-        'total_recaudado': total_cobrado,
-        'restaurante': restaurante
-    })
+    # Propinas
+    propinas_totales = pedidos.aggregate(
+        total=Sum('monto_propina')
+    )['total'] or 0
+
+    # Ventas sin propina
+    ventas_sin_propina = (
+        total_cobrado - propinas_totales
+    )
+
+    # Efectivo
+    ventas_efectivo = pedidos.filter(
+        metodo_pago='efectivo'
+    ).aggregate(
+        total=Sum('total')
+    )['total'] or 0
+
+    # Tarjeta
+    ventas_tarjeta = pedidos.filter(
+        metodo_pago='tarjeta'
+    ).aggregate(
+        total=Sum('total')
+    )['total'] or 0
+
+    # Transferencia
+    ventas_transferencia = pedidos.filter(
+        metodo_pago='transferencia'
+    ).aggregate(
+        total=Sum('total')
+    )['total'] or 0
+
+    # Efectivo esperado al cierre
+    efectivo_esperado = (
+        caja.monto_inicial
+        + ventas_efectivo
+    )
+
+    return render(
+        request,
+        'administracion/detalle_historial_caja.html',
+        {
+            'caja': caja,
+            'pedidos': pedidos,
+            'cantidad_pedidos': cantidad_pedidos,
+            'ventas_sin_propina': ventas_sin_propina,
+            'propinas_totales': propinas_totales,
+            'total_recaudado': total_cobrado,
+            'ventas_efectivo': ventas_efectivo,
+            'ventas_tarjeta': ventas_tarjeta,
+            'ventas_transferencia': ventas_transferencia,
+            'efectivo_esperado': efectivo_esperado,
+            'restaurante': restaurante,
+        }
+    )
 
 
 

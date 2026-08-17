@@ -1,57 +1,175 @@
 {% load static %}
+
 <!DOCTYPE html>
+
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
     <title>Panel de Caja</title>
-    <link rel="stylesheet" href="{% static 'administracion/css/caja.css' %}">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-</head>
-<body>
 
+    <link rel="stylesheet" href="{% static 'administracion/css/caja.css' %}" />
+  </head>
 
-<div class="container mt-4">
-    
-    <h2>Panel de Caja</h2>
-    <a href="{% url 'historial_cajas' %}" class="boton-historial">Ver Historial de Cajas</a>
+  <body>
+    <div class="container mt-4">
+      <h2>Panel de Caja</h2>
 
-    {% if caja %}
+      <a href="{% url 'historial_cajas' %}" class="boton-historial">Ver Historial de Cajas</a>
+
+      {% if caja %}
+        <!-- ========================= -->
+        <!-- CAJA ABIERTA -->
+        <!-- ========================= -->
+
         <div class="alert alert-info">
-            <h3>Resumen de Sesión Actual</h3>
-            <p><strong>Cajero:</strong> {{ caja.nombre_cajero }}</p>
-            <p><strong>Saldo Inicial:</strong> ${{ caja.saldo_actual }}</p>
-            
-            
-            <hr>
-            <h4>Ventas acumuladas: ${{ ventas_actuales }}</h4>
-            <hr>
-            
-            <p><strong>Total en caja esperado:</strong> ${{ caja.saldo_actual|add:ventas_actuales }}</p>
-        </div>
-        
-        <form method="POST" action="{% url 'cerrar_caja' %}">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-danger">Cerrar Caja</button>
-        </form>
-        <a href="{% url 'menu_admin' %}" class="boton-volver">Volver</a>
+          <h3>Resumen de Sesión Actual</h3>
 
-    {% else %}
-        <div class="alert alert-warning">
-            <p>No hay ninguna caja abierta actualmente.</p>
+          <p>
+            <strong>Cajero:</strong>
+            {{ caja.nombre_cajero }}
+          </p>
+
+          <p>
+            <strong>Monto inicial:</strong>
+            ${{ caja.monto_inicial }}
+          </p>
+
+          <hr />
+
+          <!-- ========================= -->
+          <!-- VENTAS -->
+          <!-- ========================= -->
+
+          <h3>Ventas</h3>
+
+          <p>
+            <strong>💰 Total vendido:</strong>
+            ${{ ventas_actuales }}
+          </p>
+
+          <p>
+            <strong>💵 Efectivo:</strong>
+            ${{ ventas_efectivo }}
+          </p>
+
+          <p>
+            <strong>💳 Tarjeta:</strong>
+            ${{ ventas_tarjeta }}
+          </p>
+
+          <p>
+            <strong>🏦 Transferencia:</strong>
+            ${{ ventas_transferencia }}
+          </p>
+
+          <hr />
+
+          <!-- ========================= -->
+          <!-- PROPINAS -->
+          <!-- ========================= -->
+
+          <h3>Propinas</h3>
+
+          <p>
+            <strong>🎁 Propinas:</strong>
+            ${{ propinas_actuales }}
+          </p>
+
+          <hr />
+
+          <!-- ========================= -->
+          <!-- EFECTIVO ESPERADO -->
+          <!-- ========================= -->
+
+          <h3>Efectivo esperado</h3>
+
+          <p>
+            <strong>💵 Monto inicial:</strong>
+            ${{ caja.monto_inicial }}
+          </p>
+
+          <p>
+            <strong>💵 Ventas en efectivo:</strong>
+            ${{ ventas_efectivo }}
+          </p>
+
+          <p>
+            <strong>🧮 Efectivo esperado:</strong>
+            ${{ efectivo_esperado }}
+          </p>
+
+          <hr />
+
+          <!-- ========================= -->
+          <!-- PEDIDOS -->
+          <!-- ========================= -->
+
+          <p>
+            <strong>🧾 Pedidos cobrados:</strong>
+
+            {{ cantidad_pedidos }}
+          </p>
         </div>
+
+        <!-- ========================= -->
+        <!-- CIERRE DE CAJA -->
+        <!-- ========================= -->
+
+        <div class="cierre-caja">
+          <h3>🔒 Cerrar Caja</h3>
+
+          <p>Cuenta físicamente el dinero que tienes en caja.</p>
+
+          <p>
+            <strong>Efectivo esperado:</strong>
+
+            ${{ efectivo_esperado }}
+          </p>
+
+          <form method="POST" action="{% url 'cerrar_caja' %}">
+            {% csrf_token %}
+
+            <div class="mb-3">
+              <label for="efectivo_contado"><strong>💵 Efectivo contado:</strong></label>
+
+              <input type="number" id="efectivo_contado" name="efectivo_contado" class="form-control" min="0" step="1" required />
+            </div>
+
+            <button type="submit" class="btn btn-danger">🔒 Cerrar y Cuadrar Caja</button>
+          </form>
+        </div>
+
+        <a href="{% url 'menu_admin' %}" class="boton-volver">Volver</a>
+      {% else %}
+        <!-- ========================= -->
+        <!-- CAJA CERRADA -->
+        <!-- ========================= -->
+
+        <div class="alert alert-warning">
+          <p>⚠️ No hay ninguna caja abierta actualmente.</p>
+        </div>
+
+        <!-- ========================= -->
+        <!-- ABRIR CAJA -->
+        <!-- ========================= -->
 
         <form method="POST" action="{% url 'abrir_caja' %}">
-            {% csrf_token %}
-            <div class="mb-3">
-                <label>Monto inicial de apertura:</label>
-                <input type="number" name="monto_inicial" class="form-control" value="0" required>
-            </div>
-            <button type="submit" class="btn btn-success">Abrir Caja</button>
+          {% csrf_token %}
+
+          <div class="mb-3">
+            <label>Monto inicial de apertura:</label>
+
+            <input type="number" name="monto_inicial" class="form-control" value="0" min="0" step="1" required />
+          </div>
+
+          <button type="submit" class="btn btn-success">🟢 Abrir Caja</button>
         </form>
+
         <a href="{% url 'menu_admin' %}" class="boton-volver">Volver</a>
-    {% endif %}
-
-</div>
-
-</body>
+      {% endif %}
+    </div>
+  </body>
 </html>

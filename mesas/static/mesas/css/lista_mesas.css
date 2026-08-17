@@ -200,6 +200,378 @@ body {
     margin-bottom: 20px;
 }
 
+/* ========================================
+   PEDIDOS ONLINE
+======================================== */
+
+.pedidos-online {
+    width: 95%;
+    max-width: 1200px;
+    margin: 35px auto;
+}
+
+
+/* ========================================
+   TÍTULO
+======================================== */
+
+.pedidos-online-titulo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+
+    border-bottom: 2px solid #e5e7eb;
+}
+
+.pedidos-online-titulo h2 {
+    margin: 0;
+
+    font-size: 1.6rem;
+    color: #222;
+}
+
+.contador-online {
+    background: #e8f5ff;
+    color: #1683c7;
+
+    padding: 6px 12px;
+
+    border-radius: 20px;
+
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+
+/* ========================================
+   CONTENEDOR DE PEDIDOS
+======================================== */
+
+.pedidos-online-container {
+    display: grid;
+
+    grid-template-columns:
+        repeat(auto-fit, minmax(280px, 1fr));
+
+    gap: 20px;
+}
+
+
+/* ========================================
+   TARJETA PEDIDO
+======================================== */
+
+.pedido-online {
+    background: #ffffff;
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 14px;
+
+    padding: 20px;
+
+    box-shadow:
+        0 4px 12px rgba(0, 0, 0, 0.06);
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.pedido-online:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 7px 18px rgba(0, 0, 0, 0.10);
+}
+
+
+/* ========================================
+   CABECERA
+======================================== */
+
+.pedido-online-cabecera {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 10px;
+
+    margin-bottom: 18px;
+
+    padding-bottom: 14px;
+
+    border-bottom: 1px solid #eeeeee;
+}
+
+.pedido-online-cabecera strong {
+    font-size: 1.05rem;
+
+    color: #222;
+}
+
+
+/* ========================================
+   ESTADOS
+======================================== */
+
+.estado-online {
+    display: inline-flex;
+
+    align-items: center;
+
+    padding: 5px 9px;
+
+    border-radius: 20px;
+
+    font-size: 0.78rem;
+
+    font-weight: 600;
+
+    white-space: nowrap;
+}
+
+
+/* Pendiente */
+
+.estado-online.pendiente {
+    background: #e8f1ff;
+    color: #2563eb;
+}
+
+
+/* Aceptado */
+
+.estado-online.aceptado {
+    background: #fff7d6;
+    color: #9a7500;
+}
+
+
+/* Preparando */
+
+.estado-online.preparando {
+    background: #fff0e6;
+    color: #d65a00;
+}
+
+
+/* Listo */
+
+.estado-online.listo {
+    background: #e7f8ee;
+    color: #16834b;
+}
+
+
+/* ========================================
+   INFORMACIÓN
+======================================== */
+
+.pedido-online-info {
+    margin-bottom: 16px;
+}
+
+.pedido-online-info p {
+    margin: 8px 0;
+
+    font-size: 0.92rem;
+
+    color: #555;
+
+    line-height: 1.4;
+}
+
+.pedido-online-info strong {
+    color: #333;
+}
+
+
+/* ========================================
+   PEDIDO PAGADO
+======================================== */
+
+.pedido-pagado {
+    background: #eaf8f0;
+
+    border: 1px solid #b9e7ca;
+
+    border-radius: 10px;
+
+    padding: 12px;
+
+    margin-bottom: 15px;
+}
+
+.pedido-pagado p {
+    margin: 5px 0;
+
+    color: #176b3c;
+
+    font-size: 0.88rem;
+}
+
+
+/* ========================================
+   PEDIDO PENDIENTE DE PAGO
+======================================== */
+
+.pedido-pendiente-pago {
+    background: #fff8e6;
+
+    border: 1px solid #f1d58a;
+
+    border-radius: 10px;
+
+    padding: 12px;
+
+    margin-bottom: 15px;
+}
+
+.pedido-pendiente-pago p {
+    margin: 5px 0 10px;
+
+    color: #8a6500;
+
+    font-size: 0.88rem;
+}
+
+
+/* ========================================
+   BOTÓN COBRAR
+======================================== */
+
+.btn-link {
+    display: inline-block;
+
+    text-decoration: none;
+
+    background: #f59e0b;
+
+    color: white;
+
+    padding: 8px 12px;
+
+    border-radius: 8px;
+
+    font-size: 0.85rem;
+
+    font-weight: 600;
+
+    transition:
+        background 0.2s ease;
+}
+
+.btn-link:hover {
+    background: #d97706;
+}
+
+
+/* ========================================
+   BOTÓN VER PEDIDO
+======================================== */
+
+.btn-ver-online {
+    display: block;
+
+    width: 100%;
+
+    box-sizing: border-box;
+
+    text-align: center;
+
+    text-decoration: none;
+
+    background: #1683c7;
+
+    color: white;
+
+    padding: 11px 15px;
+
+    border-radius: 9px;
+
+    font-size: 0.9rem;
+
+    font-weight: 600;
+
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease;
+}
+
+.btn-ver-online:hover {
+    background: #106a9f;
+
+    transform: translateY(-1px);
+}
+
+
+/* ========================================
+   SIN PEDIDOS
+======================================== */
+
+.sin-pedidos-online {
+    background: #f8fafc;
+
+    border: 1px dashed #cbd5e1;
+
+    border-radius: 12px;
+
+    padding: 30px;
+
+    text-align: center;
+
+    color: #64748b;
+}
+
+.sin-pedidos-online p {
+    margin: 0;
+}
+
+
+/* ========================================
+   RESPONSIVE
+======================================== */
+
+@media (max-width: 600px) {
+
+    .pedidos-online {
+        width: 92%;
+    }
+
+
+    .pedidos-online-titulo {
+        align-items: flex-start;
+
+        flex-direction: column;
+
+        gap: 10px;
+    }
+
+
+    .pedidos-online-container {
+        grid-template-columns: 1fr;
+    }
+
+
+    .pedido-online {
+        padding: 16px;
+    }
+
+
+    .pedido-online-cabecera {
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+}
+
 
 @keyframes pulso {
     0%, 100% { opacity: 1; }

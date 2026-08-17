@@ -11,16 +11,32 @@ from administracion.models import Caja
 def lista_mesas(request):
     restaurante = request.user.perfil.restaurante
     mesas = Mesa.objects.filter(restaurante=restaurante)
-    caja = Caja.objects.filter(restaurante=restaurante, esta_abierta=True).first()
+    caja = Caja.objects.filter(
+        restaurante=restaurante,
+        esta_abierta=True
+    ).first()
 
-    # Para cada mesa, adjuntamos su pedido activo si existe
+    # Pedidos presenciales activos de cada mesa
     for mesa in mesas:
         mesa.pedido_activo = Pedido.objects.filter(
             mesa=mesa,
+            origen='presencial',
             estado__in=['pendiente', 'en_preparacion', 'listo']
         ).first()
 
-    return render(request, "mesas/lista_mesas.html", {"mesas": mesas, "restaurante": restaurante, "caja": caja})
+    # Pedidos realizados desde la carta online
+    pedidos_online = Pedido.objects.filter(
+    restaurante=restaurante,
+    origen='online',
+    estado__in=['pendiente', 'aceptado', 'en_preparacion', 'listo']
+   ).order_by('-fecha')
+
+    return render(request, "mesas/lista_mesas.html", {
+        "mesas": mesas,
+        "restaurante": restaurante,
+        "caja": caja,
+        "pedidos_online": pedidos_online,
+    })
 
 
 

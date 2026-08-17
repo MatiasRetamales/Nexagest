@@ -1,0 +1,350 @@
+/* ========================================
+   DETALLE PEDIDO ONLINE
+======================================== */
+
+body {
+    margin: 0;
+    padding: 0 20px 40px;
+
+    background: #f5f7fa;
+
+    font-family: Arial, Helvetica, sans-serif;
+
+    color: #1f2937;
+}
+
+
+/* ========================================
+   LOGO
+======================================== */
+
+.logo-container {
+    width: 100%;
+    max-width: 1100px;
+
+    margin: 25px auto 10px;
+
+    text-align: center;
+}
+
+.logo-admin {
+    width: 150px;
+    max-width: 70%;
+}
+
+
+/* ========================================
+   TÍTULO
+======================================== */
+
+#titulo_lista_mesas {
+    max-width: 1100px;
+
+    margin: 20px auto 25px;
+
+    text-align: center;
+
+    font-size: 1.8rem;
+
+    color: #111827;
+}
+
+
+/* ========================================
+   CONTENEDOR PRINCIPAL
+======================================== */
+
+.mesa-detalle {
+    width: 100%;
+    max-width: 1100px;
+
+    margin: 0 auto;
+
+    display: grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap: 20px;
+}
+
+
+/* ========================================
+   TARJETAS
+======================================== */
+
+.mesa-info,
+.pedido-items,
+.acciones-mesa {
+    background: #ffffff;
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 14px;
+
+    padding: 22px;
+
+    box-shadow:
+        0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+
+/* ========================================
+   INFORMACIÓN DEL CLIENTE
+======================================== */
+
+.mesa-info {
+    grid-column: 1 / -1;
+}
+
+.mesa-info p {
+    margin: 10px 0;
+
+    font-size: 0.95rem;
+
+    line-height: 1.5;
+
+    color: #4b5563;
+}
+
+.mesa-info strong {
+    color: #111827;
+}
+
+
+/* ========================================
+   PRODUCTOS
+======================================== */
+
+.pedido-items h2 {
+    margin-top: 0;
+    margin-bottom: 18px;
+
+    font-size: 1.25rem;
+
+    color: #111827;
+}
+
+.pedido-items ul {
+    list-style: none;
+
+    padding: 0;
+    margin: 0;
+}
+
+.pedido-items li {
+    padding: 14px 0;
+
+    border-bottom: 1px solid #eeeeee;
+
+    line-height: 1.5;
+
+    color: #555;
+}
+
+.pedido-items li:last-child {
+    border-bottom: none;
+}
+
+.pedido-items li strong {
+    color: #222;
+}
+
+.pedido-items small {
+    display: inline-block;
+
+    margin-top: 5px;
+
+    color: #6b7280;
+}
+
+.pedido-items > p {
+    margin-top: 18px;
+
+    padding-top: 15px;
+
+    border-top: 2px solid #eeeeee;
+
+    font-size: 1.1rem;
+
+    text-align: right;
+}
+
+
+/* ========================================
+   ACCIONES
+======================================== */
+
+.acciones-mesa {
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    gap: 12px;
+}
+
+.acciones-mesa p {
+    margin: 0 0 5px;
+
+    text-align: center;
+
+    color: #4b5563;
+
+    line-height: 1.5;
+}
+
+
+/* ========================================
+   FORMULARIOS
+======================================== */
+
+.acciones-mesa form {
+    width: 100%;
+}
+
+
+/* ========================================
+   BOTONES
+======================================== */
+
+.btn-link {
+    display: block;
+
+    width: 100%;
+
+    box-sizing: border-box;
+
+    padding: 12px 16px;
+
+    border: none;
+
+    border-radius: 9px;
+
+    background: #1683c7;
+
+    color: white;
+
+    text-align: center;
+
+    text-decoration: none;
+
+    font-size: 0.95rem;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease;
+}
+
+.btn-link:hover {
+    background: #106a9f;
+
+    transform: translateY(-1px);
+}
+
+
+/* ========================================
+   BOTÓN VOLVER
+======================================== */
+
+.btn-volver {
+    background: #6b7280;
+}
+
+.btn-volver:hover {
+    background: #4b5563;
+}
+
+
+/* ========================================
+   ESTADOS
+======================================== */
+
+/* Pendiente */
+
+.estado-pendiente {
+    background: #fff7d6;
+    color: #946c00;
+}
+
+
+/* Preparando */
+
+.estado-preparando {
+    background: #fff0e6;
+    color: #c45100;
+}
+
+
+/* Listo */
+
+.estado-listo {
+    background: #e7f8ee;
+    color: #167443;
+}
+
+
+/* Entregado */
+
+.estado-entregado {
+    background: #e8f5ee;
+    color: #176b3c;
+}
+
+
+/* ========================================
+   MENSAJE DE TRANSFERENCIA
+======================================== */
+
+.acciones-mesa p strong {
+    color: #8a6500;
+}
+
+
+/* ========================================
+   RESPONSIVE
+======================================== */
+
+@media (max-width: 700px) {
+
+    body {
+        padding: 0 12px 30px;
+    }
+
+
+    #titulo_lista_mesas {
+        font-size: 1.45rem;
+
+        margin-top: 15px;
+    }
+
+
+    .mesa-detalle {
+        grid-template-columns: 1fr;
+
+        gap: 15px;
+    }
+
+
+    .mesa-info {
+        grid-column: auto;
+    }
+
+
+    .mesa-info,
+    .pedido-items,
+    .acciones-mesa {
+        padding: 18px;
+    }
+
+
+    .pedido-items > p {
+        text-align: left;
+    }
+
+}

@@ -1,78 +1,291 @@
 {% load static %}
 
 <!DOCTYPE html>
-<html>
+<html lang="es">
+
 <head>
+
+    <meta charset="UTF-8">
+
     <title>Cerrar Pedido</title>
-    <link rel="stylesheet" href="{% static 'pedidos/css/cerrar_pedido.css' %}">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link
+        rel="stylesheet"
+        href="{% static 'pedidos/css/cerrar_pedido.css' %}"
+    >
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
 </head>
+
 <body>
 
-<h1>Cerrar pedido</h1>
+<div class="contenedor-pedido">
 
-{% if pedido_actual %}
+    <h1>Cerrar pedido</h1>
 
-    <ul>
-        {% for item in items %}
-            <li>
-                {{ item.cantidad }} x {{ item.producto }} -
-                Precio Unitario: ${{ item.precio_unitario|floatformat:0 }} -
-                Subtotal: ${{ item.subtotal|floatformat:0 }}
-            </li>
-        {% endfor %}
-    </ul>
 
-    <p>Subtotal: ${{ total }}</p>
+    {% if pedido_actual %}
 
-    {% if pedido_actual.restaurante.propina_activa %}
+        <!-- ========================= -->
+        <!-- PRODUCTOS -->
+        <!-- ========================= -->
+
+        <div class="seccion">
+
+            <h2>Productos</h2>
+
+            <ul class="lista-productos">
+
+                {% for item in items %}
+
+                    <li>
+
+                        <div class="producto-nombre">
+
+                            {{ item.cantidad }} ×
+                            {{ item.producto }}
+
+                        </div>
+
+                        <div class="producto-precio">
+
+                            ${{ item.subtotal|floatformat:0 }}
+
+                        </div>
+
+                        <small>
+
+                            Precio unitario:
+                            ${{ item.precio_unitario|floatformat:0 }}
+
+                        </small>
+
+                    </li>
+
+                {% endfor %}
+
+            </ul>
+
+        </div>
+
+
+        <!-- ========================= -->
+        <!-- TOTALES -->
+        <!-- ========================= -->
+
+        <div class="totales">
+
+            <p>
+                <span>Subtotal</span>
+                <strong>
+                    ${{ total|floatformat:0 }}
+                </strong>
+            </p>
+
+
+            {% if pedido_actual.restaurante.propina_activa %}
+
+                <p>
+
+                    <span>
+                        Propina
+                        ({{ pedido_actual.restaurante.porcentaje_propina }}%)
+                    </span>
+
+                    <strong>
+                        ${{ propina|floatformat:0 }}
+                    </strong>
+
+                </p>
+
+
+                <p class="total-final">
+
+                    <span>Total con propina</span>
+
+                    <strong>
+                        ${{ total_con_propina|floatformat:0 }}
+                    </strong>
+
+                </p>
+
+            {% else %}
+
+                <p class="total-final">
+
+                    <span>Total</span>
+
+                    <strong>
+                        ${{ total|floatformat:0 }}
+                    </strong>
+
+                </p>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- ========================= -->
+        <!-- PAGO -->
+        <!-- ========================= -->
 
         <form method="POST">
+
             {% csrf_token %}
 
-            <p>
-                Propina ({{ pedido_actual.restaurante.porcentaje_propina }}%): ${{ propina|floatformat:0 }}
-            </p>
+            <div class="seccion-pago">
 
-            <p>
-                <strong>Total con propina: ${{ total_con_propina|floatformat:0 }}</strong>
-            </p>
-            <button type="submit" name="usar_propina" value="1">
-               Cobrar con propina
-            </button>
+                <h2>Método de pago</h2>
 
-            <button type="submit" name="usar_propina" value="0">
-                 Cobrar sin propina
-            </button>
+                <div class="metodos-pago">
+
+                    <label class="metodo-pago">
+
+                        <input
+                            type="radio"
+                            name="metodo_pago"
+                            value="efectivo"
+                        >
+
+                        <span>
+                            💵 Efectivo
+                        </span>
+
+                    </label>
+
+
+                    <label class="metodo-pago">
+
+                        <input
+                            type="radio"
+                            name="metodo_pago"
+                            value="tarjeta"
+                        >
+
+                        <span>
+                            💳 Tarjeta
+                        </span>
+
+                    </label>
+
+
+                    <label class="metodo-pago">
+
+                        <input
+                            type="radio"
+                            name="metodo_pago"
+                            value="transferencia"
+                        >
+
+                        <span>
+                            🏦 Transferencia
+                        </span>
+
+                    </label>
+
+                </div>
+
+            </div>
+
+
+            <!-- ========================= -->
+            <!-- BOTONES DE COBRO -->
+            <!-- ========================= -->
+
+            {% if pedido_actual.restaurante.propina_activa %}
+
+                <div class="botones-cobro">
+
+                    <button
+                        type="submit"
+                        name="usar_propina"
+                        value="1"
+                    >
+                        💰 Cobrar con propina
+                    </button>
+
+
+                    <button
+                        type="submit"
+                        name="usar_propina"
+                        value="0"
+                        class="btn-sin-propina"
+                    >
+                        Cobrar sin propina
+                    </button>
+
+                </div>
+
+            {% else %}
+
+                <div class="botones-cobro">
+
+                    <button
+                        type="submit"
+                        name="usar_propina"
+                        value="0"
+                    >
+                        💰 Cobrar
+                    </button>
+
+                </div>
+
+            {% endif %}
 
         </form>
+
+
+        <!-- ========================= -->
+        <!-- INFORMACIÓN -->
+        <!-- ========================= -->
+
+        <div class="info-pedido">
+
+            <p>
+                <strong>Mesa:</strong>
+                {{ pedido_actual.mesa }}
+            </p>
+
+            <p>
+                <strong>Personal:</strong>
+                {{ request.user.perfil }}
+            </p>
+
+            <p>
+                <strong>Fecha:</strong>
+                {{ pedido_actual.fecha|date:"d/m/Y H:i" }}
+            </p>
+
+        </div>
+
 
     {% else %}
 
-        <p><strong>Total: ${{ total }}</strong></p>
-        <form method="POST">
-          {% csrf_token %}
-          <button type="submit">Cobrar</button>
-        </form>
+        <div class="sin-pedido">
+
+            <p>
+                No hay pedidos pendientes para esta mesa.
+            </p>
+
+        </div>
 
     {% endif %}
 
-    <ul>
-        <li>Mesa: {{ pedido_actual.mesa }}</li>
-        <li>Personal: {{ request.user.perfil }}</li>
-        <li>Fecha: {{ pedido_actual.fecha|date:"d/m/Y H:i" }}</li>
-    </ul>
 
-{% else %}
+    <a
+        href="{% url 'detalle_mesa' mesa.id %}"
+        class="btn-volver"
+    >
+        ← Volver
+    </a>
 
-    <p>No hay pedidos pendientes para esta mesa.</p>
-
-{% endif %}
-
-<a href="{% url 'detalle_mesa' mesa.id %}">Volver</a>
-
-
-
+</div>
 
 </body>
+
 </html>

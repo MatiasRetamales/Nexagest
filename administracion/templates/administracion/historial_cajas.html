@@ -1,39 +1,76 @@
 {% load static %}
+
 <!DOCTYPE html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="administracion/css/historial_cajas.css">
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
     <title>Historial de Cajas</title>
 
-    <link rel="stylesheet" href="{% static 'administracion/css/historial_cajas.css' %}">
-</head>
-<body>
-<a href="{% url 'caja' %}" class="boton-volver">
-    ← Volver a Caja
-</a>
-<h2>Historial de Cajas Cerradas</h2>
-<table class="table">
-    <thead>
-        <tr>
-            <th>Fecha Apertura</th>
-            <th>Cajero</th>
-            <th>Total Ventas</th>
-            <th>Acciones</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for caja in cajas %}
-        <tr>
-            <td>{{ caja.fecha_apertura|date:"d/m/Y H:i" }}</td>
-            <td>{{ caja.nombre_cajero }}</td>
-            <td>${{ caja.saldo_actual }}</td>
-            <td><a href="{% url 'detalle_historial_caja' caja.id %}" class="boton-detalle-cajas">Ver detalle</a></td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+    <link rel="stylesheet" href="{% static 'administracion/css/historial_cajas.css' %}" />
+  </head>
 
-</body>
-</html>
+  <body>
+    <a href="{% url 'caja' %}" class="boton-volver">← Volver a Caja</a>
+
+    <h2>Historial de Cajas Cerradas</h2>
+
+    {% if cajas %}
+      <div class="tabla-container">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Caja</th>
+
+              <th>Fecha Apertura</th>
+
+              <th>Cajero</th>
+
+              <th>Pedidos</th>
+
+              <th>Total Ventas</th>
+
+              <th>Efectivo</th>
+
+              <th>Tarjeta</th>
+
+              <th>Transferencia</th>
+
+              <th>Acciones</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {% for item in cajas %}
+              <tr>
+                <td>#{{ item.caja.id }}</td>
+
+                <td>{{ item.caja.fecha_apertura|date:'d/m/Y H:i' }}</td>
+
+                <td>{{ item.caja.nombre_cajero|default:'No registrado' }}</td>
+
+                <td>{{ item.cantidad_pedidos }}</td>
+
+                <td>${{ item.total_ventas }}</td>
+
+                <td>${{ item.ventas_efectivo }}</td>
+
+                <td>${{ item.ventas_tarjeta }}</td>
+
+                <td>${{ item.ventas_transferencia }}</td>
+
+                <td>
+                  <a href="{% url 'detalle_historial_caja' item.caja.id %}" class="boton-detalle-cajas">Ver detalle</a>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <p>No hay cajas cerradas todavía.</p>
+    {% endif %}
+  </body>
+</html>```

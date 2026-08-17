@@ -1,0 +1,319 @@
+/* ========================================
+   GENERAL
+======================================== */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 20px;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f4f6f8;
+    color: #222;
+}
+
+
+/* ========================================
+   CONTENEDOR PRINCIPAL
+======================================== */
+
+.seguimiento-container {
+    width: 100%;
+    max-width: 520px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 18px;
+    padding: 25px;
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.08);
+}
+
+
+/* ========================================
+   LOGO
+======================================== */
+
+.logo {
+    display: block;
+    width: 150px;
+    max-width: 80%;
+    margin: 0 auto 20px auto;
+}
+
+
+/* ========================================
+   PEDIDO
+======================================== */
+
+.seguimiento-container h1 {
+    text-align: center;
+    margin: 5px 0 8px 0;
+    font-size: 28px;
+}
+
+.cliente {
+    text-align: center;
+    margin: 0 0 25px 0;
+    color: #666;
+    font-size: 16px;
+}
+
+
+/* ========================================
+   ESTADO PRINCIPAL
+======================================== */
+
+.estado-pedido {
+    text-align: center;
+    padding: 25px 15px;
+    background: #f8f9fa;
+    border-radius: 15px;
+    margin-bottom: 25px;
+}
+
+.estado-pedido .icono {
+    font-size: 48px;
+    margin-bottom: 10px;
+}
+
+.estado-pedido h2 {
+    margin: 5px 0 8px 0;
+    font-size: 23px;
+}
+
+.estado-pedido p {
+    margin: 0;
+    color: #666;
+    line-height: 1.5;
+}
+
+
+/* ========================================
+   PROGRESO
+======================================== */
+
+.progreso {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin: 30px 5px;
+    position: relative;
+}
+
+
+/* Línea del progreso */
+
+.progreso::before {
+    content: "";
+    position: absolute;
+    top: 20px;
+    left: 12%;
+    right: 12%;
+    height: 3px;
+    background: #ddd;
+    z-index: 0;
+}
+
+
+/* ========================================
+   PASOS
+======================================== */
+
+.paso {
+    position: relative;
+    z-index: 1;
+    width: 33.33%;
+    text-align: center;
+    color: #aaa;
+}
+
+.paso span {
+    width: 40px;
+    height: 40px;
+    margin: 0 auto 8px auto;
+    border-radius: 50%;
+    background: #ddd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+}
+
+.paso p {
+    margin: 0;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+
+/* ========================================
+   PASO ACTIVO
+======================================== */
+
+.paso.activo {
+    color: #198754;
+}
+
+.paso.activo span {
+    background: #198754;
+    color: white;
+}
+
+
+/* ========================================
+   PRODUCTOS
+======================================== */
+
+.productos {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+}
+
+.productos h2 {
+    margin: 0 0 15px 0;
+    font-size: 20px;
+}
+
+
+/* ========================================
+   PRODUCTO
+======================================== */
+
+.producto {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    padding: 12px 0;
+    border-bottom: 1px solid #eee;
+    font-size: 15px;
+}
+
+.producto span {
+    color: #444;
+}
+
+.producto strong {
+    white-space: nowrap;
+}
+
+
+/* ========================================
+   TOTAL
+======================================== */
+
+.total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 18px;
+    padding-top: 15px;
+    border-top: 2px solid #ddd;
+    font-size: 19px;
+}
+
+.total strong {
+    font-size: 22px;
+}
+
+
+/* ========================================
+   ENTREGA
+======================================== */
+
+.entrega {
+    margin-top: 20px;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 10px;
+}
+
+.entrega p {
+    margin: 0;
+    font-size: 15px;
+}
+
+
+/* ========================================
+   ESTADO DE PAGO
+======================================== */
+
+.estado-pago {
+    margin-top: 15px;
+    padding: 12px 15px;
+    background: #f8f9fa;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.estado-pago p {
+    margin: 0;
+    font-size: 15px;
+}
+
+.pago-confirmado {
+    color: #198754;
+    font-weight: 700;
+}
+
+.pago-pendiente {
+    color: #dc3545;
+    font-weight: 700;
+}
+
+
+/* ========================================
+   RESPONSIVE
+======================================== */
+
+@media (max-width: 480px) {
+
+    body {
+        padding: 10px;
+    }
+
+    .seguimiento-container {
+        padding: 20px 15px;
+        border-radius: 14px;
+    }
+
+    .seguimiento-container h1 {
+        font-size: 24px;
+    }
+
+    .estado-pedido {
+        padding: 20px 10px;
+    }
+
+    .estado-pedido .icono {
+        font-size: 42px;
+    }
+
+    .estado-pedido h2 {
+        font-size: 20px;
+    }
+
+    .progreso {
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+    .paso p {
+        font-size: 12px;
+    }
+
+    .producto {
+        font-size: 14px;
+    }
+
+    .total {
+        font-size: 17px;
+    }
+
+    .total strong {
+        font-size: 20px;
+    }
+
+}

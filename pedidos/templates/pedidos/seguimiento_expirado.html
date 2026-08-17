@@ -1,0 +1,54 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <link
+        rel="stylesheet"
+        href="{% static 'pedidos/css/seguimiento_expirado.css' %}"
+    >
+
+
+    <title>
+        Seguimiento finalizado
+    </title>
+
+</head>
+
+<body>
+
+    <div class="seguimiento-container">
+
+        <img
+            src="{% static 'core/img/logo_nexagest.png' %}"
+            alt="NexaGest"
+            class="logo"
+        >
+
+        <h1>
+            Pedido finalizado
+        </h1>
+
+        <p>
+            Este pedido ya fue entregado y su seguimiento
+            ya no está disponible.
+        </p>
+
+        <p>
+            ¡Gracias por tu compra! ❤️
+        </p>
+
+    </div>
+
+</body>
+
+</html>

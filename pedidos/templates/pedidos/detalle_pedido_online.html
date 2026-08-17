@@ -1,0 +1,285 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Pedido Online #{{ pedido.id }}
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="{% static 'pedidos/css/detalle_pedido_online.css' %}"
+    >
+
+</head>
+
+
+<body>
+
+    <div class="logo-container">
+
+        <img
+            src="{% static 'core/img/logo_nexagest.png' %}"
+            alt="Logo Nexagest"
+            class="logo-admin"
+        >
+
+    </div>
+
+
+    <h1 id="titulo_lista_mesas">
+        Pedido Online #{{ pedido.id }}
+    </h1>
+
+
+    <div class="mesa-detalle">
+
+
+        <!-- INFORMACIÓN DEL CLIENTE -->
+
+        <div class="mesa-info">
+
+            <p>
+                <strong>Cliente:</strong>
+                {{ pedido.nombre_cliente|default:"Sin nombre" }}
+            </p>
+
+            <p>
+                <strong>Teléfono:</strong>
+                {{ pedido.telefono_cliente|default:"No indicado" }}
+            </p>
+
+            <p>
+                <strong>Tipo de entrega:</strong>
+
+                {% if pedido.tipo_entrega == 'retiro' %}
+                    Retiro en local
+                {% elif pedido.tipo_entrega == 'delivery' %}
+                    Delivery
+                {% else %}
+                    No indicado
+                {% endif %}
+
+            </p>
+
+            {% if pedido.tipo_entrega == 'delivery' and pedido.direccion_entrega %}
+
+                <p>
+                    <strong>Dirección:</strong>
+                    {{ pedido.direccion_entrega }}
+                </p>
+
+            {% endif %}
+
+
+            <p>
+                <strong>Fecha:</strong>
+                {{ pedido.fecha|date:"d/m/Y H:i" }}
+            </p>
+
+
+            <p>
+                <strong>Estado:</strong>
+                {{ pedido.get_estado_display }}
+            </p>
+
+
+
+            <p>
+                <strong>Pago:</strong>
+
+                {% if pedido.esta_pagado %}
+
+                    ✅ Pagado
+
+                {% else %}
+
+                    🟡 Pendiente
+
+                {% endif %}
+
+            </p>
+
+        </div>
+
+
+
+        <!-- PRODUCTOS -->
+
+        <div class="pedido-items">
+
+            <h2>
+                Productos
+            </h2>
+
+
+            <ul>
+
+                {% for item in items %}
+
+                    <li>
+
+                        <strong>
+                            {{ item.cantidad }} ×
+                            {{ item.producto.nombre }}
+                        </strong>
+
+                        <br>
+
+                        Precio unitario:
+                        ${{ item.precio_unitario }}
+
+                        <br>
+
+                        Subtotal:
+                        ${{ item.subtotal }}
+
+
+                        {% if item.observacion %}
+
+                            <br>
+
+                            <small>
+                                📝 {{ item.observacion }}
+                            </small>
+
+                        {% endif %}
+
+                    </li>
+
+                {% empty %}
+
+                    <li>
+                        No hay productos en este pedido.
+                    </li>
+
+                {% endfor %}
+
+            </ul>
+
+
+            <p>
+
+                <strong>
+                    Total:
+                </strong>
+
+                ${{ total }}
+
+            </p>
+
+        </div>
+
+
+
+
+<!-- ACCIONES -->
+
+<div class="acciones-mesa">
+
+    {% if pedido.estado == 'pendiente' %}
+
+        {% if pedido.metodo_pago == 'transferencia' and not pedido.esta_pagado %}
+
+            <p>
+                💳 <strong>Pago por transferencia pendiente de verificación.</strong>
+            </p>
+
+            <form
+                method="POST"
+                action="{% url 'marcar_pedido_pagado' pedido.id %}"
+            >
+
+                {% csrf_token %}
+
+                <button
+                    type="submit"
+                    class="btn-link"
+                >
+                    💰 Marcar como Pagado
+                </button>
+
+            </form>
+
+        {% else %}
+
+            <form
+                method="POST"
+                action="{% url 'aceptar_pedido_online' pedido.id %}"
+            >
+
+                {% csrf_token %}
+
+                <button
+                    type="submit"
+                    class="btn-link"
+                >
+                    🍳 Aceptar y Enviar a Cocina
+                </button>
+
+            </form>
+
+        {% endif %}
+
+
+    {% elif pedido.estado == 'en_preparacion' %}
+
+        <p>
+            🍳 El pedido está en cocina.
+        </p>
+
+
+    {% elif pedido.estado == 'listo' %}
+
+        <p>
+            🟢 El pedido está listo para entregar.
+        </p>
+
+        <form
+            method="POST"
+            action="{% url 'marcar_pedido_entregado' pedido.id %}"
+        >
+
+            {% csrf_token %}
+
+            <button
+                type="submit"
+                class="btn-link"
+            >
+                ✅ Marcar como Entregado
+            </button>
+
+        </form>
+
+
+    {% elif pedido.estado == 'entregado' %}
+
+        <p>
+            ✅ Pedido entregado.
+        </p>
+
+    {% endif %}
+
+
+    <a
+        href="{% url 'lista_mesas' %}"
+        class="btn-link btn-volver"
+    >
+        Volver
+    </a>
+
+</div>
+
+</body>
+
+</html>

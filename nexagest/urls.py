@@ -27,6 +27,7 @@ urlpatterns = [
     path('pedidos/', include('pedidos.urls')),
     path('cocina/', vistas_pedidos.cocina, name='cocina'),
     path('administracion/', include('administracion.urls')),
+    path('carta/', include('carta.urls')),
     
     # Mantenemos el despacho para que después de loguearse se vayan a su lugar
     path('despacho/', vistas_core.despacho_usuario, name='despacho'),

@@ -1,0 +1,390 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Seguimiento de pedido
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="{% static 'pedidos/css/seguimiento_pedido.css' %}"
+    >
+
+</head>
+
+
+<body>
+
+    <div class="seguimiento-container">
+
+
+        <!-- LOGO -->
+
+        <img
+            src="{% static 'core/img/logo_nexagest.png' %}"
+            alt="NexaGest"
+            class="logo"
+        >
+
+
+        <!-- PEDIDO -->
+
+        <h1>
+            Pedido #{{ pedido.id }}
+        </h1>
+
+
+        <p class="cliente">
+
+            Hola
+            {{ pedido.nombre_cliente|default:'' }}
+            👋
+
+        </p>
+
+
+        <!-- ESTADO -->
+
+        <div
+            class="estado-pedido"
+            id="estado-pedido"
+        >
+
+
+            {% if pedido.estado == 'pendiente' %}
+
+                <div
+                    class="icono"
+                    id="estado-icono"
+                >
+                    🟡
+                </div>
+
+
+                <h2 id="estado-titulo">
+
+                    Pedido recibido
+
+                </h2>
+
+
+                <p id="estado-descripcion">
+
+                    El restaurante está revisando tu pedido.
+
+                </p>
+
+
+            {% elif pedido.estado == 'en_preparacion' %}
+
+                <div
+                    class="icono"
+                    id="estado-icono"
+                >
+                    👨‍🍳
+                </div>
+
+
+                <h2 id="estado-titulo">
+
+                    Preparando tu pedido
+
+                </h2>
+
+
+                <p id="estado-descripcion">
+
+                    Tu pedido ya está siendo preparado.
+
+                </p>
+
+
+            {% elif pedido.estado == 'listo' %}
+
+                <div
+                    class="icono"
+                    id="estado-icono"
+                >
+                    🟢
+                </div>
+
+
+                <h2 id="estado-titulo">
+
+                    ¡Tu pedido está listo!
+
+                </h2>
+
+
+                <p id="estado-descripcion">
+
+
+                    {% if pedido.tipo_entrega == 'retiro' %}
+
+                        Puedes retirarlo en el local.
+
+                    {% else %}
+
+                        Tu pedido está listo para ser entregado.
+
+                    {% endif %}
+
+
+                </p>
+
+
+            {% elif pedido.estado == 'entregado' %}
+
+                <div
+                    class="icono"
+                    id="estado-icono"
+                >
+                    ✅
+                </div>
+
+
+                <h2 id="estado-titulo">
+
+                    Pedido entregado
+
+                </h2>
+
+
+                <p id="estado-descripcion">
+
+                    Gracias por comprar con nosotros.
+
+                </p>
+
+
+            {% elif pedido.estado == 'cancelado' %}
+
+                <div
+                    class="icono"
+                    id="estado-icono"
+                >
+                    ❌
+                </div>
+
+
+                <h2 id="estado-titulo">
+
+                    Pedido cancelado
+
+                </h2>
+
+
+                <p id="estado-descripcion">
+
+                    Este pedido fue cancelado.
+
+                </p>
+
+
+            {% endif %}
+
+
+        </div>
+
+
+
+        <!-- PROGRESO -->
+
+        <div class="progreso">
+
+
+            <!-- RECIBIDO -->
+
+            <div
+                id="paso-recibido"
+                class="paso activo"
+            >
+
+                <span>
+                    ✓
+                </span>
+
+                <p>
+                    Recibido
+                </p>
+
+            </div>
+
+
+
+            <!-- PREPARANDO -->
+
+            <div
+                id="paso-preparando"
+                class="paso
+                {% if pedido.estado == 'en_preparacion' or pedido.estado == 'listo' or pedido.estado == 'entregado' %}
+                    activo
+                {% endif %}"
+            >
+
+                <span>
+                    👨‍🍳
+                </span>
+
+                <p>
+                    Preparando
+                </p>
+
+            </div>
+
+
+
+            <!-- LISTO -->
+
+            <div
+                id="paso-listo"
+                class="paso
+                {% if pedido.estado == 'listo' or pedido.estado == 'entregado' %}
+                    activo
+                {% endif %}"
+            >
+
+                <span>
+                    ✓
+                </span>
+
+                <p>
+                    Listo
+                </p>
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- PRODUCTOS -->
+
+        <div class="productos">
+
+
+            <h2>
+                Tu pedido
+            </h2>
+
+
+            {% for item in items %}
+
+
+                <div class="producto">
+
+
+                    <span>
+
+                        {{ item.cantidad }} ×
+                        {{ item.producto.nombre }}
+
+                    </span>
+
+
+                    <strong>
+
+                        ${{ item.subtotal }}
+
+                    </strong>
+
+
+                </div>
+
+
+            {% empty %}
+
+
+                <p>
+                    No hay productos en este pedido.
+                </p>
+
+
+            {% endfor %}
+
+
+
+            <!-- TOTAL -->
+
+            <div class="total">
+
+
+                <span>
+                    Total
+                </span>
+
+
+                <strong>
+
+                    ${{ total }}
+
+                </strong>
+
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- ENTREGA -->
+
+        <div class="entrega">
+
+
+            <p>
+
+
+                <strong>
+                    Entrega:
+                </strong>
+
+
+                {% if pedido.tipo_entrega == 'retiro' %}
+
+                    Retiro en local
+
+                {% elif pedido.tipo_entrega == 'delivery' %}
+
+                    Delivery
+
+                {% else %}
+
+                    No indicado
+
+                {% endif %}
+
+
+            </p>
+
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- JAVASCRIPT -->
+
+    <script
+        src="{% static 'pedidos/js/seguimiento_pedido.js' %}"
+    ></script>
+
+
+</body>
+
+</html>

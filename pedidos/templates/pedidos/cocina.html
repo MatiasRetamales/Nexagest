@@ -57,12 +57,27 @@
       >
         <div class="pedido-header">
         <h3>
-         {% if restaurante.tipo_local == 'local' %}
-            Pedido: {{ pedido.mesa.numero }} - <strong>{{ pedido.nombre_cliente|default:"Sin nombre" }}</strong>
-         {% else %}
-            Mesa {{ pedido.mesa.numero }}
-         {% endif %}
-        </h3>
+
+    {% if pedido.origen == 'online' %}
+
+        🌐 Pedido Online #{{ pedido.id }}
+
+        {% if pedido.nombre_cliente %}
+            - <strong>{{ pedido.nombre_cliente }}</strong>
+        {% endif %}
+
+    {% elif restaurante.tipo_local == 'local' %}
+
+        Pedido: {{ pedido.mesa.numero }}
+        - <strong>{{ pedido.nombre_cliente|default:"Sin nombre" }}</strong>
+
+    {% else %}
+
+        Mesa {{ pedido.mesa.numero }}
+
+    {% endif %}
+
+</h3>
          <div class="cronometro-cocina">
            ⏱ <span class="tiempo">--:--</span>
          </div>

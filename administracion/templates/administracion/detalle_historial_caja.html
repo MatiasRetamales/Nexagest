@@ -1,105 +1,215 @@
 {% load static %}
+
 <!DOCTYPE html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Detalle Caja</title>
-    <link rel="stylesheet" href="{% static 'administracion/css/detalle_historial_caja.css' %}">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
 
-<a href="{% url 'historial_cajas' %}" class="boton-volver">
-    ← Volver
-</a>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-<h1>Detalle Caja #{{ caja.id }}</h1>
+    <title>Detalle Caja #{{ caja.id }}</title>
 
-<div class="resumen">
+    <link rel="stylesheet" href="{% static 'administracion/css/detalle_historial_caja.css' %}" />
+  </head>
 
-    <h2>Resumen</h2>
+  <body>
+    <a href="{% url 'historial_cajas' %}" class="boton-volver">← Volver al historial</a>
 
-    <p><strong>Restaurante:</strong> {{ caja.restaurante.nombre }}</p>
+    <h1>Detalle Caja #{{ caja.id }}</h1>
 
-    <p><strong>Cajero:</strong> {{ caja.nombre_cajero|default:"No registrado" }}</p>
+    <!-- ========================= -->
+    <!-- INFORMACIÓN DE LA CAJA -->
+    <!-- ========================= -->
 
-    <p><strong>Fecha Apertura:</strong> {{ caja.fecha_apertura|date:"d/m/Y H:i" }}</p>
+    <div class="resumen">
+      <h2>Información de la sesión</h2>
 
-    <p><strong>Fecha Cierre:</strong>
-        {{ caja.fecha_cierre|default:"Aún abierta"|date:"d/m/Y H:i" }}
-    </p>
+      <p>
+        <strong>Restaurante:</strong>
+        {{ caja.restaurante.nombre }}
+      </p>
 
-    <p><strong>Estado:</strong>
-        {% if caja.esta_abierta %}
-            🟢 Abierta
+      <p>
+        <strong>Cajero:</strong>
+        {{ caja.nombre_cajero|default:'No registrado' }}
+      </p>
+
+      <p>
+        <strong>Fecha de apertura:</strong>
+        {{ caja.fecha_apertura|date:'d/m/Y H:i' }}
+      </p>
+
+      <p>
+        <strong>Fecha de cierre:</strong>
+
+        {% if caja.fecha_cierre %}
+          {{ caja.fecha_cierre|date:'d/m/Y H:i' }}
         {% else %}
-            🔴 Cerrada
+          Aún abierta
         {% endif %}
-    </p>
+      </p>
 
-</div>
+      <p>
+        <strong>Estado:</strong>
 
-<hr>
+        {% if caja.esta_abierta %}
+          🟢 Abierta
+        {% else %}
+          🔴 Cerrada
+        {% endif %}
+      </p>
+    </div>
 
-<div class="totales">
+    <hr />
 
-    <h2>Totales</h2>
+    <!-- ========================= -->
+    <!-- RESUMEN FINANCIERO -->
+    <!-- ========================= -->
 
-    <p><strong>Pedidos:</strong> {{ cantidad_pedidos }}</p>
+    <div class="totales">
+      <h2>Resumen financiero</h2>
 
-    <p><strong>Venta (sin propina):</strong> ${{ ventas_sin_propina }}</p>
+      <p>
+        <strong>🧾 Pedidos cobrados:</strong>
+        {{ cantidad_pedidos }}
+      </p>
 
-    <p><strong>Propinas:</strong> ${{ propinas_totales }}</p>
+      <p>
+        <strong>💰 Ventas sin propina:</strong>
+        ${{ ventas_sin_propina }}
+      </p>
 
-    <p><strong>Total Recaudado:</strong> ${{ total_recaudado }}</p>
+      <p>
+        <strong>🎁 Propinas:</strong>
+        ${{ propinas_totales }}
+      </p>
 
-    <hr>
+      <p>
+        <strong>💵 Total recaudado:</strong>
+        ${{ total_recaudado }}
+      </p>
 
-    <p><strong>Monto inicial de apertura:</strong> ${{ caja.monto_inicial }}</p>
+      <hr />
 
-    <p><strong>Saldo final en caja:</strong> ${{ caja.saldo_actual }}</p>
+      <h3>Métodos de pago</h3>
 
-</div>
+      <p>
+        <strong>💵 Efectivo:</strong>
+        ${{ ventas_efectivo }}
+      </p>
 
-<hr>
+      <p>
+        <strong>💳 Tarjeta:</strong>
+        ${{ ventas_tarjeta }}
+      </p>
 
-<h2>Pedidos</h2>
+      <p>
+        <strong>🏦 Transferencia:</strong>
+        ${{ ventas_transferencia }}
+      </p>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Fecha</th>
-            <th>Cliente</th>
-            {% if restaurante.tipo_local == "restaurante" %}
-            <th>Mesa</th>
-            {% elif restaurante.tipo_local == "local" %}
-            <th>Pedido</th>
-            {% endif %}
-            <th>Estado</th>
-            <th>Total</th>
-        </tr>
-    </thead>
+      <hr />
 
-    <tbody>
-        {% for pedido in pedidos %}
-        <tr>
-            <td>#{{ pedido.id }}</td>
-            <td>{{ pedido.fecha|date:"d/m H:i" }}</td>
-            <td>{{ pedido.nombre_cliente|default:"-" }}</td>
-            <td>
-                {% if pedido.mesa %}
-                    {{ pedido.mesa.numero }}
-                {% else %}
-                    -
+      <h3>Control de efectivo</h3>
+
+      <p>
+        <strong>Monto inicial:</strong>
+        ${{ caja.monto_inicial }}
+      </p>
+
+      <p>
+        <strong>Ventas en efectivo:</strong>
+        ${{ ventas_efectivo }}
+      </p>
+
+      <p>
+        <strong>💵 Efectivo esperado:</strong>
+        ${{ efectivo_esperado }}
+      </p>
+    </div>
+
+    <hr />
+
+    <!-- ========================= -->
+    <!-- PEDIDOS -->
+    <!-- ========================= -->
+
+    <h2>Pedidos cobrados</h2>
+
+    {% if pedidos %}
+      <div class="tabla-container">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>ID</th>
+
+              <th>Fecha</th>
+
+              <th>Cliente</th>
+
+              {% if restaurante.tipo_local == 'restaurante' %}
+                <th>Mesa</th>
+              {% elif restaurante.tipo_local == 'local' %}
+                <th>Pedido</th>
+              {% endif %}
+
+              <th>Origen</th>
+
+              <th>Método de pago</th>
+
+              <th>Total</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {% for pedido in pedidos %}
+              <tr>
+                <td>#{{ pedido.id }}</td>
+
+                <td>{{ pedido.fecha_pago|date:'d/m/Y H:i' }}</td>
+
+                <td>{{ pedido.nombre_cliente|default:'-' }}</td>
+
+                {% if restaurante.tipo_local == 'restaurante' %}
+                  <td>
+                    {% if pedido.mesa %}
+                      Mesa {{ pedido.mesa.numero }}
+                    {% else %}
+                      -
+                    {% endif %}
+                  </td>
+                {% elif restaurante.tipo_local == 'local' %}
+                  <td>Pedido #{{ pedido.id }}</td>
                 {% endif %}
-            </td>
-            <td>{{ pedido.get_estado_display }}</td>
-            <td>${{ pedido.total }}</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
 
-</body>
-</html>
+                <td>
+                  {% if pedido.origen == 'online' %}
+                    🌐 Online
+                  {% else %}
+                    🧑‍🍳 Presencial
+                  {% endif %}
+                </td>
+
+                <td>
+                  {% if pedido.metodo_pago == 'efectivo' %}
+                    💵 Efectivo
+                  {% elif pedido.metodo_pago == 'tarjeta' %}
+                    💳 Tarjeta
+                  {% elif pedido.metodo_pago == 'transferencia' %}
+                    🏦 Transferencia
+                  {% else %}
+                    -
+                  {% endif %}
+                </td>
+
+                <td>${{ pedido.total }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <p>No hay pedidos asociados a esta caja.</p>
+    {% endif %}
+  </body>
+</html>```

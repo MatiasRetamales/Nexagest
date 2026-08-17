@@ -1,0 +1,311 @@
+{% load static %}
+
+<!DOCTYPE html>
+
+<html lang="es">
+
+<head>
+
+```
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>
+    Cobrar Pedido #{{ pedido.id }}
+</title>
+
+<link
+    rel="stylesheet"
+    href="{% static 'pedidos/css/cobrar_pedido_online.css' %}"
+>
+```
+
+</head>
+
+<body>
+
+```
+<div class="contenedor">
+
+
+    <!-- ========================= -->
+    <!-- ENCABEZADO -->
+    <!-- ========================= -->
+
+    <div class="encabezado">
+
+        <h1>
+            Cobrar Pedido #{{ pedido.id }}
+        </h1>
+
+        <p>
+            Cliente:
+            <strong>
+                {{ pedido.nombre_cliente|default:"Sin nombre" }}
+            </strong>
+        </p>
+
+    </div>
+
+
+    <!-- ========================= -->
+    <!-- PRODUCTOS -->
+    <!-- ========================= -->
+
+    <div class="productos">
+
+        <h2>
+            Resumen del pedido
+        </h2>
+
+
+        <ul>
+
+            {% for item in items %}
+
+                <li>
+
+                    <div>
+
+                        <strong>
+                            {{ item.cantidad }} ×
+                            {{ item.producto.nombre }}
+                        </strong>
+
+                        <span>
+                            ${{ item.subtotal|floatformat:0 }}
+                        </span>
+
+                    </div>
+
+                </li>
+
+            {% endfor %}
+
+        </ul>
+
+    </div>
+
+
+    <!-- ========================= -->
+    <!-- TOTALES -->
+    <!-- ========================= -->
+
+    <div class="totales">
+
+        <p>
+
+            <span>
+                Subtotal
+            </span>
+
+            <strong>
+                ${{ total|floatformat:0 }}
+            </strong>
+
+        </p>
+
+
+        {% if pedido.restaurante.propina_activa %}
+
+            <p>
+
+                <span>
+                    Propina
+                    ({{ pedido.restaurante.porcentaje_propina }}%)
+                </span>
+
+                <strong>
+                    ${{ propina|floatformat:0 }}
+                </strong>
+
+            </p>
+
+
+            <p class="total-final">
+
+                <span>
+                    Total con propina
+                </span>
+
+                <strong>
+                    ${{ total_con_propina|floatformat:0 }}
+                </strong>
+
+            </p>
+
+        {% else %}
+
+            <p class="total-final">
+
+                <span>
+                    Total
+                </span>
+
+                <strong>
+                    ${{ total|floatformat:0 }}
+                </strong>
+
+            </p>
+
+        {% endif %}
+
+    </div>
+
+
+    <!-- ========================= -->
+    <!-- FORMULARIO DE PAGO -->
+    <!-- ========================= -->
+
+    <form
+        method="POST"
+        class="formulario-pago"
+    >
+
+        {% csrf_token %}
+
+
+        <h2>
+            Método de pago
+        </h2>
+
+
+        <div class="metodos-pago">
+
+
+            <label class="metodo">
+
+                <input
+                    type="radio"
+                    name="metodo_pago"
+                    value="efectivo"
+                    required
+                >
+
+                <span>
+                    💵 Efectivo
+                </span>
+
+            </label>
+
+
+            <label class="metodo">
+
+                <input
+                    type="radio"
+                    name="metodo_pago"
+                    value="tarjeta"
+                >
+
+                <span>
+                    💳 Tarjeta
+                </span>
+
+            </label>
+
+
+            <label class="metodo">
+
+                <input
+                    type="radio"
+                    name="metodo_pago"
+                    value="transferencia"
+                >
+
+                <span>
+                    📱 Transferencia
+                </span>
+
+            </label>
+
+
+        </div>
+
+
+        <!-- ========================= -->
+        <!-- PROPINA -->
+        <!-- ========================= -->
+
+        {% if pedido.restaurante.propina_activa %}
+
+            <h2>
+                Propina
+            </h2>
+
+
+            <div class="opciones-propina">
+
+                <label>
+
+                    <input
+                        type="radio"
+                        name="usar_propina"
+                        value="1"
+                    >
+
+                    Cobrar con propina
+                    (${{ total_con_propina|floatformat:0 }})
+
+                </label>
+
+
+                <label>
+
+                    <input
+                        type="radio"
+                        name="usar_propina"
+                        value="0"
+                        checked
+                    >
+
+                    Cobrar sin propina
+                    (${{ total|floatformat:0 }})
+
+                </label>
+
+            </div>
+
+        {% endif %}
+
+
+        <!-- ========================= -->
+        <!-- BOTÓN COBRAR -->
+        <!-- ========================= -->
+
+        <button
+            type="submit"
+            class="btn-cobrar"
+        >
+
+            💰 Registrar pago
+
+        </button>
+
+
+    </form>
+
+
+    <!-- ========================= -->
+    <!-- VOLVER -->
+    <!-- ========================= -->
+
+    <a
+        href="{% url 'detalle_pedido_online' pedido.id %}"
+        class="btn-volver"
+    >
+
+        ← Volver al pedido
+
+    </a>
+
+
+</div>
+```
+
+</body>
+
+</html>
