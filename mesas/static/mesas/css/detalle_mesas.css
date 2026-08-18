@@ -1,253 +1,600 @@
-/* Fondo general */
+/* =========================================================
+   NEXAGEST FOOD - DETALLE DE MESA / PEDIDO
+   ========================================================= */
+
+:root {
+    --primary: #007bff;
+    --primary-dark: #0056b3;
+    --primary-soft: #eaf4ff;
+
+    --success: #16a34a;
+    --success-soft: #ecfdf3;
+
+    --danger: #dc2626;
+    --danger-soft: #fef2f2;
+
+    --warning: #d97706;
+    --warning-soft: #fff7ed;
+
+    --text: #172033;
+    --text-soft: #667085;
+
+    --border: #e5e7eb;
+    --background: #f5f7fb;
+    --white: #ffffff;
+
+    --radius: 16px;
+    --shadow: 0 6px 20px rgba(15, 23, 42, 0.07);
+}
+
+
+/* =========================================================
+   GENERAL
+   ========================================================= */
+
+* {
+    box-sizing: border-box;
+}
+
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f0f8ff;
     margin: 0;
-    padding: 20px;
+    padding: 24px 16px 40px;
+
+    font-family:
+        Inter,
+        Arial,
+        sans-serif;
+
+    background: var(--background);
+    color: var(--text);
 }
 
-/* Título */
-#titulo_lista_mesas {
-    text-align: center;
-    color: #007BFF;
-    font-size: 32px;
-    margin-bottom: 25px;
-}
 
-/* Contenedor principal */
-.mesa-detalle {
-    max-width: 1000px;
-    margin: 0 auto;
-    background: white;
-    border-radius: 12px;
-    padding: 20px;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-}
-
-/* Info de mesa */
-.mesa-info {
-    display: flex;
-    justify-content: space-around;
-    background: #f4faff;
-    padding: 15px;
-    border-radius: 10px;
-    margin-bottom: 20px;
-    font-size: 16px;
-}
-
-/* ================================
-   PEDIDO ACTUAL
-================================ */
-
-.pedido-items {
-    margin-bottom: 25px;
-}
-
-.pedido-items h2 {
-    color: #007BFF;
-    margin: 0 0 18px;
-    text-align: left;
-    font-size: 22px;
-    font-weight: 700;
-}
-
-/* Lista de productos */
-.pedido-items ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-/* Cada producto */
-.pedido-items li {
-    background: #f9fcff;
-    padding: 15px 18px;
-    margin: 0;
-    border-radius: 10px;
-    border: 1px solid #e5eef7;
-    font-size: 14px;
-    line-height: 1.6;
-    transition: all 0.2s ease;
-}
-
-/* Efecto sutil en PC */
-.pedido-items li:hover {
-    border-color: #b9d9f7;
-    box-shadow: 0 3px 8px rgba(0, 123, 255, 0.06);
-}
-
-/* Observación */
-.pedido-items li small {
-    display: block;
-    margin-top: 7px;
-    padding: 7px 10px;
-    background: #fff8e6;
-    border-radius: 6px;
-    color: #6b5a2b;
-    font-size: 13px;
-}
-
-/* Total y personal */
-.pedido-items > p {
-    background: #f4faff;
-    margin: 10px 0 0;
-    padding: 12px 15px;
-    border-radius: 8px;
-    font-size: 16px;
-    text-align: right;
-    color: #333;
-}
-
-.pedido-items > p strong {
-    color: #007BFF;
-}
-
-/* Total más destacado */
-.pedido-items > p:first-of-type {
-    margin-top: 18px;
-    font-size: 21px;
-    border: 1px solid #d8ebfb;
-}
-
-.pedido-items > p:first-of-type strong {
-    color: #007BFF;
-}
-
-/* Personal */
-.pedido-items > p:last-of-type {
-    text-align: left;
-    font-size: 14px;
-    background: #fafafa;
-    color: #555;
-}
-
-.pedido-items > p:last-of-type strong {
-    color: #333;
-}
-
-/* Acciones */
-.acciones-mesa {
-    margin-top: 20px;
-}
-
-/* Form estado mesa */
-.acciones-mesa form {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 20px;
-}
-
-select {
-    padding: 6px;
-    border-radius: 6px;
-    border: 1px solid #ccc;
-}
-
-button {
-    padding: 8px 15px;
-    background-color: #007BFF;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: bold;
-}
-
-button:hover {
-    background-color: #0056b3;
-}
-
-/* Links de acciones */
-.links-pedidos {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 10px;
-}
-
-/* Botones tipo acción */
-.links-pedidos a {
-    text-align: center;
-    padding: 10px;
-    background: #ffffff;
-    border: 1px solid #007BFF;
-    border-radius: 8px;
-    text-decoration: none;
-    color: #007BFF;
-    font-weight: bold;
-    transition: 0.2s;
-}
-
-.links-pedidos a:hover {
-    background: #007BFF;
-    color: white;
-    transform: translateY(-2px);
-}
+/* =========================================================
+   LOGO
+   ========================================================= */
 
 .logo-container {
     display: flex;
-    justify-content: center; /* Centramos el conjunto */
-    align-items: center;    /* Alineamos verticalmente */
-    margin-top: 5px;        /* Muy poca separación desde arriba */
-    margin-bottom: 20px;     /* Espacio mínimo antes de los botones */
+    justify-content: center;
+    align-items: center;
+
+    margin-bottom: 12px;
 }
 
-/* El logo ahora es un ícono transparente */
 .logo-admin {
-    width: 280px;             
+    width: 150px;
+    max-width: 60%;
     height: auto;
-    object-fit: contain;
-    background-color: transparent !important; /* Forzamos la transparencia */
-    margin-right: 15px;       /* Separación mínima con el texto */
-    /* Mantenemos una sombra suave para que destaque */
-    filter: drop-shadow(0 3px 6px rgba(0,0,0,0.06));
 }
 
 
+/* =========================================================
+   TITULO
+   ========================================================= */
 
-/* Responsive */
+#titulo_lista_mesas {
+    margin: 8px 0 22px;
+
+    text-align: center;
+
+    font-size: 28px;
+    font-weight: 700;
+
+    color: var(--text);
+}
+
+
+/* =========================================================
+   CONTENEDOR PRINCIPAL
+   ========================================================= */
+
+.mesa-detalle {
+    width: 100%;
+    max-width: 850px;
+
+    margin: 0 auto;
+
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+
+/* =========================================================
+   INFORMACION DE MESA
+   ========================================================= */
+
+.mesa-info {
+    background: var(--white);
+
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+
+    padding: 20px;
+
+    box-shadow: var(--shadow);
+}
+
+.mesa-info p {
+    margin: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 20px;
+
+    padding: 10px 0;
+
+    border-bottom: 1px solid #f0f1f3;
+
+    font-size: 15px;
+}
+
+.mesa-info p:last-child {
+    border-bottom: none;
+}
+
+.mesa-info strong {
+    color: var(--text-soft);
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   PEDIDO ACTUAL
+   ========================================================= */
+
+.pedido-items {
+    background: var(--white);
+
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+
+    padding: 20px;
+
+    box-shadow: var(--shadow);
+}
+
+.pedido-items h2 {
+    margin: 0 0 18px;
+
+    font-size: 20px;
+    font-weight: 700;
+
+    color: var(--text);
+}
+
+
+/* =========================================================
+   LISTA DE PRODUCTOS
+   ========================================================= */
+
+.pedido-items ul {
+    list-style: none;
+
+    padding: 0;
+    margin: 0;
+}
+
+.pedido-items li {
+    padding: 15px 0;
+
+    border-bottom: 1px solid var(--border);
+
+    line-height: 1.5;
+
+    font-size: 14px;
+}
+
+.pedido-items li:last-child {
+    border-bottom: none;
+}
+
+.pedido-items li strong {
+    display: block;
+
+    margin-bottom: 4px;
+
+    font-size: 16px;
+    color: var(--text);
+}
+
+.pedido-items li small {
+    display: inline-block;
+
+    margin-top: 8px;
+    padding: 5px 8px;
+
+    border-radius: 7px;
+
+    background: var(--warning-soft);
+    color: var(--warning);
+
+    font-size: 12px;
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   TOTAL
+   ========================================================= */
+
+.pedido-items > p {
+    margin: 16px 0 0;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 12px 0;
+
+    border-top: 1px solid var(--border);
+}
+
+.pedido-items > p strong {
+    font-size: 15px;
+}
+
+.pedido-items > p:nth-last-child(2) {
+    font-size: 22px;
+    font-weight: 700;
+
+    color: var(--primary);
+}
+
+
+/* =========================================================
+   MENSAJE SIN PEDIDO
+   ========================================================= */
+
+.mesa-detalle > p {
+    margin: 0;
+
+    padding: 25px;
+
+    text-align: center;
+
+    background: var(--white);
+
+    border: 1px dashed var(--border);
+    border-radius: var(--radius);
+
+    color: var(--text-soft);
+}
+
+
+/* =========================================================
+   ENVIAR A COCINA
+   ========================================================= */
+
+.enviar-a-cocina {
+    width: 100%;
+
+    min-height: 56px;
+
+    border: none;
+    border-radius: 14px;
+
+    background: var(--primary);
+    color: white;
+
+    font-size: 17px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 5px 14px rgba(0, 123, 255, 0.22);
+
+    transition:
+        transform 0.15s ease,
+        background 0.15s ease,
+        box-shadow 0.15s ease;
+}
+
+.enviar-a-cocina:hover {
+    background: var(--primary-dark);
+
+    box-shadow:
+        0 7px 18px rgba(0, 86, 179, 0.25);
+}
+
+.enviar-a-cocina:active {
+    transform: scale(0.98);
+}
+
+.enviar-a-cocina:disabled {
+    background: #cbd5e1;
+
+    color: #64748b;
+
+    cursor: not-allowed;
+
+    box-shadow: none;
+}
+
+
+/* =========================================================
+   ACCIONES
+   ========================================================= */
+
+.acciones-mesa {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+
+/* =========================================================
+   FORMULARIO CAMBIO ESTADO
+   ========================================================= */
+
+.acciones-mesa form {
+    background: var(--white);
+
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+
+    padding: 18px;
+
+    box-shadow: var(--shadow);
+}
+
+.acciones-mesa form label {
+    display: block;
+
+    margin-bottom: 9px;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    color: var(--text-soft);
+}
+
+.acciones-mesa select {
+    width: 100%;
+
+    min-height: 46px;
+
+    padding: 10px 12px;
+
+    border: 1px solid var(--border);
+    border-radius: 10px;
+
+    background: white;
+
+    color: var(--text);
+
+    font-size: 15px;
+
+    outline: none;
+}
+
+.acciones-mesa select:focus {
+    border-color: var(--primary);
+
+    box-shadow:
+        0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+
+.acciones-mesa form button {
+    width: 100%;
+
+    min-height: 46px;
+
+    margin-top: 12px;
+
+    border: none;
+    border-radius: 10px;
+
+    background: #eef2f7;
+    color: var(--text);
+
+    font-size: 14px;
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+.acciones-mesa form button:hover {
+    background: #e2e8f0;
+}
+
+
+/* =========================================================
+   LINKS / BOTONES
+   ========================================================= */
+
+.links-pedidos {
+    display: grid;
+
+    grid-template-columns: repeat(2, 1fr);
+
+    gap: 10px;
+}
+
+.btn-link {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    min-height: 48px;
+
+    padding: 10px 14px;
+
+    border-radius: 11px;
+
+    background: var(--white);
+
+    border: 1px solid var(--border);
+
+    color: var(--text);
+
+    text-decoration: none;
+
+    text-align: center;
+
+    font-size: 14px;
+    font-weight: 700;
+
+    box-shadow: 0 2px 7px rgba(15, 23, 42, 0.04);
+
+    transition:
+        background 0.15s ease,
+        transform 0.15s ease;
+}
+
+.btn-link:hover {
+    background: #f8fafc;
+}
+
+.btn-link:active {
+    transform: scale(0.98);
+}
+
+
+/* =========================================================
+   CANCELAR
+   ========================================================= */
+
+.btn-cancelar {
+    background: var(--danger-soft);
+
+    border-color: #fecaca;
+
+    color: var(--danger);
+}
+
+.btn-cancelar:hover {
+    background: #fee2e2;
+}
+
+
+/* =========================================================
+   VOLVER
+   ========================================================= */
+
+.btn-volver {
+    grid-column: 1 / -1;
+
+    background: #eef2f7;
+
+    color: #475467;
+}
+
+.btn-volver:hover {
+    background: #e2e8f0;
+}
+
+
+/* =========================================================
+   AVISO LOCAL CERRADO
+   ========================================================= */
+
+.aviso-cerrado {
+    grid-column: 1 / -1;
+
+    padding: 14px 16px;
+
+    border-radius: 12px;
+
+    background: var(--warning-soft);
+
+    border: 1px solid #fed7aa;
+
+    color: var(--warning);
+
+    font-size: 14px;
+
+    text-align: center;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
 @media (max-width: 600px) {
-    .acciones-mesa label {
-        display: block;
-        margin-bottom: 5px;
-        font-size: 15px;
+
+    body {
+        padding: 16px 10px 30px;
     }
 
-    .acciones-mesa option {
-        font-size: 17px;
-
+    .logo-admin {
+        width: 125px;
     }
 
-     .pedido-items {
-        margin-bottom: 20px;
+    #titulo_lista_mesas {
+        margin-bottom: 16px;
+
+        font-size: 22px;
+    }
+
+    .mesa-detalle {
+        gap: 12px;
+    }
+
+    .mesa-info,
+    .pedido-items {
+        padding: 16px;
+
+        border-radius: 14px;
+    }
+
+    .mesa-info p {
+        font-size: 14px;
     }
 
     .pedido-items h2 {
-        font-size: 20px;
-        margin-bottom: 14px;
+        font-size: 18px;
     }
 
     .pedido-items li {
-        padding: 13px 14px;
-        font-size: 13px;
-        line-height: 1.55;
+        padding: 13px 0;
     }
 
-    .pedido-items li small {
-        font-size: 12px;
-        padding: 7px 9px;
+    .pedido-items li strong {
+        font-size: 15px;
     }
 
-    .pedido-items > p {
-        padding: 11px 12px;
+    .pedido-items > p:nth-last-child(2) {
+        font-size: 20px;
     }
 
-    .pedido-items > p:first-of-type {
-        font-size: 19px;
+    .enviar-a-cocina {
+        min-height: 58px;
+
+        font-size: 16px;
     }
 
+    .links-pedidos {
+        grid-template-columns: 1fr;
+    }
+
+    .btn-link {
+        min-height: 50px;
+    }
+
+    .btn-volver {
+        grid-column: auto;
+    }
+}
+
+
+/* =========================================================
+   TABLET / PANTALLAS GRANDES
+   ========================================================= */
+
+@media (min-width: 900px) {
+
+    .mesa-detalle {
+        max-width: 900px;
+    }
+
+    .enviar-a-cocina {
+        max-width: 100%;
+    }
 }
