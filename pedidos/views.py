@@ -775,9 +775,14 @@ def marcar_pedido_entregado(request, id):
 
     if request.method == "POST":
 
-        if pedido.estado == 'listo':
+        # ========================================
+        # DELIVERY
+        # ========================================
 
-            if pedido.tipo_entrega == 'delivery':
+        if pedido.tipo_entrega == 'delivery':
+
+            # LISTO → EN CAMINO
+            if pedido.estado == 'listo':
 
                 pedido.estado = 'en_camino'
 
@@ -786,7 +791,23 @@ def marcar_pedido_entregado(request, id):
                     f"Pedido online #{pedido.id} va en camino."
                 )
 
-            else:
+            # EN CAMINO → ENTREGADO
+            elif pedido.estado == 'en_camino':
+
+                pedido.estado = 'entregado'
+
+                messages.success(
+                    request,
+                    f"Pedido online #{pedido.id} fue entregado."
+                )
+
+        # ========================================
+        # RETIRO
+        # ========================================
+
+        else:
+
+            if pedido.estado == 'listo':
 
                 pedido.estado = 'entregado'
 
@@ -795,7 +816,7 @@ def marcar_pedido_entregado(request, id):
                     f"Pedido online #{pedido.id} marcado como entregado."
                 )
 
-            pedido.save()
+        pedido.save()
 
     return redirect(
         'detalle_pedido_online',

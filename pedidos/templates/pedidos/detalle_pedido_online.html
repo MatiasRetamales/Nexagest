@@ -242,7 +242,66 @@
     {% elif pedido.estado == 'listo' %}
 
         <p>
-            🟢 El pedido está listo para entregar.
+            🟢 El pedido está listo.
+        </p>
+
+
+        {% if pedido.tipo_entrega == 'delivery' %}
+
+            <p>
+                🚚 <strong>Listo para salir a delivery.</strong>
+            </p>
+
+            <form
+                method="POST"
+                action="{% url 'marcar_pedido_entregado' pedido.id %}"
+            >
+
+                {% csrf_token %}
+
+                <button
+                    type="submit"
+                    class="btn-link"
+                >
+                    🚚 Enviar pedido en camino
+                </button>
+
+            </form>
+
+        {% else %}
+
+            <p>
+                🏪 El cliente puede retirar su pedido.
+            </p>
+
+            <form
+                method="POST"
+                action="{% url 'marcar_pedido_entregado' pedido.id %}"
+            >
+
+                {% csrf_token %}
+
+                <button
+                    type="submit"
+                    class="btn-link"
+                >
+                    ✅ Marcar como Entregado
+                </button>
+
+            </form>
+
+        {% endif %}
+
+
+    {% elif pedido.estado == 'en_camino' %}
+
+        <p>
+            🚚 <strong>El pedido está en camino.</strong>
+        </p>
+
+        <p>
+            📍 Dirección:
+            {{ pedido.direccion_entrega }}
         </p>
 
         <form
@@ -256,7 +315,7 @@
                 type="submit"
                 class="btn-link"
             >
-                ✅ Marcar como Entregado
+                ✅ Confirmar que fue entregado
             </button>
 
         </form>
@@ -265,7 +324,7 @@
     {% elif pedido.estado == 'entregado' %}
 
         <p>
-            ✅ Pedido entregado.
+            ✅ Pedido entregado correctamente.
         </p>
 
     {% endif %}
