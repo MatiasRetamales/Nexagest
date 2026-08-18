@@ -763,6 +763,7 @@ def crear_pedido_online(request, restaurante_id):
 
 @tiene_acceso(['garzon', 'encargado', 'operador'])
 def marcar_pedido_entregado(request, id):
+
     restaurante = request.user.perfil.restaurante
 
     pedido = get_object_or_404(
@@ -775,16 +776,31 @@ def marcar_pedido_entregado(request, id):
     if request.method == "POST":
 
         if pedido.estado == 'listo':
-            pedido.estado = 'entregado'
+
+            if pedido.tipo_entrega == 'delivery':
+
+                pedido.estado = 'en_camino'
+
+                messages.success(
+                    request,
+                    f"Pedido online #{pedido.id} va en camino."
+                )
+
+            else:
+
+                pedido.estado = 'entregado'
+
+                messages.success(
+                    request,
+                    f"Pedido online #{pedido.id} marcado como entregado."
+                )
+
             pedido.save()
 
-            messages.success(
-                request,
-                f"Pedido online #{pedido.id} marcado como entregado."
-            )
-
-    return redirect('detalle_pedido_online', id=pedido.id)
-
+    return redirect(
+        'detalle_pedido_online',
+        id=pedido.id
+    )
 
 
 @tiene_acceso(['garzon', 'encargado', 'operador'])
