@@ -7,7 +7,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('pedidos', '0010_pedido_estado_pago_pedido_token_seguimiento'),
+        ('pedidos', '0010_5_backfill_token_seguimiento'),
     ]
 
     operations = [
