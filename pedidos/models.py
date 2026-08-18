@@ -19,7 +19,7 @@ class Pedido(models.Model):
         ('aceptado', 'Aceptado'),
         ('entregado', 'Entregado'),
         ('cancelado', 'Cancelado'),
-        ('en camino', 'En Camino')
+        ('en_camino', 'En Camino')
     )
 
     ORIGENES = (

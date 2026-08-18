@@ -199,7 +199,7 @@ def crear_categoria(request):
 
 
 @tiene_acceso(['administrador'])
-def gestion_propinas(request):
+def configuracion_restaurante(request):
     restaurante = request.user.perfil.restaurante
 
     if request.method == "POST":
@@ -278,7 +278,7 @@ def gestion_propinas(request):
 
     return render(
         request,
-        'administracion/gestion_propinas.html',
+        'administracion/configuracion_restaurante.html',
         {
             "restaurante": restaurante
         }

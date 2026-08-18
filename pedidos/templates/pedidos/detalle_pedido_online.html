@@ -63,14 +63,21 @@
                 <strong>Tipo de entrega:</strong>
 
                 {% if pedido.tipo_entrega == 'retiro' %}
+
                     Retiro en local
+
                 {% elif pedido.tipo_entrega == 'delivery' %}
+
                     Delivery
+
                 {% else %}
+
                     No indicado
+
                 {% endif %}
 
             </p>
+
 
             {% if pedido.tipo_entrega == 'delivery' and pedido.direccion_entrega %}
 
@@ -92,7 +99,6 @@
                 <strong>Estado:</strong>
                 {{ pedido.get_estado_display }}
             </p>
-
 
 
             <p>
@@ -183,161 +189,288 @@
 
 
 
-<!-- ACCIONES -->
+        <!-- ACCIONES -->
 
-<div class="acciones-mesa">
+        <div class="acciones-mesa">
 
-    {% if pedido.estado == 'pendiente' %}
 
-        {% if pedido.metodo_pago == 'transferencia' and not pedido.esta_pagado %}
+            <!-- ======================================== -->
+            <!-- PEDIDO PENDIENTE -->
+            <!-- ======================================== -->
 
-            <p>
-                💳 <strong>Pago por transferencia pendiente de verificación.</strong>
-            </p>
+            {% if pedido.estado == 'pendiente' %}
 
-            <form
-                method="POST"
-                action="{% url 'marcar_pedido_pagado' pedido.id %}"
-            >
 
-                {% csrf_token %}
+                {% if pedido.metodo_pago == 'transferencia' and not pedido.esta_pagado %}
 
-                <button
-                    type="submit"
-                    class="btn-link"
+                    <p>
+                        💳
+                        <strong>
+                            Pago por transferencia pendiente de verificación.
+                        </strong>
+                    </p>
+
+
+                    <form
+                        method="POST"
+                        action="{% url 'marcar_pedido_pagado' pedido.id %}"
+                    >
+
+                        {% csrf_token %}
+
+                        <button
+                            type="submit"
+                            class="btn-link"
+                        >
+                            💰 Marcar como Pagado
+                        </button>
+
+                    </form>
+
+
+                {% else %}
+
+
+                    <form
+                        method="POST"
+                        action="{% url 'aceptar_pedido_online' pedido.id %}"
+                    >
+
+                        {% csrf_token %}
+
+                        <button
+                            type="submit"
+                            class="btn-link"
+                        >
+                            🍳 Aceptar y Enviar a Cocina
+                        </button>
+
+                    </form>
+
+
+                {% endif %}
+
+
+
+            <!-- ======================================== -->
+            <!-- EN COCINA -->
+            <!-- ======================================== -->
+
+            {% elif pedido.estado == 'en_preparacion' %}
+
+                <p>
+                    🍳 El pedido está en cocina.
+                </p>
+
+
+
+            <!-- ======================================== -->
+            <!-- LISTO -->
+            <!-- ======================================== -->
+
+            {% elif pedido.estado == 'listo' %}
+
+                <p>
+                    🟢 El pedido está listo.
+                </p>
+
+
+                {% if pedido.tipo_entrega == 'delivery' %}
+
+
+                    {% if pedido.metodo_pago == 'transferencia' and not pedido.esta_pagado %}
+
+                        <p>
+                            🟡
+                            <strong>
+                                Transferencia pendiente de verificación.
+                            </strong>
+                        </p>
+
+
+                        <form
+                            method="POST"
+                            action="{% url 'marcar_pedido_pagado' pedido.id %}"
+                        >
+
+                            {% csrf_token %}
+
+                            <button
+                                type="submit"
+                                class="btn-link"
+                            >
+                                💰 Verificar y marcar como pagado
+                            </button>
+
+                        </form>
+
+
+                    {% else %}
+
+
+                        <p>
+                            🚚
+                            <strong>
+                                Listo para salir a delivery.
+                            </strong>
+                        </p>
+
+
+                        <form
+                            method="POST"
+                            action="{% url 'marcar_pedido_entregado' pedido.id %}"
+                        >
+
+                            {% csrf_token %}
+
+                            <button
+                                type="submit"
+                                class="btn-link"
+                            >
+                                🚚 Enviar pedido en camino
+                            </button>
+
+                        </form>
+
+
+                    {% endif %}
+
+
+                {% else %}
+
+
+                    <p>
+                        🏪 El cliente puede retirar su pedido.
+                    </p>
+
+
+                    <form
+                        method="POST"
+                        action="{% url 'marcar_pedido_entregado' pedido.id %}"
+                    >
+
+                        {% csrf_token %}
+
+                        <button
+                            type="submit"
+                            class="btn-link"
+                        >
+                            ✅ Marcar como Entregado
+                        </button>
+
+                    </form>
+
+
+                {% endif %}
+
+
+
+            <!-- ======================================== -->
+            <!-- EN CAMINO -->
+            <!-- ======================================== -->
+
+            {% elif pedido.estado == 'en_camino' %}
+
+                <p>
+                    🚚
+                    <strong>
+                        El pedido está en camino.
+                    </strong>
+                </p>
+
+
+                <p>
+                    📍 Dirección:
+                    {{ pedido.direccion_entrega }}
+                </p>
+
+
+                <form
+                    method="POST"
+                    action="{% url 'marcar_pedido_entregado' pedido.id %}"
                 >
-                    💰 Marcar como Pagado
-                </button>
 
-            </form>
+                    {% csrf_token %}
 
-        {% else %}
+                    <button
+                        type="submit"
+                        class="btn-link"
+                    >
+                        ✅ Confirmar que fue entregado
+                    </button>
 
-            <form
-                method="POST"
-                action="{% url 'aceptar_pedido_online' pedido.id %}"
+                </form>
+
+
+
+            <!-- ======================================== -->
+            <!-- ENTREGADO -->
+            <!-- ======================================== -->
+
+            {% elif pedido.estado == 'entregado' %}
+
+                <p>
+                    ✅
+                    <strong>
+                        Pedido entregado correctamente.
+                    </strong>
+                </p>
+
+
+                {% if not pedido.esta_pagado %}
+
+                    <p>
+                        🟡
+                        <strong>
+                            Pago pendiente.
+                        </strong>
+                    </p>
+
+
+                    <p>
+                        💰
+                        El pedido fue entregado,
+                        pero todavía no se ha registrado el pago.
+                    </p>
+
+
+                    <a
+                        href="{% url 'cobrar_pedido_online' pedido.id %}"
+                        class="btn-link"
+                    >
+                        💰 Registrar pago
+                    </a>
+
+
+                {% else %}
+
+                    <p>
+                        ✅
+                        Pago registrado correctamente.
+                    </p>
+
+                {% endif %}
+
+
+            {% endif %}
+
+
+
+            <!-- VOLVER -->
+
+            <a
+                href="{% url 'lista_mesas' %}"
+                class="btn-link btn-volver"
             >
-
-                {% csrf_token %}
-
-                <button
-                    type="submit"
-                    class="btn-link"
-                >
-                    🍳 Aceptar y Enviar a Cocina
-                </button>
-
-            </form>
-
-        {% endif %}
+                Volver
+            </a>
 
 
-    {% elif pedido.estado == 'en_preparacion' %}
-
-        <p>
-            🍳 El pedido está en cocina.
-        </p>
+        </div>
 
 
-    {% elif pedido.estado == 'listo' %}
+    </div>
 
-        <p>
-            🟢 El pedido está listo.
-        </p>
-
-
-        {% if pedido.tipo_entrega == 'delivery' %}
-
-            <p>
-                🚚 <strong>Listo para salir a delivery.</strong>
-            </p>
-
-            <form
-                method="POST"
-                action="{% url 'marcar_pedido_entregado' pedido.id %}"
-            >
-
-                {% csrf_token %}
-
-                <button
-                    type="submit"
-                    class="btn-link"
-                >
-                    🚚 Enviar pedido en camino
-                </button>
-
-            </form>
-
-        {% else %}
-
-            <p>
-                🏪 El cliente puede retirar su pedido.
-            </p>
-
-            <form
-                method="POST"
-                action="{% url 'marcar_pedido_entregado' pedido.id %}"
-            >
-
-                {% csrf_token %}
-
-                <button
-                    type="submit"
-                    class="btn-link"
-                >
-                    ✅ Marcar como Entregado
-                </button>
-
-            </form>
-
-        {% endif %}
-
-
-    {% elif pedido.estado == 'en_camino' %}
-
-        <p>
-            🚚 <strong>El pedido está en camino.</strong>
-        </p>
-
-        <p>
-            📍 Dirección:
-            {{ pedido.direccion_entrega }}
-        </p>
-
-        <form
-            method="POST"
-            action="{% url 'marcar_pedido_entregado' pedido.id %}"
-        >
-
-            {% csrf_token %}
-
-            <button
-                type="submit"
-                class="btn-link"
-            >
-                ✅ Confirmar que fue entregado
-            </button>
-
-        </form>
-
-
-    {% elif pedido.estado == 'entregado' %}
-
-        <p>
-            ✅ Pedido entregado correctamente.
-        </p>
-
-    {% endif %}
-
-
-    <a
-        href="{% url 'lista_mesas' %}"
-        class="btn-link btn-volver"
-    >
-        Volver
-    </a>
-
-</div>
 
 </body>
 

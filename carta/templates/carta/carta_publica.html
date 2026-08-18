@@ -1,250 +1,284 @@
 {% load static %}
 
 <!doctype html>
+
 <html lang="es">
 
 <head>
 
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
 
-    <meta
-        name="theme-color"
-        content="#111827"
-    >
+<meta
+    name="theme-color"
+    content="#111827"
+>
 
-    <title>
-        {{ restaurante.nombre }} | Carta
-    </title>
+<title>
+    {{ restaurante.nombre }} | Carta
+</title>
 
-    <link
-        rel="stylesheet"
-        href="{% static 'carta/css/carta.css' %}"
-    >
+<link
+    rel="stylesheet"
+    href="{% static 'carta/css/carta.css' %}"
+>
+
 
 </head>
 
-
 <body>
 
-
-    <main class="carta-app">
-
-
-        <!-- ================================================= -->
-        <!-- ENCABEZADO DEL LOCAL -->
-        <!-- ================================================= -->
-
-        <header class="encabezado-local">
-
-            <div class="identidad-local">
-
-                <div class="logo-local">
-
-                    <img
-                        src="{% static 'core/img/logo_nexagest.png' %}"
-                        alt="Logo {{ restaurante.nombre }}"
-                    >
-
-                </div>
+<main class="carta-app">
 
 
-                <div class="info-local">
+    <!-- ================================================= -->
+    <!-- ENCABEZADO DEL LOCAL -->
+    <!-- ================================================= -->
 
-                    <h1>
-                        {{ restaurante.nombre }}
-                    </h1>
+    <header class="encabezado-local">
 
+        <div class="identidad-local">
 
-                    {% if restaurante.estado == 'abierto' %}
+            <div class="logo-local">
 
-                        <span class="estado-local abierto">
-
-                            <span class="estado-punto"></span>
-
-                            Abierto
-
-                        </span>
-
-                    {% else %}
-
-                        <span class="estado-local cerrado">
-
-                            <span class="estado-punto"></span>
-
-                            Cerrado
-
-                        </span>
-
-                    {% endif %}
-
-                </div>
+                <img
+                    src="{% static 'core/img/logo_nexagest.png' %}"
+                    alt="Logo {{ restaurante.nombre }}"
+                >
 
             </div>
 
 
-            {% if restaurante.descripcion %}
+            <div class="info-local">
 
-                <div class="descripcion-local">
-
-                    <p>
-                        {{ restaurante.descripcion }}
-                    </p>
-
-                </div>
-
-            {% endif %}
-
-        </header>
+                <h1>
+                    {{ restaurante.nombre }}
+                </h1>
 
 
+                {% if restaurante.estado == 'abierto' and caja_abierta %}
 
-        <!-- ================================================= -->
-        <!-- NAVEGACIÓN DE CATEGORÍAS -->
-        <!-- ================================================= -->
+                    <span class="estado-local abierto">
 
-        {% if categorias %}
+                        <span class="estado-punto"></span>
 
-            <nav
-                class="categorias-nav"
-                aria-label="Categorías del menú"
-            >
+                        Abierto
 
-                <div class="categorias-scroll">
+                    </span>
 
+                {% else %}
 
-                    {% for categoria in categorias %}
+                    <span class="estado-local cerrado">
 
-                        <button
-                            type="button"
-                            class="categoria-btn {% if forloop.first %}activo{% endif %}"
-                            data-target="categoria-{{ categoria.id }}"
-                        >
+                        <span class="estado-punto"></span>
 
-                            {{ categoria.nombre }}
+                        Cerrado
 
-                        </button>
+                    </span>
 
-                    {% endfor %}
+                {% endif %}
+
+            </div>
+
+        </div>
 
 
-                </div>
+        {% if restaurante.descripcion %}
 
-            </nav>
+            <div class="descripcion-local">
+
+                <p>
+                    {{ restaurante.descripcion }}
+                </p>
+
+            </div>
 
         {% endif %}
 
-
-
-        <!-- ================================================= -->
-        <!-- CARTA -->
-        <!-- ================================================= -->
-
-        <section class="menu">
-
-
-            {% for categoria in categorias %}
-
-                <section
-                    class="categoria"
-                    id="categoria-{{ categoria.id }}"
-                    data-categoria="{{ categoria.id }}"
-                >
-
-
-                    <!-- ===================================== -->
-                    <!-- CABECERA CATEGORÍA -->
-                    <!-- ===================================== -->
-
-                    <div class="categoria-header">
-
-                        <h2>
-                            {{ categoria.nombre }}
-                        </h2>
-
-                    </div>
+    </header>
 
 
 
-                    <!-- ===================================== -->
-                    <!-- PRODUCTOS -->
-                    <!-- ===================================== -->
+    <!-- ================================================= -->
+    <!-- AVISO LOCAL / CAJA CERRADA -->
+    <!-- ================================================= -->
 
-                    <div class="productos">
+    {% if restaurante.estado != 'abierto' %}
+
+        <div class="aviso-local-cerrado">
+
+            🔒 Este local está cerrado actualmente.
+
+            <br>
+
+            Los pedidos online no están disponibles en este momento.
+
+        </div>
+
+    {% elif not caja_abierta %}
+
+        <div class="aviso-local-cerrado">
+
+            🔒 Los pedidos online están cerrados actualmente.
+
+            <br>
+
+            El local aún no tiene una caja abierta.
+
+        </div>
+
+    {% endif %}
 
 
-                        {% for producto in categoria.producto_set.all %}
+
+    <!-- ================================================= -->
+    <!-- NAVEGACIÓN DE CATEGORÍAS -->
+    <!-- ================================================= -->
+
+    {% if categorias %}
+
+        <nav
+            class="categorias-nav"
+            aria-label="Categorías del menú"
+        >
+
+            <div class="categorias-scroll">
 
 
-                            {% if producto.disponibilidad == 'disponible' %}
+                {% for categoria in categorias %}
+
+                    <button
+                        type="button"
+                        class="categoria-btn {% if forloop.first %}activo{% endif %}"
+                        data-target="categoria-{{ categoria.id }}"
+                    >
+
+                        {{ categoria.nombre }}
+
+                    </button>
+
+                {% endfor %}
 
 
-                                <article
-                                    class="producto"
-                                    data-producto-id="{{ producto.id }}"
-                                >
+            </div>
+
+        </nav>
+
+    {% endif %}
 
 
-                                    <!-- =============================== -->
-                                    <!-- IMAGEN -->
-                                    <!-- =============================== -->
 
-                                    <div class="producto-imagen">
+    <!-- ================================================= -->
+    <!-- CARTA -->
+    <!-- ================================================= -->
 
-                                        <div class="imagen-placeholder">
+    <section class="menu">
 
-                                            <span>
-                                                🍽️
-                                            </span>
 
-                                        </div>
+        {% for categoria in categorias %}
+
+            <section
+                class="categoria"
+                id="categoria-{{ categoria.id }}"
+                data-categoria="{{ categoria.id }}"
+            >
+
+
+                <!-- ===================================== -->
+                <!-- CABECERA CATEGORÍA -->
+                <!-- ===================================== -->
+
+                <div class="categoria-header">
+
+                    <h2>
+                        {{ categoria.nombre }}
+                    </h2>
+
+                </div>
+
+
+
+                <!-- ===================================== -->
+                <!-- PRODUCTOS -->
+                <!-- ===================================== -->
+
+                <div class="productos">
+
+
+                    {% for producto in categoria.producto_set.all %}
+
+
+                        {% if producto.disponibilidad == 'disponible' %}
+
+
+                            <article
+                                class="producto"
+                                data-producto-id="{{ producto.id }}"
+                            >
+
+
+                                <!-- =============================== -->
+                                <!-- IMAGEN -->
+                                <!-- =============================== -->
+
+                                <div class="producto-imagen">
+
+                                    <div class="imagen-placeholder">
+
+                                        <span>
+                                            🍽️
+                                        </span>
 
                                     </div>
 
+                                </div>
+
+
+
+                                <!-- =============================== -->
+                                <!-- INFORMACIÓN -->
+                                <!-- =============================== -->
+
+                                <div class="producto-info">
+
+
+                                    <h3>
+                                        {{ producto.nombre }}
+                                    </h3>
+
+
+                                    {% if producto.descripcion %}
+
+                                        <p class="producto-descripcion">
+
+                                            {{ producto.descripcion }}
+
+                                        </p>
+
+                                    {% endif %}
+
 
 
                                     <!-- =============================== -->
-                                    <!-- INFORMACIÓN -->
+                                    <!-- PRECIO + AGREGAR -->
                                     <!-- =============================== -->
 
-                                    <div class="producto-info">
+                                    <div class="producto-footer">
 
 
-                                        <h3>
-                                            {{ producto.nombre }}
-                                        </h3>
+                                        <strong class="precio">
 
+                                            ${{ producto.precio }}
 
-                                        {% if producto.descripcion %}
-
-                                            <p class="producto-descripcion">
-
-                                                {{ producto.descripcion }}
-
-                                            </p>
-
-                                        {% endif %}
+                                        </strong>
 
 
 
-                                        <!-- =============================== -->
-                                        <!-- PRECIO + AGREGAR -->
-                                        <!-- =============================== -->
-
-                                        <div class="producto-footer">
-
-
-                                            <strong class="precio">
-
-                                                ${{ producto.precio }}
-
-                                            </strong>
-
-
+                                        {% if restaurante.estado == 'abierto' and caja_abierta %}
 
                                             <button
                                                 type="button"
@@ -259,48 +293,60 @@
 
                                             </button>
 
+                                        {% else %}
 
-                                        </div>
+                                            <span class="producto-cerrado">
+
+                                                No disponible
+
+                                            </span>
+
+                                        {% endif %}
 
 
                                     </div>
 
 
-                                </article>
+                                </div>
 
 
-                            {% endif %}
+                            </article>
 
 
-                        {% empty %}
+                        {% endif %}
 
 
-                            <p class="categoria-vacia">
-
-                                No hay productos disponibles.
-
-                            </p>
+                    {% empty %}
 
 
-                        {% endfor %}
+                        <p class="categoria-vacia">
+
+                            No hay productos disponibles.
+
+                        </p>
 
 
-                    </div>
+                    {% endfor %}
 
 
-                </section>
+                </div>
 
 
-            {% endfor %}
+            </section>
 
 
-        </section>
+        {% endfor %}
+
+
+    </section>
 
 
 
-        <!-- ================================================= -->
-        <!-- CARRITO FIJO -->
-        <!-- ================================================= -->
+    <!-- ================================================= -->
+    <!-- CARRITO FIJO -->
+    <!-- ================================================= -->
+
+    {% if restaurante.estado == 'abierto' and caja_abierta %}
 
         <div
             id="carrito"
@@ -340,9 +386,18 @@
 
         </div>
 
+    {% endif %}
 
-    </main>
 
+</main>
+
+
+
+<!-- ================================================= -->
+<!-- MODALES DE PEDIDO -->
+<!-- ================================================= -->
+
+{% if restaurante.estado == 'abierto' and caja_abierta %}
 
 
     <!-- ================================================= -->
@@ -683,7 +738,7 @@
 
                             <span>
 
-                                💵 Pagar en local
+                                💵 Efectivo/Tarjeta
 
                             </span>
 
@@ -973,29 +1028,35 @@
 
     </div>
 
-
-
-    <!-- ================================================= -->
-    <!-- CONFIGURACIÓN -->
-    <!-- ================================================= -->
-
-    <script>
-
-        const restauranteId = {{ restaurante.id }};
-
-        const csrfToken = "{{ csrf_token }}";
-
-    </script>
+{% endif %}
 
 
 
-    <!-- ================================================= -->
-    <!-- JAVASCRIPT -->
-    <!-- ================================================= -->
+<!-- ================================================= -->
+<!-- CONFIGURACIÓN -->
+<!-- ================================================= -->
 
-    <script
-        src="{% static 'carta/carta.js' %}"
-    ></script>
+<script>
+
+    const restauranteId = {{ restaurante.id }};
+
+    const csrfToken = "{{ csrf_token }}";
+
+    const cajaAbierta = {% if caja_abierta %}true{% else %}false{% endif %};
+
+    const localAbierto = {% if restaurante.estado == 'abierto' %}true{% else %}false{% endif %};
+
+</script>
+
+
+
+<!-- ================================================= -->
+<!-- JAVASCRIPT -->
+<!-- ================================================= -->
+
+<script
+    src="{% static 'carta/carta.js' %}"
+></script>
 
 
 </body>

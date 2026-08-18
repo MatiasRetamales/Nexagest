@@ -1,55 +1,72 @@
 {% load static %}
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{% static 'administracion/css/menu_admin.css' %}">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="{% static 'administracion/css/menu_admin.css' %}"
+    />
     <title>Menu de Administración</title>
-</head>
-<body>
-
+  </head>
+  <body>
     <div class="logo-container">
-        <img src="{% static 'core/img/logo_nexagest.png' %}" alt="Logo Nexagest" class="logo-admin">
+      <img
+        src="{% static 'core/img/logo_nexagest.png' %}"
+        alt="Logo Nexagest"
+        class="logo-admin"
+      />
     </div>
-    <form action="{% url 'logout' %}" method="post" style="display: inline;">
-          {% csrf_token %}
-           <button type="submit" class="btn-logout">Cerrar Sesión</button>
-    </form> 
+    <!-- ESTADO DEL LOCAL -->
+
+    <form action="{% url 'toggle_estado_local' %}" method="post">
+      {% csrf_token %} {% if restaurante.estado == 'abierto' %}
+
+      <button type="submit" class="btn-estado abierto">🟢 Local abierto</button>
+
+      {% else %}
+
+      <button type="submit" class="btn-estado cerrado">🔴 Local cerrado</button>
+
+      {% endif %}
+    </form>
+    <form action="{% url 'logout' %}" method="post" style="display: inline">
+      {% csrf_token %}
+      <button type="submit" class="btn-logout">Cerrar Sesión</button>
+    </form>
 
     <h1>NexaGest Food — Panel de administración</h1>
 
     <div class="menu-admin-container">
-        {% if user.perfil.rol == 'administrador' %}
-         <a href="{% url 'dashboard' %}" class="btn-admin">📈 Ver Reportes</a>
-         <a href="{% url 'cocina' %}" class="btn-admin">🍳 Ir a Cocina</a>
+      {% if user.perfil.rol == 'administrador' %}
+      <a href="{% url 'dashboard' %}" class="btn-admin">📈 Ver Reportes</a>
+      <a href="{% url 'cocina' %}" class="btn-admin">🍳 Ir a Cocina</a>
 
-         {% if restaurante.tipo_local == 'restaurante' %}
-         <a href="{% url 'lista_mesas' %}" class="btn-admin">🪑 Ver Mesas</a>
-         {% elif restaurante.tipo_local == 'local' %}
-         <a href="{% url 'lista_mesas' %}" class="btn-admin">📦 Ver Pedidos</a>
-         {% endif %}
-         <a href="{% url 'lista_productos' %}" class="btn-admin">🛒 Gestión de Productos</a>
-         <a href="{% url 'gestion_propinas' %}" class="btn-admin">💰 Gestión de Propinas</a>
-         <a href="{% url 'caja' %}" class="btn-admin">💵 Gestión de Caja</a>
-         <a href="{% url 'gestion_personal' %}" class="btn-admin">👥 Gestión de Personal</a>
-        {% endif %}
-
-        
-
-        {% if user.perfil.rol == 'encargado' %}
-         <a href="{% url 'caja' %}" class="btn-admin">💵 Gestión de Caja</a>
-          {% if restaurante.tipo_local == 'restaurante' %}
-          <a href="{% url 'lista_mesas' %}" class="btn-admin">🪑 Ver Mesas</a>
-          {% elif restaurante.tipo_local == 'local' %}
-          <a href="{% url 'lista_mesas' %}" class="btn-admin">📦 Ver Pedidos</a>
-          {% endif %}
-          <a href="{% url 'cocina' %}" class="btn-admin">🍳 Ir a Cocina</a>
-        {% endif %}
-
-
-
+      {% if restaurante.tipo_local == 'restaurante' %}
+      <a href="{% url 'lista_mesas' %}" class="btn-admin">🪑 Ver Mesas</a>
+      {% elif restaurante.tipo_local == 'local' %}
+      <a href="{% url 'lista_mesas' %}" class="btn-admin">📦 Ver Pedidos</a>
+      {% endif %}
+      <a href="{% url 'lista_productos' %}" class="btn-admin"
+        >🛒 Gestión de Productos</a
+      >
+      <a href="{% url 'configuracion-restaurante' %}" class="btn-admin"
+        >⚙️ Configuración del Restaurante</a
+      >
+      <a href="{% url 'caja' %}" class="btn-admin">💵 Gestión de Caja</a>
+      <a href="{% url 'gestion_personal' %}" class="btn-admin"
+        >👥 Gestión de Personal</a
+      >
+      {% endif %} {% if user.perfil.rol == 'encargado' %}
+      <a href="{% url 'caja' %}" class="btn-admin">💵 Gestión de Caja</a>
+      {% if restaurante.tipo_local == 'restaurante' %}
+      <a href="{% url 'lista_mesas' %}" class="btn-admin">🪑 Ver Mesas</a>
+      {% elif restaurante.tipo_local == 'local' %}
+      <a href="{% url 'lista_mesas' %}" class="btn-admin">📦 Ver Pedidos</a>
+      {% endif %}
+      <a href="{% url 'cocina' %}" class="btn-admin">🍳 Ir a Cocina</a>
+      {% endif %}
     </div>
-
-</body>
+  </body>
 </html>

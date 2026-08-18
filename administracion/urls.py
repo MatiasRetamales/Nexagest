@@ -10,7 +10,7 @@ urlpatterns = [
     path('administracion/productos/crear/', views.crear_producto, name='crear_producto'),
     path('administracion/productos/editar/<int:producto_id>/', views.editar_producto, name='editar_producto'),
     path('administracion/productos/eliminar/<int:producto_id>/', views.eliminar_producto, name='eliminar_producto'),
-    path('gestion-propinas/', views.gestion_propinas, name='gestion_propinas'),
+    path('configuracion-restaurante/', views.configuracion_restaurante, name='configuracion-restaurante'),
     path('administracion/caja/', views.caja, name='caja'),
     path('administracion/caja/abrir/', views.abrir_caja, name='abrir_caja'),
     path('administracion/caja/cerrar/', views.cerrar_caja, name='cerrar_caja'),
@@ -38,4 +38,5 @@ urlpatterns = [
     path('administracion/gestion-personal/cocineros/contraseña/<int:cocinero_id>/', views.reset_password_cocinero, name='reset_password_cocinero'),
     path('administracion/gestion-personal/encargados/contraseña/<int:encargado_id>/', views.reset_password_encargado, name='reset_password_encargado'),
     path('administracion/gestion-personal/operadores/contraseña/<int:operador_id>/', views.reset_password_operador, name='reset_password_operador'),
+    path("toggle-estado-local/",views.toggle_estado_local,name="toggle_estado_local"),
 ]

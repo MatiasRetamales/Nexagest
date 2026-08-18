@@ -1605,6 +1605,67 @@ button {
 
 
 /* =========================================================
+   AVISO LOCAL CERRADO
+   ========================================================= */
+
+.aviso-local-cerrado {
+
+    margin: 24px 0;
+
+    padding: 20px 18px;
+
+    background: #fef2f2;
+
+    border: 1px solid #fecaca;
+
+    border-radius: var(--radio);
+
+    text-align: center;
+
+    box-shadow:
+        0 4px 14px rgba(15, 23, 42, 0.04);
+}
+
+
+.aviso-local-cerrado-icono {
+
+    display: block;
+
+    margin-bottom: 8px;
+
+    font-size: 28px;
+
+    line-height: 1;
+}
+
+
+.aviso-local-cerrado strong {
+
+    display: block;
+
+    margin-bottom: 5px;
+
+    color: #991b1b;
+
+    font-size: 16px;
+
+    font-weight: 800;
+}
+
+
+.aviso-local-cerrado p {
+
+    margin: 0;
+
+    color: #b91c1c;
+
+    font-size: 13px;
+
+    line-height: 1.5;
+}
+
+
+/* =========================================================
    TABLET
    ========================================================= */
 
