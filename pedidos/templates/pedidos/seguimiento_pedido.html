@@ -54,13 +54,19 @@
         </p>
 
 
-        <!-- ESTADO -->
+        <!-- ======================================== -->
+        <!-- ESTADO ACTUAL -->
+        <!-- ======================================== -->
 
         <div
             class="estado-pedido"
             id="estado-pedido"
         >
 
+
+            <!-- ================================ -->
+            <!-- PENDIENTE -->
+            <!-- ================================ -->
 
             {% if pedido.estado == 'pendiente' %}
 
@@ -71,13 +77,11 @@
                     🟡
                 </div>
 
-
                 <h2 id="estado-titulo">
 
                     Pedido recibido
 
                 </h2>
-
 
                 <p id="estado-descripcion">
 
@@ -85,6 +89,10 @@
 
                 </p>
 
+
+            <!-- ================================ -->
+            <!-- EN PREPARACIÓN -->
+            <!-- ================================ -->
 
             {% elif pedido.estado == 'en_preparacion' %}
 
@@ -95,13 +103,11 @@
                     👨‍🍳
                 </div>
 
-
                 <h2 id="estado-titulo">
 
                     Preparando tu pedido
 
                 </h2>
-
 
                 <p id="estado-descripcion">
 
@@ -109,6 +115,10 @@
 
                 </p>
 
+
+            <!-- ================================ -->
+            <!-- LISTO -->
+            <!-- ================================ -->
 
             {% elif pedido.estado == 'listo' %}
 
@@ -119,16 +129,13 @@
                     🟢
                 </div>
 
-
                 <h2 id="estado-titulo">
 
                     ¡Tu pedido está listo!
 
                 </h2>
 
-
                 <p id="estado-descripcion">
-
 
                     {% if pedido.tipo_entrega == 'retiro' %}
 
@@ -140,9 +147,38 @@
 
                     {% endif %}
 
+                </p>
+
+
+            <!-- ================================ -->
+            <!-- EN CAMINO -->
+            <!-- ================================ -->
+
+            {% elif pedido.estado == 'en_camino' %}
+
+                <div
+                    class="icono"
+                    id="estado-icono"
+                >
+                    🚗
+                </div>
+
+                <h2 id="estado-titulo">
+
+                    ¡Tu pedido va en camino!
+
+                </h2>
+
+                <p id="estado-descripcion">
+
+                    El repartidor ya salió con tu pedido.
 
                 </p>
 
+
+            <!-- ================================ -->
+            <!-- ENTREGADO -->
+            <!-- ================================ -->
 
             {% elif pedido.estado == 'entregado' %}
 
@@ -153,13 +189,11 @@
                     ✅
                 </div>
 
-
                 <h2 id="estado-titulo">
 
                     Pedido entregado
 
                 </h2>
-
 
                 <p id="estado-descripcion">
 
@@ -167,6 +201,10 @@
 
                 </p>
 
+
+            <!-- ================================ -->
+            <!-- CANCELADO -->
+            <!-- ================================ -->
 
             {% elif pedido.estado == 'cancelado' %}
 
@@ -177,20 +215,17 @@
                     ❌
                 </div>
 
-
                 <h2 id="estado-titulo">
 
                     Pedido cancelado
 
                 </h2>
 
-
                 <p id="estado-descripcion">
 
                     Este pedido fue cancelado.
 
                 </p>
-
 
             {% endif %}
 
@@ -199,12 +234,16 @@
 
 
 
+        <!-- ======================================== -->
         <!-- PROGRESO -->
+        <!-- ======================================== -->
 
         <div class="progreso">
 
 
+            <!-- ================================ -->
             <!-- RECIBIDO -->
+            <!-- ================================ -->
 
             <div
                 id="paso-recibido"
@@ -223,12 +262,14 @@
 
 
 
+            <!-- ================================ -->
             <!-- PREPARANDO -->
+            <!-- ================================ -->
 
             <div
                 id="paso-preparando"
                 class="paso
-                {% if pedido.estado == 'en_preparacion' or pedido.estado == 'listo' or pedido.estado == 'entregado' %}
+                {% if pedido.estado == 'en_preparacion' or pedido.estado == 'listo' or pedido.estado == 'en_camino' or pedido.estado == 'entregado' %}
                     activo
                 {% endif %}"
             >
@@ -245,12 +286,14 @@
 
 
 
+            <!-- ================================ -->
             <!-- LISTO -->
+            <!-- ================================ -->
 
             <div
                 id="paso-listo"
                 class="paso
-                {% if pedido.estado == 'listo' or pedido.estado == 'entregado' %}
+                {% if pedido.estado == 'listo' or pedido.estado == 'en_camino' or pedido.estado == 'entregado' %}
                     activo
                 {% endif %}"
             >
@@ -266,11 +309,43 @@
             </div>
 
 
+
+            <!-- ================================ -->
+            <!-- EN CAMINO -->
+            <!-- SOLO DELIVERY -->
+            <!-- ================================ -->
+
+            {% if pedido.tipo_entrega == 'delivery' %}
+
+                <div
+                    id="paso-en-camino"
+                    class="paso
+                    {% if pedido.estado == 'en_camino' or pedido.estado == 'entregado' %}
+                        activo
+                    {% endif %}"
+                >
+
+                    <span>
+                        🚗
+                    </span>
+
+                    <p>
+                        En camino
+                    </p>
+
+                </div>
+
+            {% endif %}
+
+
+
         </div>
 
 
 
+        <!-- ======================================== -->
         <!-- PRODUCTOS -->
+        <!-- ======================================== -->
 
         <div class="productos">
 
@@ -308,7 +383,9 @@
 
 
                 <p>
+
                     No hay productos en este pedido.
+
                 </p>
 
 
@@ -340,7 +417,9 @@
 
 
 
+        <!-- ======================================== -->
         <!-- ENTREGA -->
+        <!-- ======================================== -->
 
         <div class="entrega">
 
@@ -378,7 +457,9 @@
 
 
 
+    <!-- ======================================== -->
     <!-- JAVASCRIPT -->
+    <!-- ======================================== -->
 
     <script
         src="{% static 'pedidos/js/seguimiento_pedido.js' %}"

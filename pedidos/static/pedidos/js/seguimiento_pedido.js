@@ -33,6 +33,11 @@ const pasoListo =
         'paso-listo'
     );
 
+const pasoEnCamino =
+    document.getElementById(
+        'paso-en-camino'
+    );
+
 
 // ========================================
 // ACTUALIZAR ESTADO
@@ -102,6 +107,14 @@ function actualizarEstado() {
                 'activo'
             );
 
+            if (pasoEnCamino) {
+
+                pasoEnCamino.classList.remove(
+                    'activo'
+                );
+
+            }
+
         }
 
 
@@ -134,6 +147,14 @@ function actualizarEstado() {
             pasoListo.classList.remove(
                 'activo'
             );
+
+            if (pasoEnCamino) {
+
+                pasoEnCamino.classList.remove(
+                    'activo'
+                );
+
+            }
 
         }
 
@@ -180,6 +201,55 @@ function actualizarEstado() {
                 'activo'
             );
 
+            if (pasoEnCamino) {
+
+                pasoEnCamino.classList.remove(
+                    'activo'
+                );
+
+            }
+
+        }
+
+
+        // ========================================
+        // EN CAMINO
+        // ========================================
+
+        else if (
+            data.estado === 'en_camino'
+        ) {
+
+            estadoIcono.textContent =
+                '🚗';
+
+            estadoTitulo.textContent =
+                '¡Tu pedido va en camino!';
+
+            estadoDescripcion.textContent =
+                'El repartidor ya salió con tu pedido.';
+
+
+            pasoRecibido.classList.add(
+                'activo'
+            );
+
+            pasoPreparando.classList.add(
+                'activo'
+            );
+
+            pasoListo.classList.add(
+                'activo'
+            );
+
+            if (pasoEnCamino) {
+
+                pasoEnCamino.classList.add(
+                    'activo'
+                );
+
+            }
+
         }
 
 
@@ -212,6 +282,20 @@ function actualizarEstado() {
             pasoListo.classList.add(
                 'activo'
             );
+
+            if (pasoEnCamino) {
+
+                if (
+                    data.tipo_entrega === 'delivery'
+                ) {
+
+                    pasoEnCamino.classList.add(
+                        'activo'
+                    );
+
+                }
+
+            }
 
 
             // Dejar de consultar
