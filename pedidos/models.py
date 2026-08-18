@@ -17,8 +17,9 @@ class Pedido(models.Model):
         ('en_preparacion', 'En Cocina'),
         ('listo', 'Para Entregar'),
         ('aceptado', 'Aceptado'),
-        ('entregado', 'Servido'),
+        ('entregado', 'Entregado'),
         ('cancelado', 'Cancelado'),
+        ('en camino', 'En Camino')
     )
 
     ORIGENES = (
