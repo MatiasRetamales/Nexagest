@@ -101,6 +101,11 @@ class Pedido(models.Model):
         null=True,
         blank=True
     )
+    
+    descripcion = models.TextField(
+     blank=True,
+     null=True
+    )
 
     def total_con_propina(self):
         return self.total + self.monto_propina
