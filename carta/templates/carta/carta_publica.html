@@ -1,884 +1,1002 @@
 {% load static %}
 
 <!doctype html>
-
 <html lang="es">
 
 <head>
 
-```
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
 
-<meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
->
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-<meta
-    name="theme-color"
-    content="#111827"
->
+    <meta
+        name="theme-color"
+        content="#111827"
+    >
 
-<title>
-    {{ restaurante.nombre }} | Carta
-</title>
+    <title>
+        {{ restaurante.nombre }} | Carta
+    </title>
 
-<link
-    rel="stylesheet"
-    href="{% static 'carta/css/carta.css' %}"
->
-```
+    <link
+        rel="stylesheet"
+        href="{% static 'carta/css/carta.css' %}"
+    >
 
 </head>
 
+
 <body>
 
-```
-<!-- ================================================== -->
-<!-- CONTENEDOR PRINCIPAL -->
-<!-- ================================================== -->
 
-<main class="carta-app">
+    <main class="carta-app">
 
 
-    <!-- ================================================== -->
-    <!-- ENCABEZADO DEL LOCAL -->
-    <!-- ================================================== -->
+        <!-- ================================================= -->
+        <!-- ENCABEZADO DEL LOCAL -->
+        <!-- ================================================= -->
 
-    <header class="encabezado-local">
+        <header class="encabezado-local">
 
-        <div class="identidad-local">
+            <div class="identidad-local">
 
-            <!--
-                Preparado para logo personalizado.
+                <div class="logo-local">
 
-                Más adelante podremos usar algo como:
-
-                {% if restaurante.logo %}
-                    <img src="{{ restaurante.logo.url }}">
-                {% else %}
-                    <img src="{% static 'core/img/logo_nexagest.png' %}">
-                {% endif %}
-            -->
-
-            <div class="logo-local">
-
-                <img
-                    src="{% static 'core/img/logo_nexagest.png' %}"
-                    alt="Logo {{ restaurante.nombre }}"
-                >
-
-            </div>
-
-
-            <div class="info-local">
-
-                <h1>
-                    {{ restaurante.nombre }}
-                </h1>
-
-
-                {% if restaurante.estado == 'abierto' %}
-
-                    <span class="estado-local abierto">
-                        <span class="estado-punto"></span>
-                        Abierto
-                    </span>
-
-                {% else %}
-
-                    <span class="estado-local cerrado">
-                        <span class="estado-punto"></span>
-                        Cerrado
-                    </span>
-
-                {% endif %}
-
-            </div>
-
-        </div>
-
-
-        <!--
-            Espacio preparado para futuras funciones:
-
-            - Instagram
-            - WhatsApp
-            - Dirección
-            - Horario
-            - Información del local
-        -->
-
-        <div class="acciones-local">
-
-            <!-- Futuro -->
-
-        </div>
-
-    </header>
-
-
-
-    <!-- ================================================== -->
-    <!-- INFORMACIÓN / DESCRIPCIÓN DEL LOCAL -->
-    <!-- ================================================== -->
-
-    <!--
-        Esta sección puede activarse posteriormente
-        si el restaurante tiene descripción.
-    -->
-
-    {% if restaurante.descripcion %}
-
-        <section class="descripcion-local">
-
-            <p>
-                {{ restaurante.descripcion }}
-            </p>
-
-        </section>
-
-    {% endif %}
-
-
-
-    <!-- ================================================== -->
-    <!-- CARTA -->
-    <!-- ================================================== -->
-
-    <section class="menu">
-
-
-        {% for categoria in categorias %}
-
-            <section
-                class="categoria"
-                data-categoria="{{ categoria.id }}"
-            >
-
-
-                <!-- ================================ -->
-                <!-- NOMBRE CATEGORÍA -->
-                <!-- ================================ -->
-
-                <div class="categoria-header">
-
-                    <h2>
-                        {{ categoria.nombre }}
-                    </h2>
+                    <img
+                        src="{% static 'core/img/logo_nexagest.png' %}"
+                        alt="Logo {{ restaurante.nombre }}"
+                    >
 
                 </div>
 
 
+                <div class="info-local">
 
-                <!-- ================================ -->
-                <!-- PRODUCTOS -->
-                <!-- ================================ -->
-
-                <div class="productos">
-
-
-                    {% for producto in categoria.producto_set.all %}
+                    <h1>
+                        {{ restaurante.nombre }}
+                    </h1>
 
 
-                        {% if producto.disponibilidad == 'disponible' %}
+                    {% if restaurante.estado == 'abierto' %}
 
-                            <article
-                                class="producto"
-                                data-producto-id="{{ producto.id }}"
-                            >
+                        <span class="estado-local abierto">
+
+                            <span class="estado-punto"></span>
+
+                            Abierto
+
+                        </span>
+
+                    {% else %}
+
+                        <span class="estado-local cerrado">
+
+                            <span class="estado-punto"></span>
+
+                            Cerrado
+
+                        </span>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
 
 
-                                <!-- ================================ -->
-                                <!-- IMAGEN PRODUCTO -->
-                                <!-- ================================ -->
+            {% if restaurante.descripcion %}
 
-                                <div class="producto-imagen">
+                <div class="descripcion-local">
 
-                                    <!--
-                                        Preparado para imágenes
-                                        personalizadas por producto.
+                    <p>
+                        {{ restaurante.descripcion }}
+                    </p>
 
-                                        Más adelante:
+                </div>
 
-                                        {% if producto.imagen %}
-                                            <img
-                                                src="{{ producto.imagen.url }}"
-                                                alt="{{ producto.nombre }}"
-                                            >
-                                        {% else %}
-                                            <div class="imagen-placeholder">
-                                                ...
-                                            </div>
-                                        {% endif %}
-                                    -->
+            {% endif %}
 
-                                    <div class="imagen-placeholder">
-
-                                        <span>
-                                            🍽️
-                                        </span>
-
-                                    </div>
-
-                                </div>
+        </header>
 
 
 
-                                <!-- ================================ -->
-                                <!-- INFORMACIÓN -->
-                                <!-- ================================ -->
+        <!-- ================================================= -->
+        <!-- NAVEGACIÓN DE CATEGORÍAS -->
+        <!-- ================================================= -->
 
-                                <div class="producto-info">
+        {% if categorias %}
 
+            <nav
+                class="categorias-nav"
+                aria-label="Categorías del menú"
+            >
 
-                                    <h3>
-                                        {{ producto.nombre }}
-                                    </h3>
-
-
-                                    {% if producto.descripcion %}
-                                        <p class="descripcion">
-                                            {{ producto.descripcion }}
-                                        </p>
-                                    {% endif %}
-
-                                    {% if producto.descripcion %}
-
-                                        <p class="producto-descripcion">
-
-                                            {{ producto.descripcion }}
-
-                                        </p>
-
-                                    {% endif %}
+                <div class="categorias-scroll">
 
 
-                                    <div class="producto-footer">
+                    {% for categoria in categorias %}
 
+                        <button
+                            type="button"
+                            class="categoria-btn {% if forloop.first %}activo{% endif %}"
+                            data-target="categoria-{{ categoria.id }}"
+                        >
 
-                                        <strong class="precio">
+                            {{ categoria.nombre }}
 
-                                            ${{ producto.precio }}
-
-                                        </strong>
-
-
-                                        <button
-                                            type="button"
-                                            class="btn-agregar"
-                                            data-id="{{ producto.id }}"
-                                            data-nombre="{{ producto.nombre }}"
-                                            data-precio="{{ producto.precio }}"
-                                            aria-label="Agregar {{ producto.nombre }}"
-                                        >
-
-                                            +
-
-                                        </button>
-
-
-                                    </div>
-
-
-                                </div>
-
-
-                            </article>
-
-                        {% endif %}
-
-
-                    {% empty %}
-
-                        <p class="categoria-vacia">
-
-                            No hay productos disponibles.
-
-                        </p>
+                        </button>
 
                     {% endfor %}
 
 
                 </div>
 
-            </section>
+            </nav>
 
-        {% endfor %}
+        {% endif %}
 
 
-    </section>
 
+        <!-- ================================================= -->
+        <!-- CARTA -->
+        <!-- ================================================= -->
 
+        <section class="menu">
 
-    <!-- ================================================== -->
-    <!-- CARRITO FIJO -->
-    <!-- ================================================== -->
 
-    <div
-        id="carrito"
-        class="carrito"
-    >
+            {% for categoria in categorias %}
 
+                <section
+                    class="categoria"
+                    id="categoria-{{ categoria.id }}"
+                    data-categoria="{{ categoria.id }}"
+                >
 
-        <div class="carrito-info">
 
+                    <!-- ===================================== -->
+                    <!-- CABECERA CATEGORÍA -->
+                    <!-- ===================================== -->
 
-            <span
-                id="cantidad-carrito"
-            >
+                    <div class="categoria-header">
 
-                0 productos
+                        <h2>
+                            {{ categoria.nombre }}
+                        </h2>
 
-            </span>
+                    </div>
 
 
-            <strong
-                id="total-carrito"
-            >
 
-                $0
+                    <!-- ===================================== -->
+                    <!-- PRODUCTOS -->
+                    <!-- ===================================== -->
 
-            </strong>
+                    <div class="productos">
 
 
-        </div>
+                        {% for producto in categoria.producto_set.all %}
 
 
-        <button
-            type="button"
-            id="btn-carrito"
-        >
+                            {% if producto.disponibilidad == 'disponible' %}
 
-            Ver pedido
 
-        </button>
+                                <article
+                                    class="producto"
+                                    data-producto-id="{{ producto.id }}"
+                                >
 
 
-    </div>
+                                    <!-- =============================== -->
+                                    <!-- IMAGEN -->
+                                    <!-- =============================== -->
 
+                                    <div class="producto-imagen">
 
+                                        <div class="imagen-placeholder">
 
-</main>
+                                            <span>
+                                                🍽️
+                                            </span>
 
+                                        </div>
 
+                                    </div>
 
-<!-- ================================================== -->
-<!-- RESUMEN DEL PEDIDO -->
-<!-- ================================================== -->
 
-<div
-    id="resumen-pedido"
-    class="modal oculto"
->
 
+                                    <!-- =============================== -->
+                                    <!-- INFORMACIÓN -->
+                                    <!-- =============================== -->
 
-    <div class="resumen-contenido">
+                                    <div class="producto-info">
 
 
-        <button
-            type="button"
-            id="cerrar-pedido"
-            class="cerrar-pedido"
-            aria-label="Cerrar pedido"
-        >
+                                        <h3>
+                                            {{ producto.nombre }}
+                                        </h3>
 
-            ×
 
-        </button>
+                                        {% if producto.descripcion %}
 
+                                            <p class="producto-descripcion">
 
-        <h2>
-            Tu pedido
-        </h2>
+                                                {{ producto.descripcion }}
 
+                                            </p>
 
-        <div
-            id="lista-pedido"
-            class="lista-pedido"
-        ></div>
+                                        {% endif %}
 
 
-        <div class="total-pedido">
 
+                                        <!-- =============================== -->
+                                        <!-- PRECIO + AGREGAR -->
+                                        <!-- =============================== -->
 
-            <span>
-                Total
-            </span>
+                                        <div class="producto-footer">
 
 
-            <strong
-                id="total-pedido"
-            >
+                                            <strong class="precio">
 
-                $0
+                                                ${{ producto.precio }}
 
-            </strong>
+                                            </strong>
 
 
-        </div>
 
+                                            <button
+                                                type="button"
+                                                class="btn-agregar"
+                                                data-id="{{ producto.id }}"
+                                                data-nombre="{{ producto.nombre }}"
+                                                data-precio="{{ producto.precio }}"
+                                                aria-label="Agregar {{ producto.nombre }}"
+                                            >
 
-        <button
-            type="button"
-            id="btn-continuar"
-            class="btn-continuar"
-        >
+                                                +
 
-            Continuar
+                                            </button>
 
-        </button>
 
+                                        </div>
 
-    </div>
 
+                                    </div>
 
-</div>
 
+                                </article>
 
 
-<!-- ================================================== -->
-<!-- DATOS DEL CLIENTE -->
-<!-- ================================================== -->
-
-<div
-    id="datos-cliente"
-    class="modal oculto"
->
-
-
-    <div class="datos-contenido">
-
-
-        <button
-            type="button"
-            id="cerrar-datos"
-            class="cerrar-pedido"
-            aria-label="Cerrar"
-        >
-
-            ×
-
-        </button>
-
-
-        <h2>
-            Datos del pedido
-        </h2>
-
-
-        <!-- ================================ -->
-        <!-- NOMBRE -->
-        <!-- ================================ -->
-
-        <div class="campo-formulario">
-
-            <label for="nombre-cliente">
-                Nombre
-            </label>
-
-
-            <input
-                type="text"
-                id="nombre-cliente"
-                placeholder="Tu nombre"
-                autocomplete="name"
-            >
-
-        </div>
-
-
-
-        <!-- ================================ -->
-        <!-- TELÉFONO -->
-        <!-- ================================ -->
-
-        <div class="campo-formulario">
-
-            <label for="telefono-cliente">
-                Teléfono
-            </label>
-
-
-            <input
-                type="tel"
-                id="telefono-cliente"
-                placeholder="Tu teléfono"
-                autocomplete="tel"
-            >
-
-        </div>
-
-
-
-        <!-- ================================ -->
-        <!-- TIPO DE ENTREGA -->
-        <!-- ================================ -->
-
-        <div class="campo-formulario">
-
-            <label>
-                ¿Cómo quieres recibir tu pedido?
-            </label>
-
-
-            <div class="opciones">
-
-
-                {% if restaurante.acepta_retiro %}
-
-                    <label class="opcion">
-
-                        <input
-                            type="radio"
-                            name="tipo-entrega"
-                            value="retiro"
-                            checked
-                        >
-
-                        <span>
-                            🏪 Retiro en local
-                        </span>
-
-                    </label>
-
-                {% endif %}
-
-
-
-                {% if restaurante.acepta_delivery %}
-
-                    <label class="opcion">
-
-                        <input
-                            type="radio"
-                            name="tipo-entrega"
-                            value="delivery"
-                            {% if not restaurante.acepta_retiro %}
-                                checked
                             {% endif %}
-                        >
 
-                        <span>
-                            🛵 Delivery
-                        </span>
 
-                    </label>
+                        {% empty %}
 
-                {% endif %}
 
+                            <p class="categoria-vacia">
 
+                                No hay productos disponibles.
 
-                {% if not restaurante.acepta_retiro and not restaurante.acepta_delivery %}
+                            </p>
 
-                    <p class="aviso">
 
-                        ⚠️ Este local no tiene opciones
-                        de entrega configuradas.
-
-                    </p>
-
-                {% endif %}
-
-
-            </div>
-
-        </div>
-
-
-
-        <!-- ================================ -->
-        <!-- MÉTODO DE PAGO -->
-        <!-- ================================ -->
-
-        <div
-            id="pago-container"
-            class="campo-formulario"
-        >
-
-
-            <label>
-                ¿Cómo quieres pagar?
-            </label>
-
-
-            <div class="opciones">
-
-
-                {% if restaurante.acepta_pago_local %}
-
-                    <label class="opcion">
-
-                        <input
-                            type="radio"
-                            name="metodo-pago"
-                            value="efectivo"
-                        >
-
-                        <span>
-                            💵 Pagar en local
-                        </span>
-
-                    </label>
-
-                {% endif %}
-
-
-
-                {% if restaurante.acepta_pago_transferencia %}
-
-                    <label class="opcion">
-
-                        <input
-                            type="radio"
-                            name="metodo-pago"
-                            value="transferencia"
-                        >
-
-                        <span>
-                            🏦 Transferencia bancaria
-                        </span>
-
-                    </label>
-
-
-
-                    <!-- ================================ -->
-                    <!-- DATOS TRANSFERENCIA -->
-                    <!-- ================================ -->
-
-                    <div
-                        id="datos-transferencia"
-                        class="datos-transferencia oculto"
-                    >
-
-
-                        <h4>
-                            Datos para transferir
-                        </h4>
-
-
-                        <div class="dato-transferencia">
-
-                            <span>
-                                Banco
-                            </span>
-
-                            <strong>
-                                {{ restaurante.banco_transferencia }}
-                            </strong>
-
-                        </div>
-
-
-                        <div class="dato-transferencia">
-
-                            <span>
-                                Tipo de cuenta
-                            </span>
-
-                            <strong>
-                                {{ restaurante.tipo_cuenta_transferencia }}
-                            </strong>
-
-                        </div>
-
-
-                        <div class="dato-transferencia">
-
-                            <span>
-                                Número de cuenta
-                            </span>
-
-                            <strong>
-                                {{ restaurante.numero_cuenta_transferencia }}
-                            </strong>
-
-                        </div>
-
-
-                        <div class="dato-transferencia">
-
-                            <span>
-                                Titular
-                            </span>
-
-                            <strong>
-                                {{ restaurante.titular_transferencia }}
-                            </strong>
-
-                        </div>
-
-
-                        <div class="dato-transferencia">
-
-                            <span>
-                                RUT
-                            </span>
-
-                            <strong>
-                                {{ restaurante.rut_transferencia }}
-                            </strong>
-
-                        </div>
-
-
-                        <div class="dato-transferencia">
-
-                            <span>
-                                Correo
-                            </span>
-
-                            <strong>
-                                {{ restaurante.correo_transferencia }}
-                            </strong>
-
-                        </div>
+                        {% endfor %}
 
 
                     </div>
 
-                {% endif %}
+
+                </section>
+
+
+            {% endfor %}
+
+
+        </section>
 
 
 
-                {% if not restaurante.acepta_pago_local and not restaurante.acepta_pago_transferencia %}
+        <!-- ================================================= -->
+        <!-- CARRITO FIJO -->
+        <!-- ================================================= -->
 
-                    <p class="aviso">
+        <div
+            id="carrito"
+            class="carrito"
+        >
 
-                        ⚠️ Este local no tiene métodos de pago
-                        configurados para pedidos online.
+
+            <div class="carrito-info">
+
+                <span id="cantidad-carrito">
+
+                    0 productos
+
+                </span>
+
+
+                <strong id="total-carrito">
+
+                    $0
+
+                </strong>
+
+            </div>
+
+
+
+            <button
+                type="button"
+                id="btn-carrito"
+                class="btn-ver-pedido"
+            >
+
+                Ver pedido
+
+            </button>
+
+
+        </div>
+
+
+    </main>
+
+
+
+    <!-- ================================================= -->
+    <!-- MODAL: RESUMEN DEL PEDIDO -->
+    <!-- ================================================= -->
+
+    <div
+        id="resumen-pedido"
+        class="modal oculto"
+    >
+
+
+        <div class="resumen-contenido">
+
+
+            <button
+                type="button"
+                id="cerrar-pedido"
+                class="cerrar-pedido"
+                aria-label="Cerrar pedido"
+            >
+
+                ×
+
+            </button>
+
+
+
+            <div class="modal-header">
+
+
+                <span class="modal-icono">
+
+                    🛒
+
+                </span>
+
+
+                <div>
+
+                    <h2>
+
+                        Tu pedido
+
+                    </h2>
+
+
+                    <p>
+
+                        Revisa tus productos antes de continuar.
 
                     </p>
 
-                {% endif %}
+                </div>
 
 
             </div>
 
 
+
+            <div
+                id="lista-pedido"
+                class="lista-pedido"
+            ></div>
+
+
+
+            <div class="total-pedido">
+
+                <span>
+
+                    Total
+
+                </span>
+
+
+                <strong id="total-pedido">
+
+                    $0
+
+                </strong>
+
+            </div>
+
+
+
+            <button
+                type="button"
+                id="btn-continuar"
+                class="btn-continuar"
+            >
+
+                Continuar
+
+            </button>
+
+
         </div>
 
 
-
-        <!-- ================================ -->
-        <!-- DIRECCIÓN DELIVERY -->
-        <!-- ================================ -->
-
-        <div
-            id="direccion-container"
-            class="campo-formulario oculto"
-        >
+    </div>
 
 
-            <label for="direccion-cliente">
 
-                Dirección de entrega
+    <!-- ================================================= -->
+    <!-- MODAL: DATOS DEL CLIENTE -->
+    <!-- ================================================= -->
 
-            </label>
+    <div
+        id="datos-cliente"
+        class="modal oculto"
+    >
 
 
-            <input
-                type="text"
-                id="direccion-cliente"
-                placeholder="Ej: Av. Principal 123"
-                autocomplete="street-address"
+        <div class="datos-contenido">
+
+
+            <button
+                type="button"
+                id="cerrar-datos"
+                class="cerrar-pedido"
+                aria-label="Cerrar"
+            >
+
+                ×
+
+            </button>
+
+
+
+            <div class="modal-header">
+
+
+                <span class="modal-icono">
+
+                    📋
+
+                </span>
+
+
+                <div>
+
+                    <h2>
+
+                        Datos del pedido
+
+                    </h2>
+
+
+                    <p>
+
+                        Completa tus datos para confirmar.
+
+                    </p>
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- ================================================= -->
+            <!-- NOMBRE -->
+            <!-- ================================================= -->
+
+            <div class="campo-formulario">
+
+
+                <label for="nombre-cliente">
+
+                    Nombre
+
+                </label>
+
+
+                <input
+                    type="text"
+                    id="nombre-cliente"
+                    placeholder="Tu nombre"
+                    autocomplete="name"
+                >
+
+
+            </div>
+
+
+
+            <!-- ================================================= -->
+            <!-- TELÉFONO -->
+            <!-- ================================================= -->
+
+            <div class="campo-formulario">
+
+
+                <label for="telefono-cliente">
+
+                    Teléfono
+
+                </label>
+
+
+                <input
+                    type="tel"
+                    id="telefono-cliente"
+                    placeholder="Tu teléfono"
+                    autocomplete="tel"
+                >
+
+
+            </div>
+
+
+
+            <!-- ================================================= -->
+            <!-- TIPO DE ENTREGA -->
+            <!-- ================================================= -->
+
+            <div class="campo-formulario">
+
+
+                <label>
+
+                    ¿Cómo quieres recibir tu pedido?
+
+                </label>
+
+
+
+                <div class="opciones">
+
+
+                    {% if restaurante.acepta_retiro %}
+
+                        <label class="opcion">
+
+
+                            <input
+                                type="radio"
+                                name="tipo-entrega"
+                                value="retiro"
+                                checked
+                            >
+
+
+                            <span>
+
+                                🏪 Retiro en local
+
+                            </span>
+
+
+                        </label>
+
+                    {% endif %}
+
+
+
+                    {% if restaurante.acepta_delivery %}
+
+                        <label class="opcion">
+
+
+                            <input
+                                type="radio"
+                                name="tipo-entrega"
+                                value="delivery"
+
+                                {% if not restaurante.acepta_retiro %}
+                                    checked
+                                {% endif %}
+                            >
+
+
+                            <span>
+
+                                🛵 Delivery
+
+                            </span>
+
+
+                        </label>
+
+                    {% endif %}
+
+
+
+                    {% if not restaurante.acepta_retiro and not restaurante.acepta_delivery %}
+
+                        <p class="aviso">
+
+                            ⚠️ Este local no tiene opciones de entrega configuradas.
+
+                        </p>
+
+                    {% endif %}
+
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- ================================================= -->
+            <!-- MÉTODO DE PAGO -->
+            <!-- ================================================= -->
+
+            <div
+                id="pago-container"
+                class="campo-formulario"
             >
 
 
+                <label>
+
+                    ¿Cómo quieres pagar?
+
+                </label>
+
+
+
+                <div class="opciones">
+
+
+                    {% if restaurante.acepta_pago_local %}
+
+                        <label class="opcion">
+
+
+                            <input
+                                type="radio"
+                                name="metodo-pago"
+                                value="efectivo"
+                            >
+
+
+                            <span>
+
+                                💵 Pagar en local
+
+                            </span>
+
+
+                        </label>
+
+                    {% endif %}
+
+
+
+                    {% if restaurante.acepta_pago_transferencia %}
+
+                        <label class="opcion">
+
+
+                            <input
+                                type="radio"
+                                name="metodo-pago"
+                                value="transferencia"
+                            >
+
+
+                            <span>
+
+                                🏦 Transferencia bancaria
+
+                            </span>
+
+
+                        </label>
+
+
+
+                        <!-- ================================================= -->
+                        <!-- DATOS DE TRANSFERENCIA -->
+                        <!-- ================================================= -->
+
+                        <div
+                            id="datos-transferencia"
+                            class="datos-transferencia oculto"
+                        >
+
+
+                            <h4>
+
+                                Datos para transferir
+
+                            </h4>
+
+
+
+                            <div class="dato-transferencia">
+
+                                <span>
+
+                                    Banco
+
+                                </span>
+
+
+                                <strong>
+
+                                    {{ restaurante.banco_transferencia }}
+
+                                </strong>
+
+                            </div>
+
+
+
+                            <div class="dato-transferencia">
+
+                                <span>
+
+                                    Tipo de cuenta
+
+                                </span>
+
+
+                                <strong>
+
+                                    {{ restaurante.tipo_cuenta_transferencia }}
+
+                                </strong>
+
+                            </div>
+
+
+
+                            <div class="dato-transferencia">
+
+                                <span>
+
+                                    Número de cuenta
+
+                                </span>
+
+
+                                <strong>
+
+                                    {{ restaurante.numero_cuenta_transferencia }}
+
+                                </strong>
+
+                            </div>
+
+
+
+                            <div class="dato-transferencia">
+
+                                <span>
+
+                                    Titular
+
+                                </span>
+
+
+                                <strong>
+
+                                    {{ restaurante.titular_transferencia }}
+
+                                </strong>
+
+                            </div>
+
+
+
+                            <div class="dato-transferencia">
+
+                                <span>
+
+                                    RUT
+
+                                </span>
+
+
+                                <strong>
+
+                                    {{ restaurante.rut_transferencia }}
+
+                                </strong>
+
+                            </div>
+
+
+
+                            <div class="dato-transferencia">
+
+                                <span>
+
+                                    Correo
+
+                                </span>
+
+
+                                <strong>
+
+                                    {{ restaurante.correo_transferencia }}
+
+                                </strong>
+
+                            </div>
+
+
+                        </div>
+
+                    {% endif %}
+
+
+
+                    {% if not restaurante.acepta_pago_local and not restaurante.acepta_pago_transferencia %}
+
+                        <p class="aviso">
+
+                            ⚠️ Este local no tiene métodos de pago configurados para pedidos online.
+
+                        </p>
+
+                    {% endif %}
+
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- ================================================= -->
+            <!-- DIRECCIÓN DELIVERY -->
+            <!-- ================================================= -->
+
+            <div
+                id="direccion-container"
+                class="campo-formulario oculto"
+            >
+
+
+                <label for="direccion-cliente">
+
+                    Dirección de entrega
+
+                </label>
+
+
+                <input
+                    type="text"
+                    id="direccion-cliente"
+                    placeholder="Ej: Av. Principal 123"
+                    autocomplete="street-address"
+                >
+
+
+            </div>
+
+
+
+            <!-- ================================================= -->
+            <!-- CONFIRMAR PEDIDO -->
+            <!-- ================================================= -->
+
+            <button
+                type="button"
+                id="confirmar-pedido"
+                class="btn-continuar"
+            >
+
+                Confirmar pedido
+
+            </button>
+
+
         </div>
-
-
-
-        <!-- ================================ -->
-        <!-- CONFIRMAR -->
-        <!-- ================================ -->
-
-        <button
-            type="button"
-            id="confirmar-pedido"
-            class="btn-continuar"
-        >
-
-            Confirmar pedido
-
-        </button>
 
 
     </div>
 
 
-</div>
+
+    <!-- ================================================= -->
+    <!-- MODAL: PEDIDO EXITOSO -->
+    <!-- ================================================= -->
+
+    <div
+        id="pedido-exitoso"
+        class="modal oculto"
+    >
+
+
+        <div class="pedido-exitoso-contenido">
+
+
+            <div class="icono-exito">
+
+                ✓
+
+            </div>
 
 
 
-<!-- ================================================== -->
-<!-- PEDIDO EXITOSO -->
-<!-- ================================================== -->
+            <h2>
 
-<div
-    id="pedido-exitoso"
-    class="modal oculto"
->
+                ¡Pedido enviado!
+
+            </h2>
 
 
-    <div class="pedido-exitoso-contenido">
+
+            <p id="mensaje-pedido-exitoso"></p>
 
 
-        <div class="icono-exito">
-            ✓
+
+            <a
+                id="btn-seguimiento"
+                href="#"
+                target="_blank"
+                class="btn-seguimiento"
+            >
+
+                🔗 Ver estado de mi pedido
+
+            </a>
+
+
         </div>
-
-
-        <h2>
-            ¡Pedido enviado!
-        </h2>
-
-
-        <p id="mensaje-pedido-exitoso"></p>
-
-
-        <a
-            id="btn-seguimiento"
-            href="#"
-            target="_blank"
-            class="btn-seguimiento"
-        >
-
-            🔗 Ver estado de mi pedido
-
-        </a>
 
 
     </div>
 
 
-</div>
+
+    <!-- ================================================= -->
+    <!-- CONFIGURACIÓN -->
+    <!-- ================================================= -->
+
+    <script>
+
+        const restauranteId = {{ restaurante.id }};
+
+        const csrfToken = "{{ csrf_token }}";
+
+    </script>
 
 
 
-<!-- ================================================== -->
-<!-- CONFIGURACIÓN DEL RESTAURANTE -->
-<!-- ================================================== -->
+    <!-- ================================================= -->
+    <!-- JAVASCRIPT -->
+    <!-- ================================================= -->
 
-<script>
+    <script
+        src="{% static 'carta/carta.js' %}"
+    ></script>
 
-    const restauranteId = {{ restaurante.id }};
-
-    const csrfToken = "{{ csrf_token }}";
-
-</script>
-
-
-
-<!-- ================================================== -->
-<!-- JAVASCRIPT -->
-<!-- ================================================== -->
-
-<script
-    src="{% static 'carta/carta.js' %}"
-></script>
-```
 
 </body>
 

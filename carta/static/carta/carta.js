@@ -936,3 +936,229 @@ setInterval(
     comprobarPedidoGuardado,
     5000
 );
+
+
+
+// ========================================
+// NAVEGACIÓN POR CATEGORÍAS
+// ========================================
+
+const botonesCategorias =
+    document.querySelectorAll(".categoria-btn");
+
+const seccionesCategorias =
+    document.querySelectorAll(".categoria");
+
+
+// ========================================
+// CLICK EN CATEGORÍA
+// ========================================
+
+botonesCategorias.forEach((boton) => {
+
+    boton.addEventListener("click", () => {
+
+        const categoriaId =
+            boton.dataset.categoria;
+
+        const categoria =
+            document.querySelector(
+                `.categoria[data-categoria="${categoriaId}"]`
+            );
+
+
+        if (!categoria) {
+
+            return;
+
+        }
+
+
+        // ----------------------------------------
+        // Mover hacia la categoría
+        // ----------------------------------------
+
+        categoria.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+
+
+        // ----------------------------------------
+        // Marcar botón activo
+        // ----------------------------------------
+
+        botonesCategorias.forEach((btn) => {
+
+            btn.classList.remove("activo");
+
+        });
+
+
+        boton.classList.add("activo");
+
+    });
+
+});
+
+
+// ========================================
+// NAVEGACIÓN DE CATEGORÍAS
+// ========================================
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    const botonesCategorias =
+        document.querySelectorAll(".categoria-btn");
+
+    const categorias =
+        document.querySelectorAll(".categoria");
+
+
+    if (
+        botonesCategorias.length === 0 ||
+        categorias.length === 0
+    ) {
+
+        return;
+
+    }
+
+
+    // ========================================
+    // CLICK EN CATEGORÍA
+    // ========================================
+
+    botonesCategorias.forEach((boton) => {
+
+        boton.addEventListener("click", () => {
+
+            const targetId =
+                boton.dataset.target;
+
+
+            const categoria =
+                document.getElementById(targetId);
+
+
+            if (!categoria) {
+
+                console.error(
+                    "No se encontró la categoría:",
+                    targetId
+                );
+
+                return;
+
+            }
+
+
+            // Quitar activo de todos
+
+            botonesCategorias.forEach((btn) => {
+
+                btn.classList.remove("activo");
+
+            });
+
+
+            // Activar botón seleccionado
+
+            boton.classList.add("activo");
+
+
+            // Desplazamiento
+
+            const offset = 75;
+
+            const posicion =
+                categoria.getBoundingClientRect().top +
+                window.scrollY -
+                offset;
+
+
+            window.scrollTo({
+
+                top: posicion,
+
+                behavior: "smooth"
+
+            });
+
+        });
+
+    });
+
+
+    // ========================================
+    // CAMBIAR CATEGORÍA SEGÚN SCROLL
+    // ========================================
+
+    const observer =
+        new IntersectionObserver(
+            (entries) => {
+
+                entries.forEach((entry) => {
+
+                    if (!entry.isIntersecting) {
+
+                        return;
+
+                    }
+
+
+                    const categoriaId =
+                        entry.target.id;
+
+
+                    botonesCategorias.forEach((boton) => {
+
+                        boton.classList.remove("activo");
+
+
+                        if (
+                            boton.dataset.target ===
+                            categoriaId
+                        ) {
+
+                            boton.classList.add("activo");
+
+
+                            boton.scrollIntoView({
+
+                                behavior: "smooth",
+
+                                block: "nearest",
+
+                                inline: "center"
+
+                            });
+
+                        }
+
+                    });
+
+                });
+
+            },
+            {
+                root: null,
+
+                threshold: 0.15,
+
+                rootMargin: "-80px 0px -60% 0px"
+            }
+        );
+
+
+    // ========================================
+    // OBSERVAR CATEGORÍAS
+    // ========================================
+
+    categorias.forEach((categoria) => {
+
+        observer.observe(categoria);
+
+    });
+
+});
