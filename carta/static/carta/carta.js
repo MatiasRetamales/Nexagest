@@ -1,32 +1,22 @@
 let carrito = [];
 
-
 // ========================================
 // AGREGAR PRODUCTOS
 // ========================================
 
-const botonesAgregar =
-    document.querySelectorAll('.btn-agregar');
+const botonesAgregar = document.querySelectorAll(".btn-agregar");
 
-botonesAgregar.forEach(boton => {
+botonesAgregar.forEach((boton) => {
 
-    boton.addEventListener('click', () => {
+    boton.addEventListener("click", () => {
 
-        const id =
-            boton.dataset.id;
+        const id = boton.dataset.id;
+        const nombre = boton.dataset.nombre;
+        const precio = Number(boton.dataset.precio);
 
-        const nombre =
-            boton.dataset.nombre;
-
-        const precio =
-            Number(boton.dataset.precio);
-
-
-        const productoExistente =
-            carrito.find(
-                producto => producto.id === id
-            );
-
+        const productoExistente = carrito.find(
+            producto => producto.id === id
+        );
 
         if (productoExistente) {
 
@@ -35,19 +25,13 @@ botonesAgregar.forEach(boton => {
         } else {
 
             carrito.push({
-
                 id: id,
-
                 nombre: nombre,
-
                 precio: precio,
-
                 cantidad: 1
-
             });
 
         }
-
 
         actualizarCarrito();
 
@@ -63,11 +47,9 @@ botonesAgregar.forEach(boton => {
 function actualizarCarrito() {
 
     let cantidadTotal = 0;
-
     let precioTotal = 0;
 
-
-    carrito.forEach(producto => {
+    carrito.forEach((producto) => {
 
         cantidadTotal += producto.cantidad;
 
@@ -77,17 +59,15 @@ function actualizarCarrito() {
 
     });
 
-
     document.getElementById(
-        'cantidad-carrito'
+        "cantidad-carrito"
     ).textContent =
         `${cantidadTotal} productos`;
 
-
     document.getElementById(
-        'total-carrito'
+        "total-carrito"
     ).textContent =
-        `$${precioTotal.toLocaleString('es-CL')}`;
+        `$${precioTotal.toLocaleString("es-CL")}`;
 
 }
 
@@ -97,183 +77,129 @@ function actualizarCarrito() {
 // ========================================
 
 const btnCarrito =
-    document.getElementById(
-        'btn-carrito'
-    );
-
+    document.getElementById("btn-carrito");
 
 const resumenPedido =
-    document.getElementById(
-        'resumen-pedido'
-    );
-
+    document.getElementById("resumen-pedido");
 
 const cerrarPedido =
-    document.getElementById(
-        'cerrar-pedido'
-    );
-
+    document.getElementById("cerrar-pedido");
 
 const listaPedido =
-    document.getElementById(
-        'lista-pedido'
-    );
-
+    document.getElementById("lista-pedido");
 
 const totalPedido =
-    document.getElementById(
-        'total-pedido'
-    );
+    document.getElementById("total-pedido");
 
 
 // ========================================
-// ABRIR RESUMEN DEL PEDIDO
+// ABRIR RESUMEN
 // ========================================
 
-btnCarrito.addEventListener(
-    'click',
-    () => {
+btnCarrito.addEventListener("click", () => {
 
-        listaPedido.innerHTML = '';
+    listaPedido.innerHTML = "";
 
-        let total = 0;
+    let total = 0;
 
+    carrito.forEach((producto) => {
 
-        carrito.forEach(producto => {
+        const subtotal =
+            producto.precio *
+            producto.cantidad;
 
-            const subtotal =
-                producto.precio *
-                producto.cantidad;
+        total += subtotal;
 
+        listaPedido.innerHTML += `
 
-            total += subtotal;
+            <div class="item-pedido">
 
-
-            listaPedido.innerHTML += `
-
-                <div class="item-pedido">
-
-                    <div class="item-pedido-info">
-
-                        <strong>
-                            ${producto.nombre}
-                        </strong>
-
-                        <span>
-                            ${producto.cantidad} x
-                            $${producto.precio.toLocaleString('es-CL')}
-                        </span>
-
-                    </div>
-
+                <div class="item-pedido-info">
 
                     <strong>
-                        $${subtotal.toLocaleString('es-CL')}
+                        ${producto.nombre}
                     </strong>
+
+                    <span>
+                        ${producto.cantidad} x
+                        $${producto.precio.toLocaleString("es-CL")}
+                    </span>
 
                 </div>
 
-            `;
+                <strong>
+                    $${subtotal.toLocaleString("es-CL")}
+                </strong>
 
-        });
+            </div>
 
+        `;
 
-        totalPedido.textContent =
-            `$${total.toLocaleString('es-CL')}`;
+    });
 
+    totalPedido.textContent =
+        `$${total.toLocaleString("es-CL")}`;
 
-        resumenPedido.classList.remove(
-            'oculto'
-        );
+    resumenPedido.classList.remove("oculto");
 
-    }
-);
+});
 
 
 // ========================================
 // CERRAR RESUMEN
 // ========================================
 
-cerrarPedido.addEventListener(
-    'click',
-    () => {
+cerrarPedido.addEventListener("click", () => {
 
-        resumenPedido.classList.add(
-            'oculto'
-        );
+    resumenPedido.classList.add("oculto");
 
-    }
-);
+});
 
 
 // ========================================
-// FORMULARIO DEL CLIENTE
+// FORMULARIO CLIENTE
 // ========================================
 
 const btnContinuar =
-    document.getElementById(
-        'btn-continuar'
-    );
-
+    document.getElementById("btn-continuar");
 
 const datosCliente =
-    document.getElementById(
-        'datos-cliente'
-    );
-
+    document.getElementById("datos-cliente");
 
 const cerrarDatos =
-    document.getElementById(
-        'cerrar-datos'
-    );
+    document.getElementById("cerrar-datos");
 
 
 // ========================================
 // CONTINUAR
 // ========================================
 
-btnContinuar.addEventListener(
-    'click',
-    () => {
+btnContinuar.addEventListener("click", () => {
 
-        if (carrito.length === 0) {
+    if (carrito.length === 0) {
 
-            alert(
-                'Agrega al menos un producto.'
-            );
+        alert("Agrega al menos un producto.");
 
-            return;
-
-        }
-
-
-        resumenPedido.classList.add(
-            'oculto'
-        );
-
-
-        datosCliente.classList.remove(
-            'oculto'
-        );
+        return;
 
     }
-);
+
+    resumenPedido.classList.add("oculto");
+
+    datosCliente.classList.remove("oculto");
+
+});
 
 
 // ========================================
 // CERRAR FORMULARIO
 // ========================================
 
-cerrarDatos.addEventListener(
-    'click',
-    () => {
+cerrarDatos.addEventListener("click", () => {
 
-        datosCliente.classList.add(
-            'oculto'
-        );
+    datosCliente.classList.add("oculto");
 
-    }
-);
+});
 
 
 // ========================================
@@ -285,44 +211,38 @@ const opcionesEntrega =
         'input[name="tipo-entrega"]'
     );
 
-
 const direccionContainer =
     document.getElementById(
-        'direccion-container'
+        "direccion-container"
     );
 
+opcionesEntrega.forEach((opcion) => {
 
-opcionesEntrega.forEach(opcion => {
+    opcion.addEventListener("change", () => {
 
-    opcion.addEventListener(
-        'change',
-        () => {
+        if (
+            opcion.value === "delivery" &&
+            opcion.checked
+        ) {
 
-            if (
-                opcion.value === 'delivery' &&
-                opcion.checked
-            ) {
-
-                direccionContainer.classList.remove(
-                    'oculto'
-                );
-
-            }
-
-
-            if (
-                opcion.value === 'retiro' &&
-                opcion.checked
-            ) {
-
-                direccionContainer.classList.add(
-                    'oculto'
-                );
-
-            }
+            direccionContainer.classList.remove(
+                "oculto"
+            );
 
         }
-    );
+
+        if (
+            opcion.value === "retiro" &&
+            opcion.checked
+        ) {
+
+            direccionContainer.classList.add(
+                "oculto"
+            );
+
+        }
+
+    });
 
 });
 
@@ -336,38 +256,33 @@ const opcionesPago =
         'input[name="metodo-pago"]'
     );
 
-
 const datosTransferencia =
     document.getElementById(
-        'datos-transferencia'
+        "datos-transferencia"
     );
 
+opcionesPago.forEach((opcion) => {
 
-opcionesPago.forEach(opcion => {
+    opcion.addEventListener("change", () => {
 
-    opcion.addEventListener(
-        'change',
-        () => {
+        if (
+            opcion.value === "transferencia" &&
+            opcion.checked
+        ) {
 
-            if (
-                opcion.value === 'transferencia' &&
-                opcion.checked
-            ) {
+            datosTransferencia.classList.remove(
+                "oculto"
+            );
 
-                datosTransferencia.classList.remove(
-                    'oculto'
-                );
+        } else {
 
-            } else {
-
-                datosTransferencia.classList.add(
-                    'oculto'
-                );
-
-            }
+            datosTransferencia.classList.add(
+                "oculto"
+            );
 
         }
-    );
+
+    });
 
 });
 
@@ -378,34 +293,32 @@ opcionesPago.forEach(opcion => {
 
 const confirmarPedido =
     document.getElementById(
-        'confirmar-pedido'
+        "confirmar-pedido"
     );
 
 
 confirmarPedido.addEventListener(
-    'click',
-    () => {
+    "click",
+    async () => {
 
-
-        // -------------------------------
-        // DATOS DEL CLIENTE
-        // -------------------------------
+        // ========================================
+        // DATOS CLIENTE
+        // ========================================
 
         const nombre =
             document.getElementById(
-                'nombre-cliente'
+                "nombre-cliente"
             ).value.trim();
-
 
         const telefono =
             document.getElementById(
-                'telefono-cliente'
+                "telefono-cliente"
             ).value.trim();
 
 
-        // -------------------------------
-        // TIPO DE ENTREGA
-        // -------------------------------
+        // ========================================
+        // TIPO ENTREGA
+        // ========================================
 
         const tipoEntregaElemento =
             document.querySelector(
@@ -416,7 +329,7 @@ confirmarPedido.addEventListener(
         if (!tipoEntregaElemento) {
 
             alert(
-                'Selecciona cómo quieres recibir tu pedido.'
+                "Selecciona cómo quieres recibir tu pedido."
             );
 
             return;
@@ -428,19 +341,19 @@ confirmarPedido.addEventListener(
             tipoEntregaElemento.value;
 
 
-        // -------------------------------
+        // ========================================
         // DIRECCIÓN
-        // -------------------------------
+        // ========================================
 
         const direccion =
             document.getElementById(
-                'direccion-cliente'
+                "direccion-cliente"
             ).value.trim();
 
 
-        // -------------------------------
-        // MÉTODO DE PAGO
-        // -------------------------------
+        // ========================================
+        // MÉTODO PAGO
+        // ========================================
 
         const metodoPagoElemento =
             document.querySelector(
@@ -448,7 +361,7 @@ confirmarPedido.addEventListener(
             );
 
 
-        let metodoPago = '';
+        let metodoPago = "";
 
 
         if (metodoPagoElemento) {
@@ -459,15 +372,13 @@ confirmarPedido.addEventListener(
         }
 
 
-        // -------------------------------
+        // ========================================
         // VALIDACIONES
-        // -------------------------------
+        // ========================================
 
         if (!nombre) {
 
-            alert(
-                'Ingresa tu nombre.'
-            );
+            alert("Ingresa tu nombre.");
 
             return;
 
@@ -476,9 +387,7 @@ confirmarPedido.addEventListener(
 
         if (!telefono) {
 
-            alert(
-                'Ingresa tu teléfono.'
-            );
+            alert("Ingresa tu teléfono.");
 
             return;
 
@@ -486,13 +395,11 @@ confirmarPedido.addEventListener(
 
 
         if (
-            tipoEntrega === 'delivery' &&
+            tipoEntrega === "delivery" &&
             !direccion
         ) {
 
-            alert(
-                'Ingresa tu dirección.'
-            );
+            alert("Ingresa tu dirección.");
 
             return;
 
@@ -502,7 +409,7 @@ confirmarPedido.addEventListener(
         if (!metodoPago) {
 
             alert(
-                'Selecciona un método de pago.'
+                "Selecciona un método de pago."
             );
 
             return;
@@ -510,100 +417,189 @@ confirmarPedido.addEventListener(
         }
 
 
-        // -------------------------------
+        if (carrito.length === 0) {
+
+            alert(
+                "El carrito está vacío."
+            );
+
+            return;
+
+        }
+
+
+        // ========================================
         // PREPARAR PEDIDO
-        // -------------------------------
+        // ========================================
 
         const datos =
             new FormData();
 
 
         datos.append(
-            'nombre_cliente',
+            "nombre_cliente",
             nombre
         );
 
-
         datos.append(
-            'telefono_cliente',
+            "telefono_cliente",
             telefono
         );
 
-
         datos.append(
-            'tipo_entrega',
+            "tipo_entrega",
             tipoEntrega
         );
 
-
         datos.append(
-            'direccion_entrega',
+            "direccion_entrega",
             direccion
         );
 
-
         datos.append(
-            'metodo_pago',
+            "metodo_pago",
             metodoPago
         );
 
-
         datos.append(
-            'productos',
+            "productos",
             JSON.stringify(carrito)
         );
 
 
-        // -------------------------------
-        // ENVIAR A DJANGO
-        // -------------------------------
+        // ========================================
+        // OBTENER CSRF
+        // ========================================
 
-        fetch(
-            `/pedidos/online/crear/${restauranteId}/`,
-            {
-
-                method: 'POST',
-
-                body: datos,
-
-                headers: {
-
-                    'X-CSRFToken':
-                        obtenerCSRF()
-
-                }
-
-            }
-        )
+        const tokenCSRF =
+            csrfToken;
 
 
-        .then(response => {
+        console.log(
+            "Restaurante:",
+            restauranteId
+        );
 
-            return response.json();
+        console.log(
+            "CSRF:",
+            tokenCSRF
+        );
 
-        })
+        console.log(
+            "Carrito:",
+            carrito
+        );
 
 
-        .then(data => {
+        if (!tokenCSRF) {
 
-            if (data.success) {
+            alert(
+                "No se pudo obtener el token de seguridad. Recarga la página."
+            );
 
-                // ========================================
-                // GUARDAR DATOS DEL PEDIDO
-                // ========================================
+            return;
 
-                localStorage.setItem(
-                    'pedidoExitoso',
-                    JSON.stringify({
-                        pedido_id: data.pedido_id,
-                        seguimiento_url: data.seguimiento_url
-                    })
+        }
+
+
+        // ========================================
+        // DESACTIVAR BOTÓN
+        // ========================================
+
+        confirmarPedido.disabled = true;
+
+        confirmarPedido.textContent =
+            "Enviando pedido...";
+
+
+        try {
+
+            // ========================================
+            // ENVIAR A DJANGO
+            // ========================================
+
+            const response =
+                await fetch(
+                    `/pedidos/online/crear/${restauranteId}/`,
+                    {
+                        method: "POST",
+
+                        body: datos,
+
+                        credentials: "same-origin",
+
+                        headers: {
+                            "X-CSRFToken":
+                                tokenCSRF,
+
+                            "X-Requested-With":
+                                "XMLHttpRequest"
+                        }
+                    }
                 );
 
 
-                // ========================================
-                // MOSTRAR MENSAJE
-                // ========================================
+            // ========================================
+            // LEER RESPUESTA
+            // ========================================
+
+            const contentType =
+                response.headers.get(
+                    "content-type"
+                ) || "";
+
+
+            if (!contentType.includes(
+                "application/json"
+            )) {
+
+                const texto =
+                    await response.text();
+
+                console.error(
+                    "Respuesta no JSON:",
+                    texto
+                );
+
+                if (response.status === 403) {
+
+                    throw new Error(
+                        "Django rechazó la petición por CSRF (403)."
+                    );
+
+                }
+
+                throw new Error(
+                    `El servidor respondió con HTTP ${response.status}.`
+                );
+
+            }
+
+
+            const data =
+                await response.json();
+
+
+            // ========================================
+            // PEDIDO CREADO
+            // ========================================
+
+            if (data.success) {
+
+                localStorage.setItem(
+                    "pedidoExitoso",
+
+                    JSON.stringify({
+
+                        pedido_id:
+                            data.pedido_id,
+
+                        seguimiento_url:
+                            data.seguimiento_url
+
+                    })
+                );
+
 
                 mostrarPedidoExitoso(
                     data.pedido_id,
@@ -621,34 +617,46 @@ confirmarPedido.addEventListener(
 
 
                 datosCliente.classList.add(
-                    'oculto'
+                    "oculto"
                 );
+
 
             } else {
 
                 alert(
                     data.error ||
-                    'No se pudo crear el pedido.'
+                    "No se pudo crear el pedido."
                 );
 
             }
 
-        })
 
-
-        .catch(error => {
+        } catch (error) {
 
             console.error(
-                'Error:',
+                "Error enviando pedido:",
                 error
             );
 
 
             alert(
-                'Ocurrió un error al enviar el pedido.'
+                error.message ||
+                "Ocurrió un error al enviar el pedido."
             );
 
-        });
+
+        } finally {
+
+            // ========================================
+            // REACTIVAR BOTÓN
+            // ========================================
+
+            confirmarPedido.disabled = false;
+
+            confirmarPedido.textContent =
+                "Confirmar pedido";
+
+        }
 
     }
 );
@@ -665,24 +673,24 @@ function mostrarPedidoExitoso(
 
     const pedidoExitoso =
         document.getElementById(
-            'pedido-exitoso'
+            "pedido-exitoso"
         );
-
 
     const mensajePedidoExitoso =
         document.getElementById(
-            'mensaje-pedido-exitoso'
+            "mensaje-pedido-exitoso"
         );
-
 
     const btnSeguimiento =
         document.getElementById(
-            'btn-seguimiento'
+            "btn-seguimiento"
         );
 
 
     if (!pedidoExitoso) {
+
         return;
+
     }
 
 
@@ -699,7 +707,7 @@ function mostrarPedidoExitoso(
 
 
     pedidoExitoso.classList.remove(
-        'oculto'
+        "oculto"
     );
 
 }
@@ -710,17 +718,19 @@ function mostrarPedidoExitoso(
 // ========================================
 
 document.addEventListener(
-    'DOMContentLoaded',
+    "DOMContentLoaded",
     () => {
 
         const pedidoGuardado =
             localStorage.getItem(
-                'pedidoExitoso'
+                "pedidoExitoso"
             );
 
 
         if (!pedidoGuardado) {
+
             return;
+
         }
 
 
@@ -747,12 +757,13 @@ document.addEventListener(
         } catch (error) {
 
             console.error(
-                'Error recuperando pedido:',
+                "Error recuperando pedido:",
                 error
             );
 
+
             localStorage.removeItem(
-                'pedidoExitoso'
+                "pedidoExitoso"
             );
 
         }
@@ -762,57 +773,21 @@ document.addEventListener(
 
 
 // ========================================
-// OBTENER CSRF
-// ========================================
-
-function obtenerCSRF() {
-
-    const cookies =
-        document.cookie.split(';');
-
-
-    for (
-        let cookie of cookies
-    ) {
-
-        cookie =
-            cookie.trim();
-
-
-        if (
-            cookie.startsWith(
-                'csrftoken='
-            )
-        ) {
-
-            return decodeURIComponent(
-                cookie.substring(
-                    'csrftoken='.length
-                )
-            );
-
-        }
-
-    }
-
-
-    return '';
-
-}
-
-
-// ========================================
 // COMPROBAR ESTADO DEL PEDIDO GUARDADO
 // ========================================
 
 function comprobarPedidoGuardado() {
 
     const pedidoGuardado =
-        localStorage.getItem('pedidoExitoso');
+        localStorage.getItem(
+            "pedidoExitoso"
+        );
 
 
     if (!pedidoGuardado) {
+
         return;
+
     }
 
 
@@ -821,19 +796,21 @@ function comprobarPedidoGuardado() {
 
     try {
 
-        pedido = JSON.parse(
-            pedidoGuardado
-        );
+        pedido =
+            JSON.parse(
+                pedidoGuardado
+            );
 
     } catch (error) {
 
         console.error(
-            'Error leyendo pedido guardado:',
+            "Error leyendo pedido:",
             error
         );
 
+
         localStorage.removeItem(
-            'pedidoExitoso'
+            "pedidoExitoso"
         );
 
         return;
@@ -842,7 +819,9 @@ function comprobarPedidoGuardado() {
 
 
     if (!pedido.seguimiento_url) {
+
         return;
+
     }
 
 
@@ -850,18 +829,18 @@ function comprobarPedidoGuardado() {
         pedido.seguimiento_url,
         {
             headers: {
-                'X-Requested-With':
-                    'XMLHttpRequest'
+                "X-Requested-With":
+                    "XMLHttpRequest"
             }
         }
     )
 
-    .then(response => {
+    .then((response) => {
 
         if (!response.ok) {
 
             throw new Error(
-                'No se pudo consultar el pedido.'
+                "No se pudo consultar el pedido."
             );
 
         }
@@ -870,10 +849,10 @@ function comprobarPedidoGuardado() {
 
     })
 
-    .then(data => {
+    .then((data) => {
 
         console.log(
-            'Estado actual del pedido:',
+            "Estado actual:",
             data.estado
         );
 
@@ -883,27 +862,25 @@ function comprobarPedidoGuardado() {
         // ========================================
 
         if (
-            data.estado === 'entregado' ||
-            data.estado === 'cancelado'
+            data.estado === "entregado" ||
+            data.estado === "cancelado"
         ) {
 
-            // Borrar pedido guardado
             localStorage.removeItem(
-                'pedidoExitoso'
+                "pedidoExitoso"
             );
 
 
-            // Ocultar mensaje
             const pedidoExitoso =
                 document.getElementById(
-                    'pedido-exitoso'
+                    "pedido-exitoso"
                 );
 
 
             if (pedidoExitoso) {
 
                 pedidoExitoso.classList.add(
-                    'oculto'
+                    "oculto"
                 );
 
             }
@@ -915,7 +892,7 @@ function comprobarPedidoGuardado() {
 
 
         // ========================================
-        // PEDIDO TODAVÍA ACTIVO
+        // PEDIDO ACTIVO
         // ========================================
 
         mostrarPedidoExitoso(
@@ -925,10 +902,10 @@ function comprobarPedidoGuardado() {
 
     })
 
-    .catch(error => {
+    .catch((error) => {
 
         console.error(
-            'Error comprobando pedido:',
+            "Error comprobando pedido:",
             error
         );
 
@@ -942,7 +919,7 @@ function comprobarPedidoGuardado() {
 // ========================================
 
 document.addEventListener(
-    'DOMContentLoaded',
+    "DOMContentLoaded",
     () => {
 
         comprobarPedidoGuardado();
