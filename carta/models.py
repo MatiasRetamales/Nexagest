@@ -23,6 +23,7 @@ class Producto(models.Model):
     disponibilidad = models.CharField(max_length=20, choices=DISPONIBILIDAD, default='disponible')
     restaurante = models.ForeignKey("core.Restaurante", on_delete=models.CASCADE, related_name='productos')
     categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE)
+    descripcion = models.TextField(blank=True, null=True)  
     
     def __str__(self):
         return self.nombre
