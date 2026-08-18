@@ -1,0 +1,315 @@
+/* ========================================
+   GENERAL
+======================================== */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    background: #f4f7fb;
+    color: #222;
+}
+
+
+/* ========================================
+   CONTENEDOR
+======================================== */
+
+.contenedor {
+    width: 100%;
+    max-width: 650px;
+    margin: 0 auto;
+}
+
+
+/* ========================================
+   ENCABEZADO
+======================================== */
+
+.encabezado {
+    background: white;
+    padding: 24px;
+    border-radius: 16px;
+    margin-bottom: 16px;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+}
+
+.encabezado h1 {
+    margin: 0 0 10px;
+    text-align: center;
+    color: #007bff;
+    font-size: 26px;
+}
+
+.encabezado p {
+    margin: 0;
+    text-align: center;
+    color: #555;
+}
+
+
+/* ========================================
+   PRODUCTOS
+======================================== */
+
+.productos {
+    background: white;
+    padding: 20px;
+    border-radius: 16px;
+    margin-bottom: 16px;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+}
+
+.productos h2,
+.totales h2,
+.formulario-pago h2 {
+    margin-top: 0;
+    color: #333;
+    font-size: 19px;
+}
+
+.productos ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.productos li {
+    padding: 13px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.productos li:last-child {
+    border-bottom: none;
+}
+
+.productos li > div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+}
+
+.productos li span {
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+
+/* ========================================
+   TOTALES
+======================================== */
+
+.totales {
+    background: white;
+    padding: 20px;
+    border-radius: 16px;
+    margin-bottom: 16px;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+}
+
+.totales p {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 10px 0;
+    color: #555;
+}
+
+.totales strong {
+    color: #222;
+}
+
+.total-final {
+    margin-top: 18px !important;
+    padding-top: 16px;
+    border-top: 2px solid #eee;
+    font-size: 21px;
+}
+
+.total-final strong {
+    color: #007bff;
+    font-size: 23px;
+}
+
+
+/* ========================================
+   FORMULARIO
+======================================== */
+
+.formulario-pago {
+    background: white;
+    padding: 20px;
+    border-radius: 16px;
+    margin-bottom: 16px;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+}
+
+.metodos-pago {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 25px;
+}
+
+
+/* ========================================
+   MÉTODOS DE PAGO
+======================================== */
+
+.metodo {
+    cursor: pointer;
+}
+
+.metodo input {
+    display: none;
+}
+
+.metodo span {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 70px;
+    padding: 12px;
+    text-align: center;
+    background: #f5f7fa;
+    border: 2px solid #ddd;
+    border-radius: 12px;
+    font-weight: 600;
+    transition: 0.2s;
+}
+
+.metodo input:checked + span {
+    border-color: #007bff;
+    background: #eaf4ff;
+    color: #007bff;
+}
+
+
+/* ========================================
+   PROPINA
+======================================== */
+
+.opciones-propina {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 25px;
+}
+
+.opciones-propina label {
+    display: block;
+    padding: 14px;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    background: #f8f9fa;
+    cursor: pointer;
+}
+
+.opciones-propina label:has(input:checked) {
+    border-color: #007bff;
+    background: #eaf4ff;
+}
+
+.opciones-propina input {
+    margin-right: 8px;
+}
+
+
+/* ========================================
+   BOTÓN COBRAR
+======================================== */
+
+.btn-cobrar {
+    width: 100%;
+    padding: 17px;
+    border: none;
+    border-radius: 12px;
+    background: #007bff;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.btn-cobrar:hover {
+    background: #0056b3;
+}
+
+.btn-cobrar:active {
+    transform: scale(0.98);
+}
+
+
+/* ========================================
+   VOLVER
+======================================== */
+
+.btn-volver {
+    display: block;
+    width: 100%;
+    padding: 14px;
+    text-align: center;
+    text-decoration: none;
+    background: white;
+    color: #007bff;
+    border: 2px solid #007bff;
+    border-radius: 12px;
+    font-weight: bold;
+    transition: 0.2s;
+}
+
+.btn-volver:hover {
+    background: #007bff;
+    color: white;
+}
+
+
+/* ========================================
+   MÓVIL
+======================================== */
+
+@media (max-width: 600px) {
+
+    body {
+        padding: 10px;
+    }
+
+    .encabezado,
+    .productos,
+    .totales,
+    .formulario-pago {
+        padding: 16px;
+        border-radius: 14px;
+    }
+
+    .encabezado h1 {
+        font-size: 22px;
+    }
+
+    .metodos-pago {
+        grid-template-columns: 1fr;
+    }
+
+    .metodo span {
+        min-height: 58px;
+    }
+
+    .total-final {
+        font-size: 19px;
+    }
+
+    .total-final strong {
+        font-size: 21px;
+    }
+
+    .btn-cobrar {
+        padding: 16px;
+        font-size: 17px;
+    }
+}
