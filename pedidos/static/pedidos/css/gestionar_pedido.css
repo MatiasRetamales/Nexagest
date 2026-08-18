@@ -1,317 +1,732 @@
-/* Fondo general */
+/* ========================================
+   BASE
+======================================== */
+
+* {
+    box-sizing: border-box;
+}
+
 body {
     font-family: Arial, sans-serif;
-    background-color: #f0f8ff;
+    background: #f4f6f8;
     margin: 0;
-    padding: 20px;
+    padding: 0;
+    color: #1f2937;
 }
 
-/* Título */
-h1 {
-    text-align: center;
-    color: #007BFF;
-    font-size: 28px;
-    margin-bottom: 20px;
-}
 
-/* Formulario principal */
-form {
-    max-width: 900px;
-    margin: 0 auto;
+/* ========================================
+   HEADER
+======================================== */
+
+.header-pedido {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+
     background: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+    border-bottom: 1px solid #e5e7eb;
+
+    padding: 14px 20px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
 
-/* Buscador */
-#buscador {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 15px;
-    border: 2px solid #007BFF;
-    border-radius: 6px;
-    font-size: 16px;
+.header-pedido h1 {
+    margin: 0;
+    font-size: 22px;
+    color: #111827;
 }
+
+
+/* ========================================
+   VOLVER
+======================================== */
+
+.contenedor-volver {
+    display: flex;
+    align-items: center;
+}
+
+.btn-volver {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 9px 16px;
+
+    background: #f3f4f6;
+    color: #374151 !important;
+
+    text-decoration: none;
+
+    border-radius: 8px;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    margin: 0;
+
+    box-shadow: none;
+
+    transition: 0.2s ease;
+}
+
+.btn-volver:hover {
+    background: #e5e7eb;
+    text-decoration: none;
+}
+
+
+/* ========================================
+   CONTENEDOR PRINCIPAL
+======================================== */
+
+.contenedor-principal {
+    max-width: 1100px;
+
+    margin: 0 auto;
+
+    padding: 20px;
+}
+
+
+/* ========================================
+   FORMULARIO
+======================================== */
+
+#form-pedido {
+    background: transparent;
+
+    max-width: none;
+
+    margin: 0;
+
+    padding: 0;
+
+    box-shadow: none;
+}
+
+
+/* ========================================
+   NOMBRE CLIENTE
+======================================== */
+
+.input-nombre-cliente {
+    background: white;
+
+    padding: 16px;
+
+    border-radius: 12px;
+
+    border: 1px solid #e5e7eb;
+
+    margin: 0 0 18px;
+
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+.input-nombre-cliente label {
+    display: block;
+
+    margin-bottom: 8px;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    color: #374151;
+}
+
+.input-nombre-cliente input {
+    width: 100%;
+
+    padding: 12px 14px;
+
+    border: 1px solid #d1d5db;
+
+    border-radius: 8px;
+
+    font-size: 16px;
+
+    outline: none;
+
+    transition: 0.2s ease;
+}
+
+.input-nombre-cliente input:focus {
+    border-color: #007bff;
+
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+
+
+/* ========================================
+   BUSCADOR
+======================================== */
 
 .buscador-container {
-    margin-right: 20px;
+    position: sticky;
+
+    top: 65px;
+
+    z-index: 900;
+
+    margin: 0 0 12px;
 }
 
-/* Contenedor principal de los productos */
+#buscador {
+    width: 100%;
+
+    padding: 14px 16px;
+
+    background: white;
+
+    border: 2px solid #e5e7eb;
+
+    border-radius: 12px;
+
+    font-size: 16px;
+
+    outline: none;
+
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
+
+    transition: 0.2s ease;
+}
+
+#buscador:focus {
+    border-color: #007bff;
+
+    box-shadow:
+        0 0 0 3px rgba(0, 123, 255, 0.1),
+        0 3px 10px rgba(0, 0, 0, 0.06);
+}
+
+
+/* ========================================
+   CATEGORÍAS
+======================================== */
+
+.categorias-nav {
+    display: flex;
+
+    gap: 8px;
+
+    overflow-x: auto;
+
+    padding: 4px 2px 12px;
+
+    margin-bottom: 4px;
+
+    scrollbar-width: none;
+}
+
+.categorias-nav::-webkit-scrollbar {
+    display: none;
+}
+
+.btn-cat {
+    width: auto;
+
+    flex: 0 0 auto;
+
+    padding: 9px 14px;
+
+    margin: 0;
+
+    background: white;
+
+    color: #4b5563;
+
+    border: 1px solid #d1d5db;
+
+    border-radius: 999px;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    white-space: nowrap;
+
+    transition: 0.2s ease;
+}
+
+.btn-cat:hover {
+    background: #f3f4f6;
+}
+
+.btn-cat.active {
+    background: #007bff;
+
+    color: white;
+
+    border-color: #007bff;
+}
+
+
+/* ========================================
+   PRODUCTOS
+======================================== */
+
 .contenedor-productos {
     display: grid;
-    /* Crea tantas columnas como quepan, con un mínimo de 150px cada una */
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+
     gap: 12px;
-    padding: 12px;
+
+    padding: 4px 0 100px;
 }
 
-/* Estilo de la Tarjeta Individual */
+
+/* ========================================
+   TARJETA PRODUCTO
+======================================== */
+
 .product-card {
-    background-color: #007BFF;
+    background: white;
+
+    border: 1px solid #e5e7eb;
+
     border-radius: 12px;
-    padding: 15px;
+
+    padding: 13px;
+
+    min-height: 145px;
+
     display: flex;
-    flex-direction: column; /* Nombre arriba, contador abajo */
-    align-items: center;    /* Centramos todo */
-    text-align: center;
+
+    flex-direction: column;
+
     justify-content: space-between;
-    min-height: 140px;      /* Un poco más altas para que quepa todo */
-    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
-    border: 1px solid #eee;
-    position: relative;     /* Para posicionar cosas adentro si quieres */
+
+    position: relative;
+
+    cursor: pointer;
+
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+
+    transition:
+        transform 0.15s ease,
+        box-shadow 0.15s ease,
+        border-color 0.15s ease;
 }
 
-/* Efecto al tocar la tarjeta */
+.product-card:hover {
+    border-color: #bfdbfe;
+
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.07);
+}
+
 .product-card:active {
-    transform: scale(0.96);
-    background-color: #f9f9f9;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    transform: scale(0.97);
 }
 
-/* Información del producto (Nombre y Precio) */
+
+/* ========================================
+   PRODUCTO SELECCIONADO
+======================================== */
+
+.product-card:has(.product-counter:not(:empty)) {
+    border-color: #93c5fd;
+}
+
+
+/* ========================================
+   INFORMACIÓN
+======================================== */
+
 .product-info {
     flex: 1;
 }
 
 .product-info strong {
     display: block;
-    font-size: 1.1rem;
-    color: #ffffff;
-    margin-bottom: 4px;
+
+    color: #111827;
+
+    font-size: 15px;
+
+    line-height: 1.3;
+
+    margin-bottom: 6px;
 }
 
 .product-info span {
-    color: #ffffff;
-    font-weight: bold;
+    display: block;
+
+    color: #007bff;
+
+    font-size: 15px;
+
+    font-weight: 700;
 }
 
-.product-info input {
-    width: 70%;
-    padding: 6px;
-    margin-top: 8px;
-    border: 2px solid #ddd;
-    border-radius: 6px;
-    font-size: 14px;
+
+/* ========================================
+   OBSERVACIÓN
+======================================== */
+
+.product-info input.input-obs {
+    width: 100%;
+
+    padding: 7px 8px;
+
+    margin-top: 9px;
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 7px;
+
+    background: #f9fafb;
+
+    font-size: 12px;
+
+    outline: none;
 }
 
-/* Contenedor de la cantidad (el numerito) */
-.product-counter {
-    background-color: #f0f2f5;
-    color: #333;
-    min-width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-    font-size: 1.2rem;
-    border: 2px solid #ddd;
-    border-radius: 50%; /* Lo hace un círculo perfecto */
-    margin: 0;          /* IMPORTANTE: Quitamos el margin-left: 15px */
+.product-info input.input-obs:focus {
+    border-color: #93c5fd;
+
+    background: white;
 }
+
+
+/* ========================================
+   CONTROLES
+======================================== */
 
 .product-controls {
     display: flex;
-    align-items: center;      /* Alinea verticalmente al centro */
-    justify-content: center;   /* Centra el grupo horizontalmente */
-    gap: 10px;                /* Espacio uniforme entre los elementos */
-    margin-top: 15px;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 10px;
+
     width: 100%;
+
+    margin-top: 12px;
 }
 
-/* Label */
-.producto label {
-    flex: 1;
-    margin-left: 10px;
-    font-size: 14px;
-}
 
-/* Botón principal */
-button {
-    width: 100%;
-    padding: 12px;
-    background-color: #007BFF;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    font-size: 16px;
-    font-weight: bold;
+/* ========================================
+   BOTONES + -
+======================================== */
+
+.btn-accion {
+    width: 34px;
+
+    height: 34px;
+
+    padding: 0;
+
+    margin: 0;
+
+    border-radius: 50%;
+
+    border: 1px solid #d1d5db;
+
+    background: #f9fafb;
+
+    color: #374151;
+
+    font-size: 20px;
+
+    font-weight: 600;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
     cursor: pointer;
-    margin-top: 15px;
+
+    line-height: 1;
+
+    transition: 0.15s ease;
 }
 
-button:hover {
-    background-color: #0056b3;
+.btn-accion:hover {
+    background: #f3f4f6;
 }
 
-/* Link volver */
-a {
-    display: inline-block;
-    margin-top: 30px;
-    padding: 12px 24px; /* Espacio interno para que sea fácil de presionar */
-    background-color: #007BFF;
-    color: white !important; /* Letras blancas (forzado para evitar conflictos) */
-    text-decoration: none;
-    font-weight: bold;
-    border-radius: 8px; /* Bordes redondeados modernos */
-    text-align: center;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1); /* Sombra para que se vea "arriba" del fondo */
+.btn-accion.plus {
+    background: #007bff;
+
+    border-color: #007bff;
+
+    color: white;
 }
 
-.contenedor-volver {
-    text-align: center; /* Esto centra cualquier cosa 'inline-block' que esté adentro */
-    width: 100%;
+.btn-accion.plus:hover {
+    background: #0069d9;
 }
 
-a:hover {
-    background-color: #0056b3;
-    text-decoration: underline;
+.btn-accion:active {
+    transform: scale(0.9);
 }
+
+
+/* ========================================
+   CONTADOR
+======================================== */
+
+.product-counter {
+    min-width: 30px;
+
+    height: 34px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    color: #111827;
+
+    font-size: 15px;
+
+    font-weight: 700;
+}
+
+
+/* ========================================
+   INPUT OCULTO
+======================================== */
+
+.product-card input[type="number"] {
+    display: none;
+}
+
+
+/* ========================================
+   ELEMENTOS OCULTOS
+======================================== */
 
 .hidden {
     display: none !important;
 }
 
-/* Asegúrate que el contenedor siempre sea grid en PC */
-.contenedor-productos {
-    display: grid !important; 
-    grid-template-columns: repeat(4, 1fr); /* 4 columnas en PC */
-    gap: 15px;
+
+/* ========================================
+   BOTÓN CONFIRMAR
+======================================== */
+
+.footer-acciones {
+    position: fixed;
+
+    bottom: 0;
+
+    left: 0;
+
+    right: 0;
+
+    z-index: 1000;
+
+    padding: 12px 20px;
+
+    background: rgba(255, 255, 255, 0.95);
+
+    backdrop-filter: blur(8px);
+
+    border-top: 1px solid #e5e7eb;
+
+    box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.08);
 }
 
-.btn-accion {
-    width: 35px;
-    height: 35px;
-    border-radius: 50%;
-    border: 1px solid rgba(255, 255, 255, 0.5);
-    background: rgba(255, 255, 255, 0.2);
-    color: white;
-    font-size: 18px;
-    font-weight: bold;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0;
-    line-height: 1;
-}
-
-.btn-accion:active {
-    transform: scale(0.9);
-    background-color: white;
-    color: #007BFF;
-}
-
-
-.input-nombre-cliente {
-    margin: 20px 0;
-    padding: 15px;
-    background-color: #f9f9f9;
-    border-radius: 12px;
-    border: 2px solid #e0e0e0;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-    margin-bottom: 25px;
-}
-
-.input-nombre-cliente label {
+.btn-enviar {
     display: block;
-    font-weight: 600;
-    margin-bottom: 8px;
-    color: #333;
-    font-size: 0.95rem;
-}
 
-.input-nombre-cliente input {
     width: 100%;
-    padding: 12px;
-    font-size: 1.1rem;
-    border: 2px solid #ddd;
-    border-radius: 8px;
-    box-sizing: border-box; /* Importante para que no se salga del contenedor */
-    transition: border-color 0.3s ease;
+
+    max-width: 1100px;
+
+    margin: 0 auto;
+
+    padding: 14px 20px;
+
+    background: #007bff;
+
+    color: white;
+
+    border: none;
+
+    border-radius: 10px;
+
+    font-size: 16px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: 0.2s ease;
 }
 
-.input-nombre-cliente input:focus {
-    border-color: #007bff; /* El color de tu marca o sistema */
-    outline: none;
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+.btn-enviar:hover {
+    background: #0069d9;
+}
+
+.btn-enviar:active {
+    transform: scale(0.98);
 }
 
 
+/* ========================================
+   RESPONSIVE TABLET
+======================================== */
+
+@media (max-width: 900px) {
+
+    .contenedor-productos {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+}
 
 
+/* ========================================
+   RESPONSIVE MÓVIL
+======================================== */
 
+@media (max-width: 650px) {
 
-/* Responsive */
-@media (max-width: 768px) {
     body {
-        padding: 10px; /* Menos espacio en los bordes para ganar pantalla */
+        background: #f4f6f8;
     }
 
-    .contenedor-productos {
-        grid-template-columns: repeat(2, 1fr);
+    .header-pedido {
+        padding: 12px 14px;
     }
 
-    form {
-        padding: 15px;
-        border-radius: 0; /* Opcional: que el formulario ocupe todo el ancho */
+    .header-pedido h1 {
+        font-size: 19px;
     }
 
-    h1 {
-        font-size: 22px; /* Título más pequeño */
+    .btn-volver {
+        padding: 8px 12px;
+
+        font-size: 13px;
     }
 
-    .contenedor-productos {
-        /* En celulares pequeños, mejor 2 columnas fijas para que no se vea minúsculo */
-        grid-template-columns: repeat(2, 1fr); 
-        gap: 8px;
-        padding: 5px;
-    }
-
-    
-
-    .product-card {
-        min-height: 160px; /* Un poco más de aire para los dedos */
-        padding: 10px;
-    }
-
-    .product-counter {
-        min-width: 30px;
-        height: 30px;
-        font-size: 1rem;
-    }
-
-    .product-info strong {
-        font-size: 0.95rem; /* Letra un poco más chica para que no se corte el nombre */
-    }
-
-    /* Hacer que el input de nota ocupe más ancho en móvil */
-    .product-info input {
-        width: 90%;
-    }
-
-    /* Botón de enviar más grande para el pulgar */
-    button {
-        padding: 15px;
-        font-size: 18px;
-    }
-
-   button[type="submit"] {
-        position: sticky;
-        bottom: 10px;
-        z-index: 100;
-        box-shadow: 0 -4px 10px rgba(0,0,0,0.1);
-    }
-
-    #buscador {
-        font-size: 15px;
-        box-sizing: border-box;
+    .contenedor-principal {
+        padding: 12px;
     }
 
     .buscador-container {
-        margin-right: 0;
+        top: 57px;
     }
+
+    #buscador {
+        padding: 13px 14px;
+
+        font-size: 15px;
+    }
+
+    .contenedor-productos {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+
+        gap: 8px;
+
+        padding-bottom: 95px;
+    }
+
+    .product-card {
+        min-height: 145px;
+
+        padding: 11px;
+    }
+
+    .product-info strong {
+        font-size: 14px;
+    }
+
+    .product-info span {
+        font-size: 14px;
+    }
+
+    .product-info input.input-obs {
+        font-size: 11px;
+
+        padding: 7px;
+    }
+
+    .product-controls {
+        gap: 7px;
+
+        margin-top: 10px;
+    }
+
+    .btn-accion {
+        width: 32px;
+
+        height: 32px;
+
+        font-size: 18px;
+    }
+
+    .product-counter {
+        height: 32px;
+
+        min-width: 28px;
+    }
+
+    .footer-acciones {
+        padding: 10px 12px;
+    }
+
+    .btn-enviar {
+        padding: 14px;
+
+        font-size: 16px;
+    }
+
+}
+
+
+/* ========================================
+   MÓVILES MUY PEQUEÑOS
+======================================== */
+
+@media (max-width: 380px) {
+
+    .contenedor-productos {
+        gap: 6px;
+    }
+
+    .product-card {
+        padding: 9px;
+
+        min-height: 140px;
+    }
+
+    .product-info strong {
+        font-size: 13px;
+    }
+
+    .product-info span {
+        font-size: 13px;
+    }
+
+    .btn-accion {
+        width: 29px;
+
+        height: 29px;
+    }
+
+    .product-counter {
+        height: 29px;
+
+        min-width: 25px;
+    }
+
 }
