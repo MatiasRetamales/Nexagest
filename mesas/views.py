@@ -9,35 +9,63 @@ from administracion.models import Caja
 
 @tiene_acceso(['garzon', 'encargado', 'operador'])
 def lista_mesas(request):
+
     restaurante = request.user.perfil.restaurante
-    mesas = Mesa.objects.filter(restaurante=restaurante)
+
+    mesas = Mesa.objects.filter(
+        restaurante=restaurante
+    )
+
     caja = Caja.objects.filter(
         restaurante=restaurante,
         esta_abierta=True
     ).first()
 
-    # Pedidos presenciales activos de cada mesa
+
+    # ========================================
+    # PEDIDOS PRESENCIALES ACTIVOS
+    # ========================================
+
     for mesa in mesas:
+
         mesa.pedido_activo = Pedido.objects.filter(
             mesa=mesa,
             origen='presencial',
-            estado__in=['pendiente', 'en_preparacion', 'listo']
+            estado__in=[
+                'pendiente',
+                'en_preparacion',
+                'listo'
+            ]
         ).first()
 
-    # Pedidos realizados desde la carta online
+
+    # ========================================
+    # PEDIDOS ONLINE ACTIVOS
+    # ========================================
+
     pedidos_online = Pedido.objects.filter(
-    restaurante=restaurante,
-    origen='online',
-    estado__in=['pendiente', 'aceptado', 'en_preparacion', 'listo']
-   ).order_by('-fecha')
+        restaurante=restaurante,
+        origen='online',
+        estado__in=[
+            'pendiente',
+            'aceptado',
+            'en_preparacion',
+            'listo',
+            'en_camino'
+        ]
+    ).order_by('-fecha')
 
-    return render(request, "mesas/lista_mesas.html", {
-        "mesas": mesas,
-        "restaurante": restaurante,
-        "caja": caja,
-        "pedidos_online": pedidos_online,
-    })
 
+    return render(
+        request,
+        "mesas/lista_mesas.html",
+        {
+            "mesas": mesas,
+            "restaurante": restaurante,
+            "caja": caja,
+            "pedidos_online": pedidos_online,
+        }
+    )
 
 
 
