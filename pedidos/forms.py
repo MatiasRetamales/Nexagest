@@ -3,7 +3,9 @@ from .models import Producto
 from carta.models import Categoria
 
 class ProductoForm(forms.ModelForm):
+
     class Meta:
+
         model = Producto
 
         fields = [
@@ -28,6 +30,17 @@ class ProductoForm(forms.ModelForm):
                 'placeholder': 'Ej: Carne, queso cheddar, tomate y salsa de la casa...'
             })
         }
+
+
+    def __init__(self, *args, restaurante=None, **kwargs):
+
+        super().__init__(*args, **kwargs)
+
+        if restaurante:
+
+            self.fields['categoria'].queryset = Categoria.objects.filter(
+                restaurante=restaurante
+            ).order_by('nombre')
 
 class CategoriaForm(forms.ModelForm):
     class Meta:

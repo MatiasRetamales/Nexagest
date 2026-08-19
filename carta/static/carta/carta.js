@@ -1,22 +1,33 @@
 let carrito = [];
 
+
 // ========================================
 // AGREGAR PRODUCTOS
 // ========================================
 
-const botonesAgregar = document.querySelectorAll(".btn-agregar");
+const botonesAgregar =
+    document.querySelectorAll(".btn-agregar");
+
 
 botonesAgregar.forEach((boton) => {
 
     boton.addEventListener("click", () => {
 
-        const id = boton.dataset.id;
-        const nombre = boton.dataset.nombre;
-        const precio = Number(boton.dataset.precio);
+        const id =
+            boton.dataset.id;
 
-        const productoExistente = carrito.find(
-            producto => producto.id === id
-        );
+        const nombre =
+            boton.dataset.nombre;
+
+        const precio =
+            Number(boton.dataset.precio);
+
+
+        const productoExistente =
+            carrito.find(
+                producto => producto.id === id
+            );
+
 
         if (productoExistente) {
 
@@ -25,19 +36,26 @@ botonesAgregar.forEach((boton) => {
         } else {
 
             carrito.push({
+
                 id: id,
+
                 nombre: nombre,
+
                 precio: precio,
+
                 cantidad: 1
+
             });
 
         }
+
 
         actualizarCarrito();
 
     });
 
 });
+
 
 
 // ========================================
@@ -47,11 +65,14 @@ botonesAgregar.forEach((boton) => {
 function actualizarCarrito() {
 
     let cantidadTotal = 0;
+
     let precioTotal = 0;
+
 
     carrito.forEach((producto) => {
 
-        cantidadTotal += producto.cantidad;
+        cantidadTotal +=
+            producto.cantidad;
 
         precioTotal +=
             producto.precio *
@@ -59,17 +80,36 @@ function actualizarCarrito() {
 
     });
 
-    document.getElementById(
-        "cantidad-carrito"
-    ).textContent =
-        `${cantidadTotal} productos`;
 
-    document.getElementById(
-        "total-carrito"
-    ).textContent =
-        `$${precioTotal.toLocaleString("es-CL")}`;
+    const cantidadCarrito =
+        document.getElementById(
+            "cantidad-carrito"
+        );
+
+
+    const totalCarrito =
+        document.getElementById(
+            "total-carrito"
+        );
+
+
+    if (cantidadCarrito) {
+
+        cantidadCarrito.textContent =
+            `${cantidadTotal} productos`;
+
+    }
+
+
+    if (totalCarrito) {
+
+        totalCarrito.textContent =
+            `$${precioTotal.toLocaleString("es-CL")}`;
+
+    }
 
 }
+
 
 
 // ========================================
@@ -77,30 +117,89 @@ function actualizarCarrito() {
 // ========================================
 
 const btnCarrito =
-    document.getElementById("btn-carrito");
+    document.getElementById(
+        "btn-carrito"
+    );
+
 
 const resumenPedido =
-    document.getElementById("resumen-pedido");
+    document.getElementById(
+        "resumen-pedido"
+    );
+
 
 const cerrarPedido =
-    document.getElementById("cerrar-pedido");
+    document.getElementById(
+        "cerrar-pedido"
+    );
+
 
 const listaPedido =
-    document.getElementById("lista-pedido");
+    document.getElementById(
+        "lista-pedido"
+    );
+
 
 const totalPedido =
-    document.getElementById("total-pedido");
+    document.getElementById(
+        "total-pedido"
+    );
+
 
 
 // ========================================
 // ABRIR RESUMEN
 // ========================================
 
-btnCarrito.addEventListener("click", () => {
+if (btnCarrito) {
+
+    btnCarrito.addEventListener(
+        "click",
+        () => {
+
+            if (carrito.length === 0) {
+
+                alert(
+                    "Agrega al menos un producto."
+                );
+
+                return;
+
+            }
+
+
+            actualizarResumenPedido();
+
+
+            resumenPedido.classList.remove(
+                "oculto"
+            );
+
+        }
+    );
+
+}
+
+
+
+// ========================================
+// ACTUALIZAR RESUMEN DEL PEDIDO
+// ========================================
+
+function actualizarResumenPedido() {
+
+    if (!listaPedido || !totalPedido) {
+
+        return;
+
+    }
+
 
     listaPedido.innerHTML = "";
 
     let total = 0;
+
+
 
     carrito.forEach((producto) => {
 
@@ -108,11 +207,17 @@ btnCarrito.addEventListener("click", () => {
             producto.precio *
             producto.cantidad;
 
+
         total += subtotal;
+
+
 
         listaPedido.innerHTML += `
 
-            <div class="item-pedido">
+            <div
+                class="item-pedido"
+                data-id="${producto.id}"
+            >
 
                 <div class="item-pedido-info">
 
@@ -120,16 +225,67 @@ btnCarrito.addEventListener("click", () => {
                         ${producto.nombre}
                     </strong>
 
+
                     <span>
-                        ${producto.cantidad} x
                         $${producto.precio.toLocaleString("es-CL")}
+                        c/u
                     </span>
 
                 </div>
 
-                <strong>
-                    $${subtotal.toLocaleString("es-CL")}
-                </strong>
+
+                <div class="item-pedido-controles">
+
+                    <button
+                        type="button"
+                        class="btn-cantidad btn-restar"
+                        data-id="${producto.id}"
+                        aria-label="Disminuir cantidad"
+                    >
+
+                        −
+
+                    </button>
+
+
+                    <span class="cantidad-producto">
+
+                        ${producto.cantidad}
+
+                    </span>
+
+
+                    <button
+                        type="button"
+                        class="btn-cantidad btn-sumar"
+                        data-id="${producto.id}"
+                        aria-label="Aumentar cantidad"
+                    >
+
+                        +
+
+                    </button>
+
+
+                    <strong class="subtotal-producto">
+
+                        $${subtotal.toLocaleString("es-CL")}
+
+                    </strong>
+
+
+                    <button
+                        type="button"
+                        class="btn-eliminar-producto"
+                        data-id="${producto.id}"
+                        aria-label="Eliminar ${producto.nombre}"
+                    >
+
+                        ×
+
+                    </button>
+
+                </div>
 
             </div>
 
@@ -137,23 +293,180 @@ btnCarrito.addEventListener("click", () => {
 
     });
 
+
+
     totalPedido.textContent =
         `$${total.toLocaleString("es-CL")}`;
 
-    resumenPedido.classList.remove("oculto");
 
-});
+
+    // ========================================
+    // BOTONES RESTAR
+    // ========================================
+
+    const botonesRestar =
+        listaPedido.querySelectorAll(
+            ".btn-restar"
+        );
+
+
+    botonesRestar.forEach((boton) => {
+
+        boton.addEventListener(
+            "click",
+            () => {
+
+                const id =
+                    boton.dataset.id;
+
+
+                const producto =
+                    carrito.find(
+                        producto =>
+                            producto.id === id
+                    );
+
+
+                if (!producto) {
+
+                    return;
+
+                }
+
+
+                producto.cantidad -= 1;
+
+
+
+                if (producto.cantidad <= 0) {
+
+                    carrito =
+                        carrito.filter(
+                            producto =>
+                                producto.id !== id
+                        );
+
+                }
+
+
+                actualizarCarrito();
+
+                actualizarResumenPedido();
+
+            }
+        );
+
+    });
+
+
+
+    // ========================================
+    // BOTONES SUMAR
+    // ========================================
+
+    const botonesSumar =
+        listaPedido.querySelectorAll(
+            ".btn-sumar"
+        );
+
+
+    botonesSumar.forEach((boton) => {
+
+        boton.addEventListener(
+            "click",
+            () => {
+
+                const id =
+                    boton.dataset.id;
+
+
+                const producto =
+                    carrito.find(
+                        producto =>
+                            producto.id === id
+                    );
+
+
+                if (!producto) {
+
+                    return;
+
+                }
+
+
+                producto.cantidad += 1;
+
+
+                actualizarCarrito();
+
+                actualizarResumenPedido();
+
+            }
+        );
+
+    });
+
+
+
+    // ========================================
+    // BOTONES ELIMINAR
+    // ========================================
+
+    const botonesEliminar =
+        listaPedido.querySelectorAll(
+            ".btn-eliminar-producto"
+        );
+
+
+    botonesEliminar.forEach((boton) => {
+
+        boton.addEventListener(
+            "click",
+            () => {
+
+                const id =
+                    boton.dataset.id;
+
+
+                carrito =
+                    carrito.filter(
+                        producto =>
+                            producto.id !== id
+                    );
+
+
+                actualizarCarrito();
+
+                actualizarResumenPedido();
+
+            }
+        );
+
+    });
+
+}
+
 
 
 // ========================================
 // CERRAR RESUMEN
 // ========================================
 
-cerrarPedido.addEventListener("click", () => {
+if (cerrarPedido) {
 
-    resumenPedido.classList.add("oculto");
+    cerrarPedido.addEventListener(
+        "click",
+        () => {
 
-});
+            resumenPedido.classList.add(
+                "oculto"
+            );
+
+        }
+    );
+
+}
+
 
 
 // ========================================
@@ -161,45 +474,83 @@ cerrarPedido.addEventListener("click", () => {
 // ========================================
 
 const btnContinuar =
-    document.getElementById("btn-continuar");
+    document.getElementById(
+        "btn-continuar"
+    );
+
 
 const datosCliente =
-    document.getElementById("datos-cliente");
+    document.getElementById(
+        "datos-cliente"
+    );
+
 
 const cerrarDatos =
-    document.getElementById("cerrar-datos");
+    document.getElementById(
+        "cerrar-datos"
+    );
+
 
 
 // ========================================
 // CONTINUAR
 // ========================================
 
-btnContinuar.addEventListener("click", () => {
+if (btnContinuar) {
 
-    if (carrito.length === 0) {
+    btnContinuar.addEventListener(
+        "click",
+        () => {
 
-        alert("Agrega al menos un producto.");
+            if (carrito.length === 0) {
 
-        return;
+                alert(
+                    "Agrega al menos un producto."
+                );
 
-    }
+                return;
 
-    resumenPedido.classList.add("oculto");
+            }
 
-    datosCliente.classList.remove("oculto");
 
-});
+            resumenPedido.classList.add(
+                "oculto"
+            );
+
+
+            datosCliente.classList.remove(
+                "oculto"
+            );
+
+
+            actualizarMetodosPago();
+
+        }
+    );
+
+}
+
 
 
 // ========================================
 // CERRAR FORMULARIO
 // ========================================
 
-cerrarDatos.addEventListener("click", () => {
+if (cerrarDatos) {
 
-    datosCliente.classList.add("oculto");
+    cerrarDatos.addEventListener(
+        "click",
+        () => {
 
-});
+            datosCliente.classList.add(
+                "oculto"
+            );
+
+        }
+    );
+
+}
+
 
 
 // ========================================
@@ -211,40 +562,50 @@ const opcionesEntrega =
         'input[name="tipo-entrega"]'
     );
 
+
 const direccionContainer =
     document.getElementById(
         "direccion-container"
     );
 
+
 opcionesEntrega.forEach((opcion) => {
 
-    opcion.addEventListener("change", () => {
+    opcion.addEventListener(
+        "change",
+        () => {
 
-        if (
-            opcion.value === "delivery" &&
-            opcion.checked
-        ) {
+            if (
+                opcion.value === "delivery" &&
+                opcion.checked
+            ) {
 
-            direccionContainer.classList.remove(
-                "oculto"
-            );
+                direccionContainer.classList.remove(
+                    "oculto"
+                );
+
+            }
+
+
+            if (
+                opcion.value === "retiro" &&
+                opcion.checked
+            ) {
+
+                direccionContainer.classList.add(
+                    "oculto"
+                );
+
+            }
+
+
+            actualizarMetodosPago();
 
         }
-
-        if (
-            opcion.value === "retiro" &&
-            opcion.checked
-        ) {
-
-            direccionContainer.classList.add(
-                "oculto"
-            );
-
-        }
-
-    });
+    );
 
 });
+
 
 
 // ========================================
@@ -256,35 +617,259 @@ const opcionesPago =
         'input[name="metodo-pago"]'
     );
 
+
 const datosTransferencia =
     document.getElementById(
         "datos-transferencia"
     );
 
-opcionesPago.forEach((opcion) => {
 
-    opcion.addEventListener("change", () => {
+const avisoMetodosPago =
+    document.getElementById(
+        "aviso-metodos-pago"
+    );
 
-        if (
-            opcion.value === "transferencia" &&
-            opcion.checked
-        ) {
 
-            datosTransferencia.classList.remove(
+
+// ========================================
+// ACTUALIZAR MÉTODOS DE PAGO
+// ========================================
+
+function actualizarMetodosPago() {
+
+    const tipoEntregaElemento =
+        document.querySelector(
+            'input[name="tipo-entrega"]:checked'
+        );
+
+
+    if (!tipoEntregaElemento) {
+
+        return;
+
+    }
+
+
+    const tipoEntrega =
+        tipoEntregaElemento.value;
+
+
+    let hayMetodoDisponible = false;
+
+
+    let primerMetodoDisponible = null;
+
+
+
+    // ========================================
+    // REVISAR CADA MÉTODO
+    // ========================================
+
+    opcionesPago.forEach((opcion) => {
+
+        const label =
+            opcion.parentElement;
+
+
+        if (!label) {
+
+            return;
+
+        }
+
+
+        let disponible = false;
+
+
+
+        // ----------------------------------------
+        // RETIRO
+        // ----------------------------------------
+
+        if (tipoEntrega === "retiro") {
+
+            disponible =
+                label.dataset.retiro === "true";
+
+        }
+
+
+
+        // ----------------------------------------
+        // DELIVERY
+        // ----------------------------------------
+
+        if (tipoEntrega === "delivery") {
+
+            disponible =
+                label.dataset.delivery === "true";
+
+        }
+
+
+
+        // ----------------------------------------
+        // MOSTRAR / OCULTAR
+        // ----------------------------------------
+
+        if (disponible) {
+
+            label.classList.remove(
                 "oculto"
             );
+
+
+            hayMetodoDisponible = true;
+
+
+            if (!primerMetodoDisponible) {
+
+                primerMetodoDisponible =
+                    opcion;
+
+            }
 
         } else {
 
-            datosTransferencia.classList.add(
+            label.classList.add(
                 "oculto"
             );
+
+
+            opcion.checked = false;
 
         }
 
     });
 
+
+
+    // ========================================
+    // SI NO HAY MÉTODOS
+    // ========================================
+
+    if (hayMetodoDisponible) {
+
+        if (avisoMetodosPago) {
+
+            avisoMetodosPago.classList.add(
+                "oculto"
+            );
+
+        }
+
+    } else {
+
+        if (avisoMetodosPago) {
+
+            avisoMetodosPago.classList.remove(
+                "oculto"
+            );
+
+        }
+
+    }
+
+
+
+    // ========================================
+    // SELECCIONAR MÉTODO AUTOMÁTICAMENTE
+    // ========================================
+
+    const metodoSeleccionado =
+        document.querySelector(
+            'input[name="metodo-pago"]:checked'
+        );
+
+
+    if (
+        !metodoSeleccionado ||
+        metodoSeleccionado.parentElement.classList.contains(
+            "oculto"
+        )
+    ) {
+
+        if (primerMetodoDisponible) {
+
+            primerMetodoDisponible.checked = true;
+
+        }
+
+    }
+
+
+
+    // ========================================
+    // DATOS TRANSFERENCIA
+    // ========================================
+
+    const transferenciaSeleccionada =
+        document.querySelector(
+            'input[name="metodo-pago"][value="transferencia"]:checked'
+        );
+
+
+    if (
+        transferenciaSeleccionada &&
+        datosTransferencia
+    ) {
+
+        datosTransferencia.classList.remove(
+            "oculto"
+        );
+
+    } else if (datosTransferencia) {
+
+        datosTransferencia.classList.add(
+            "oculto"
+        );
+
+    }
+
+}
+
+
+
+// ========================================
+// CAMBIO DE MÉTODO DE PAGO
+// ========================================
+
+opcionesPago.forEach((opcion) => {
+
+    opcion.addEventListener(
+        "change",
+        () => {
+
+            if (
+                opcion.value === "transferencia" &&
+                opcion.checked
+            ) {
+
+                if (datosTransferencia) {
+
+                    datosTransferencia.classList.remove(
+                        "oculto"
+                    );
+
+                }
+
+            } else {
+
+                if (datosTransferencia) {
+
+                    datosTransferencia.classList.add(
+                        "oculto"
+                    );
+
+                }
+
+            }
+
+        }
+    );
+
 });
+
 
 
 // ========================================
@@ -297,369 +882,408 @@ const confirmarPedido =
     );
 
 
-confirmarPedido.addEventListener(
-    "click",
-    async () => {
+if (confirmarPedido) {
 
-        // ========================================
-        // DATOS CLIENTE
-        // ========================================
+    confirmarPedido.addEventListener(
+        "click",
+        async () => {
 
-        const nombre =
-            document.getElementById(
-                "nombre-cliente"
-            ).value.trim();
-
-        const telefono =
-            document.getElementById(
-                "telefono-cliente"
-            ).value.trim();
-
-
-        // ========================================
-        // TIPO ENTREGA
-        // ========================================
-
-        const tipoEntregaElemento =
-            document.querySelector(
-                'input[name="tipo-entrega"]:checked'
-            );
-
-
-        if (!tipoEntregaElemento) {
-
-            alert(
-                "Selecciona cómo quieres recibir tu pedido."
-            );
-
-            return;
-
-        }
-
-
-        const tipoEntrega =
-            tipoEntregaElemento.value;
-
-
-        // ========================================
-        // DIRECCIÓN
-        // ========================================
-
-        const direccion =
-            document.getElementById(
-                "direccion-cliente"
-            ).value.trim();
-
-
-        // ========================================
-        // MÉTODO PAGO
-        // ========================================
-
-        const metodoPagoElemento =
-            document.querySelector(
-                'input[name="metodo-pago"]:checked'
-            );
-
-
-        let metodoPago = "";
-
-
-        if (metodoPagoElemento) {
-
-            metodoPago =
-                metodoPagoElemento.value;
-
-        }
-
-
-        // ========================================
-        // VALIDACIONES
-        // ========================================
-
-        if (!nombre) {
-
-            alert("Ingresa tu nombre.");
-
-            return;
-
-        }
-
-
-        if (!telefono) {
-
-            alert("Ingresa tu teléfono.");
-
-            return;
-
-        }
-
-
-        if (
-            tipoEntrega === "delivery" &&
-            !direccion
-        ) {
-
-            alert("Ingresa tu dirección.");
-
-            return;
-
-        }
-
-
-        if (!metodoPago) {
-
-            alert(
-                "Selecciona un método de pago."
-            );
-
-            return;
-
-        }
-
-
-        if (carrito.length === 0) {
-
-            alert(
-                "El carrito está vacío."
-            );
-
-            return;
-
-        }
-
-
-        // ========================================
-        // PREPARAR PEDIDO
-        // ========================================
-
-        const datos =
-            new FormData();
-
-
-        datos.append(
-            "nombre_cliente",
-            nombre
-        );
-
-        datos.append(
-            "telefono_cliente",
-            telefono
-        );
-
-        datos.append(
-            "tipo_entrega",
-            tipoEntrega
-        );
-
-        datos.append(
-            "direccion_entrega",
-            direccion
-        );
-
-        datos.append(
-            "metodo_pago",
-            metodoPago
-        );
-
-        datos.append(
-            "productos",
-            JSON.stringify(carrito)
-        );
-
-
-        // ========================================
-        // OBTENER CSRF
-        // ========================================
-
-        const tokenCSRF =
-            csrfToken;
-
-
-        console.log(
-            "Restaurante:",
-            restauranteId
-        );
-
-        console.log(
-            "CSRF:",
-            tokenCSRF
-        );
-
-        console.log(
-            "Carrito:",
-            carrito
-        );
-
-
-        if (!tokenCSRF) {
-
-            alert(
-                "No se pudo obtener el token de seguridad. Recarga la página."
-            );
-
-            return;
-
-        }
-
-
-        // ========================================
-        // DESACTIVAR BOTÓN
-        // ========================================
-
-        confirmarPedido.disabled = true;
-
-        confirmarPedido.textContent =
-            "Enviando pedido...";
-
-
-        try {
 
             // ========================================
-            // ENVIAR A DJANGO
+            // DATOS CLIENTE
             // ========================================
 
-            const response =
-                await fetch(
-                    `/pedidos/online/crear/${restauranteId}/`,
-                    {
-                        method: "POST",
+            const nombre =
+                document.getElementById(
+                    "nombre-cliente"
+                ).value.trim();
 
-                        body: datos,
 
-                        credentials: "same-origin",
+            const telefono =
+                document.getElementById(
+                    "telefono-cliente"
+                ).value.trim();
 
-                        headers: {
-                            "X-CSRFToken":
-                                tokenCSRF,
 
-                            "X-Requested-With":
-                                "XMLHttpRequest"
+
+            // ========================================
+            // TIPO ENTREGA
+            // ========================================
+
+            const tipoEntregaElemento =
+                document.querySelector(
+                    'input[name="tipo-entrega"]:checked'
+                );
+
+
+            if (!tipoEntregaElemento) {
+
+                alert(
+                    "Selecciona cómo quieres recibir tu pedido."
+                );
+
+                return;
+
+            }
+
+
+            const tipoEntrega =
+                tipoEntregaElemento.value;
+
+
+
+            // ========================================
+            // DIRECCIÓN
+            // ========================================
+
+            const direccion =
+                document.getElementById(
+                    "direccion-cliente"
+                ).value.trim();
+
+
+
+            // ========================================
+            // MÉTODO PAGO
+            // ========================================
+
+            const metodoPagoElemento =
+                document.querySelector(
+                    'input[name="metodo-pago"]:checked'
+                );
+
+
+            let metodoPago = "";
+
+
+            if (metodoPagoElemento) {
+
+                metodoPago =
+                    metodoPagoElemento.value;
+
+            }
+
+
+
+            // ========================================
+            // VALIDACIONES
+            // ========================================
+
+            if (!nombre) {
+
+                alert(
+                    "Ingresa tu nombre."
+                );
+
+                return;
+
+            }
+
+
+            if (!telefono) {
+
+                alert(
+                    "Ingresa tu teléfono."
+                );
+
+                return;
+
+            }
+
+
+            if (
+                tipoEntrega === "delivery" &&
+                !direccion
+            ) {
+
+                alert(
+                    "Ingresa tu dirección."
+                );
+
+                return;
+
+            }
+
+
+            if (!metodoPago) {
+
+                alert(
+                    "Selecciona un método de pago."
+                );
+
+                return;
+
+            }
+
+
+            if (carrito.length === 0) {
+
+                alert(
+                    "El carrito está vacío."
+                );
+
+                return;
+
+            }
+
+
+
+            // ========================================
+            // PREPARAR PEDIDO
+            // ========================================
+
+            const datos =
+                new FormData();
+
+
+            datos.append(
+                "nombre_cliente",
+                nombre
+            );
+
+
+            datos.append(
+                "telefono_cliente",
+                telefono
+            );
+
+
+            datos.append(
+                "tipo_entrega",
+                tipoEntrega
+            );
+
+
+            datos.append(
+                "direccion_entrega",
+                direccion
+            );
+
+
+            datos.append(
+                "metodo_pago",
+                metodoPago
+            );
+
+
+            datos.append(
+                "productos",
+                JSON.stringify(carrito)
+            );
+
+
+
+            // ========================================
+            // CSRF
+            // ========================================
+
+            const tokenCSRF =
+                csrfToken;
+
+
+            console.log(
+                "Restaurante:",
+                restauranteId
+            );
+
+
+            console.log(
+                "CSRF:",
+                tokenCSRF
+            );
+
+
+            console.log(
+                "Carrito:",
+                carrito
+            );
+
+
+            if (!tokenCSRF) {
+
+                alert(
+                    "No se pudo obtener el token de seguridad. Recarga la página."
+                );
+
+                return;
+
+            }
+
+
+
+            // ========================================
+            // DESACTIVAR BOTÓN
+            // ========================================
+
+            confirmarPedido.disabled =
+                true;
+
+
+            confirmarPedido.textContent =
+                "Enviando pedido...";
+
+
+
+            try {
+
+
+                // ========================================
+                // ENVIAR A DJANGO
+                // ========================================
+
+                const response =
+                    await fetch(
+                        `/pedidos/online/crear/${restauranteId}/`,
+                        {
+                            method: "POST",
+
+                            body: datos,
+
+                            credentials:
+                                "same-origin",
+
+                            headers: {
+
+                                "X-CSRFToken":
+                                    tokenCSRF,
+
+                                "X-Requested-With":
+                                    "XMLHttpRequest"
+
+                            }
+
                         }
+                    );
+
+
+
+                // ========================================
+                // LEER RESPUESTA
+                // ========================================
+
+                const contentType =
+                    response.headers.get(
+                        "content-type"
+                    ) || "";
+
+
+                if (
+                    !contentType.includes(
+                        "application/json"
+                    )
+                ) {
+
+                    const texto =
+                        await response.text();
+
+
+                    console.error(
+                        "Respuesta no JSON:",
+                        texto
+                    );
+
+
+                    if (
+                        response.status === 403
+                    ) {
+
+                        throw new Error(
+                            "Django rechazó la petición por CSRF (403)."
+                        );
+
                     }
-                );
 
-
-            // ========================================
-            // LEER RESPUESTA
-            // ========================================
-
-            const contentType =
-                response.headers.get(
-                    "content-type"
-                ) || "";
-
-
-            if (!contentType.includes(
-                "application/json"
-            )) {
-
-                const texto =
-                    await response.text();
-
-                console.error(
-                    "Respuesta no JSON:",
-                    texto
-                );
-
-                if (response.status === 403) {
 
                     throw new Error(
-                        "Django rechazó la petición por CSRF (403)."
+                        `El servidor respondió con HTTP ${response.status}.`
                     );
 
                 }
 
-                throw new Error(
-                    `El servidor respondió con HTTP ${response.status}.`
-                );
 
-            }
+                const data =
+                    await response.json();
 
-
-            const data =
-                await response.json();
-
-
-            // ========================================
-            // PEDIDO CREADO
-            // ========================================
-
-            if (data.success) {
-
-                localStorage.setItem(
-                    "pedidoExitoso",
-
-                    JSON.stringify({
-
-                        pedido_id:
-                            data.pedido_id,
-
-                        seguimiento_url:
-                            data.seguimiento_url
-
-                    })
-                );
-
-
-                mostrarPedidoExitoso(
-                    data.pedido_id,
-                    data.seguimiento_url
-                );
 
 
                 // ========================================
-                // LIMPIAR CARRITO
+                // PEDIDO CREADO
                 // ========================================
 
-                carrito = [];
+                if (data.success) {
 
-                actualizarCarrito();
+                    localStorage.setItem(
+                        "pedidoExitoso",
+
+                        JSON.stringify({
+
+                            pedido_id:
+                                data.pedido_id,
+
+                            seguimiento_url:
+                                data.seguimiento_url
+
+                        })
+                    );
 
 
-                datosCliente.classList.add(
-                    "oculto"
+                    mostrarPedidoExitoso(
+                        data.pedido_id,
+                        data.seguimiento_url
+                    );
+
+
+                    carrito = [];
+
+
+                    actualizarCarrito();
+
+
+                    datosCliente.classList.add(
+                        "oculto"
+                    );
+
+
+                } else {
+
+                    alert(
+                        data.error ||
+                        "No se pudo crear el pedido."
+                    );
+
+                }
+
+
+            } catch (error) {
+
+                console.error(
+                    "Error enviando pedido:",
+                    error
                 );
 
-
-            } else {
 
                 alert(
-                    data.error ||
-                    "No se pudo crear el pedido."
+                    error.message ||
+                    "Ocurrió un error al enviar el pedido."
                 );
+
+
+            } finally {
+
+                confirmarPedido.disabled =
+                    false;
+
+
+                confirmarPedido.textContent =
+                    "Confirmar pedido";
 
             }
 
-
-        } catch (error) {
-
-            console.error(
-                "Error enviando pedido:",
-                error
-            );
-
-
-            alert(
-                error.message ||
-                "Ocurrió un error al enviar el pedido."
-            );
-
-
-        } finally {
-
-            // ========================================
-            // REACTIVAR BOTÓN
-            // ========================================
-
-            confirmarPedido.disabled = false;
-
-            confirmarPedido.textContent =
-                "Confirmar pedido";
-
         }
+    );
 
-    }
-);
+}
+
 
 
 // ========================================
@@ -676,10 +1300,12 @@ function mostrarPedidoExitoso(
             "pedido-exitoso"
         );
 
+
     const mensajePedidoExitoso =
         document.getElementById(
             "mensaje-pedido-exitoso"
         );
+
 
     const btnSeguimiento =
         document.getElementById(
@@ -694,11 +1320,18 @@ function mostrarPedidoExitoso(
     }
 
 
-    mensajePedidoExitoso.textContent =
-        `Tu pedido #${pedidoId} fue recibido correctamente.`;
+    if (mensajePedidoExitoso) {
+
+        mensajePedidoExitoso.textContent =
+            `Tu pedido #${pedidoId} fue recibido correctamente.`;
+
+    }
 
 
-    if (seguimientoUrl) {
+    if (
+        seguimientoUrl &&
+        btnSeguimiento
+    ) {
 
         btnSeguimiento.href =
             seguimientoUrl;
@@ -711,6 +1344,7 @@ function mostrarPedidoExitoso(
     );
 
 }
+
 
 
 // ========================================
@@ -772,8 +1406,9 @@ document.addEventListener(
 );
 
 
+
 // ========================================
-// COMPROBAR ESTADO DEL PEDIDO GUARDADO
+// COMPROBAR ESTADO DEL PEDIDO
 // ========================================
 
 function comprobarPedidoGuardado() {
@@ -813,6 +1448,7 @@ function comprobarPedidoGuardado() {
             "pedidoExitoso"
         );
 
+
         return;
 
     }
@@ -829,11 +1465,15 @@ function comprobarPedidoGuardado() {
         pedido.seguimiento_url,
         {
             headers: {
+
                 "X-Requested-With":
                     "XMLHttpRequest"
+
             }
+
         }
     )
+
 
     .then((response) => {
 
@@ -845,9 +1485,11 @@ function comprobarPedidoGuardado() {
 
         }
 
+
         return response.json();
 
     })
+
 
     .then((data) => {
 
@@ -855,6 +1497,7 @@ function comprobarPedidoGuardado() {
             "Estado actual:",
             data.estado
         );
+
 
 
         // ========================================
@@ -891,6 +1534,7 @@ function comprobarPedidoGuardado() {
         }
 
 
+
         // ========================================
         // PEDIDO ACTIVO
         // ========================================
@@ -901,6 +1545,7 @@ function comprobarPedidoGuardado() {
         );
 
     })
+
 
     .catch((error) => {
 
@@ -914,6 +1559,7 @@ function comprobarPedidoGuardado() {
 }
 
 
+
 // ========================================
 // COMPROBAR AL CARGAR
 // ========================================
@@ -924,8 +1570,11 @@ document.addEventListener(
 
         comprobarPedidoGuardado();
 
+        actualizarMetodosPago();
+
     }
 );
+
 
 
 // ========================================
@@ -943,222 +1592,195 @@ setInterval(
 // NAVEGACIÓN POR CATEGORÍAS
 // ========================================
 
-const botonesCategorias =
-    document.querySelectorAll(".categoria-btn");
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
 
-const seccionesCategorias =
-    document.querySelectorAll(".categoria");
-
-
-// ========================================
-// CLICK EN CATEGORÍA
-// ========================================
-
-botonesCategorias.forEach((boton) => {
-
-    boton.addEventListener("click", () => {
-
-        const categoriaId =
-            boton.dataset.categoria;
-
-        const categoria =
-            document.querySelector(
-                `.categoria[data-categoria="${categoriaId}"]`
+        const botonesCategorias =
+            document.querySelectorAll(
+                ".categoria-btn"
             );
 
 
-        if (!categoria) {
+        const categorias =
+            document.querySelectorAll(
+                ".categoria"
+            );
+
+
+        if (
+            botonesCategorias.length === 0 ||
+            categorias.length === 0
+        ) {
 
             return;
 
         }
 
 
-        // ----------------------------------------
-        // Mover hacia la categoría
-        // ----------------------------------------
 
-        categoria.scrollIntoView({
-            behavior: "smooth",
-            block: "start"
-        });
+        // ========================================
+        // CLICK EN CATEGORÍA
+        // ========================================
 
+        botonesCategorias.forEach(
+            (boton) => {
 
-        // ----------------------------------------
-        // Marcar botón activo
-        // ----------------------------------------
+                boton.addEventListener(
+                    "click",
+                    () => {
 
-        botonesCategorias.forEach((btn) => {
+                        const targetId =
+                            boton.dataset.target;
 
-            btn.classList.remove("activo");
 
-        });
+                        const categoria =
+                            document.getElementById(
+                                targetId
+                            );
 
 
-        boton.classList.add("activo");
+                        if (!categoria) {
 
-    });
+                            console.error(
+                                "No se encontró la categoría:",
+                                targetId
+                            );
 
-});
-
-
-// ========================================
-// NAVEGACIÓN DE CATEGORÍAS
-// ========================================
-
-document.addEventListener("DOMContentLoaded", () => {
-
-    const botonesCategorias =
-        document.querySelectorAll(".categoria-btn");
-
-    const categorias =
-        document.querySelectorAll(".categoria");
-
-
-    if (
-        botonesCategorias.length === 0 ||
-        categorias.length === 0
-    ) {
-
-        return;
-
-    }
-
-
-    // ========================================
-    // CLICK EN CATEGORÍA
-    // ========================================
-
-    botonesCategorias.forEach((boton) => {
-
-        boton.addEventListener("click", () => {
-
-            const targetId =
-                boton.dataset.target;
-
-
-            const categoria =
-                document.getElementById(targetId);
-
-
-            if (!categoria) {
-
-                console.error(
-                    "No se encontró la categoría:",
-                    targetId
-                );
-
-                return;
-
-            }
-
-
-            // Quitar activo de todos
-
-            botonesCategorias.forEach((btn) => {
-
-                btn.classList.remove("activo");
-
-            });
-
-
-            // Activar botón seleccionado
-
-            boton.classList.add("activo");
-
-
-            // Desplazamiento
-
-            const offset = 75;
-
-            const posicion =
-                categoria.getBoundingClientRect().top +
-                window.scrollY -
-                offset;
-
-
-            window.scrollTo({
-
-                top: posicion,
-
-                behavior: "smooth"
-
-            });
-
-        });
-
-    });
-
-
-    // ========================================
-    // CAMBIAR CATEGORÍA SEGÚN SCROLL
-    // ========================================
-
-    const observer =
-        new IntersectionObserver(
-            (entries) => {
-
-                entries.forEach((entry) => {
-
-                    if (!entry.isIntersecting) {
-
-                        return;
-
-                    }
-
-
-                    const categoriaId =
-                        entry.target.id;
-
-
-                    botonesCategorias.forEach((boton) => {
-
-                        boton.classList.remove("activo");
-
-
-                        if (
-                            boton.dataset.target ===
-                            categoriaId
-                        ) {
-
-                            boton.classList.add("activo");
-
-
-                            boton.scrollIntoView({
-
-                                behavior: "smooth",
-
-                                block: "nearest",
-
-                                inline: "center"
-
-                            });
+                            return;
 
                         }
 
-                    });
 
-                });
 
-            },
-            {
-                root: null,
+                        botonesCategorias.forEach(
+                            (btn) => {
 
-                threshold: 0.15,
+                                btn.classList.remove(
+                                    "activo"
+                                );
 
-                rootMargin: "-80px 0px -60% 0px"
+                            }
+                        );
+
+
+                        boton.classList.add(
+                            "activo"
+                        );
+
+
+
+                        const offset = 75;
+
+
+                        const posicion =
+                            categoria.getBoundingClientRect().top +
+                            window.scrollY -
+                            offset;
+
+
+                        window.scrollTo({
+
+                            top: posicion,
+
+                            behavior: "smooth"
+
+                        });
+
+                    }
+                );
+
             }
         );
 
 
-    // ========================================
-    // OBSERVAR CATEGORÍAS
-    // ========================================
 
-    categorias.forEach((categoria) => {
+        // ========================================
+        // CAMBIAR CATEGORÍA SEGÚN SCROLL
+        // ========================================
 
-        observer.observe(categoria);
+        const observer =
+            new IntersectionObserver(
+                (entries) => {
 
-    });
+                    entries.forEach(
+                        (entry) => {
 
-});
+                            if (
+                                !entry.isIntersecting
+                            ) {
+
+                                return;
+
+                            }
+
+
+                            const categoriaId =
+                                entry.target.id;
+
+
+                            botonesCategorias.forEach(
+                                (boton) => {
+
+                                    boton.classList.remove(
+                                        "activo"
+                                    );
+
+
+                                    if (
+                                        boton.dataset.target ===
+                                        categoriaId
+                                    ) {
+
+                                        boton.classList.add(
+                                            "activo"
+                                        );
+
+
+                                        boton.scrollIntoView({
+
+                                            behavior: "smooth",
+
+                                            block: "nearest",
+
+                                            inline: "center"
+
+                                        });
+
+                                    }
+
+                                }
+                            );
+
+                        }
+                    );
+
+                },
+                {
+                    root: null,
+
+                    threshold: 0.15,
+
+                    rootMargin:
+                        "-80px 0px -60% 0px"
+                }
+            );
+
+
+
+        // ========================================
+        // OBSERVAR CATEGORÍAS
+        // ========================================
+
+        categorias.forEach(
+            (categoria) => {
+
+                observer.observe(
+                    categoria
+                );
+
+            }
+        );
+
+    }
+);

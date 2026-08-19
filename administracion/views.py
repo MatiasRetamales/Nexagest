@@ -99,21 +99,31 @@ def lista_productos(request):
 
 @tiene_acceso(['administrador'])
 def crear_producto(request):
+
+    restaurante = request.user.perfil.restaurante
+
     if request.method == 'POST':
-        form = ProductoForm(request.POST)
+
+        form = ProductoForm(
+            request.POST,
+            restaurante=restaurante
+        )
 
         if form.is_valid():
+
             producto = form.save(commit=False)
 
-            # Asignamos el restaurante del usuario
-            producto.restaurante = request.user.perfil.restaurante
+            producto.restaurante = restaurante
 
             producto.save()
 
             return redirect('lista_productos')
 
     else:
-        form = ProductoForm()
+
+        form = ProductoForm(
+            restaurante=restaurante
+        )
 
     return render(
         request,
@@ -124,27 +134,53 @@ def crear_producto(request):
 
 @tiene_acceso(['administrador'])
 def editar_producto(request, producto_id):
+
     restaurante = request.user.perfil.restaurante
-    producto = restaurante.productos.filter(id=producto_id).first()
+
+    producto = restaurante.productos.filter(
+        id=producto_id
+    ).first()
 
     if not producto:
-        messages.error(request, "Producto no encontrado.")
+
+        messages.error(
+            request,
+            "Producto no encontrado."
+        )
+
         return redirect('lista_productos')
 
+
     if request.method == 'POST':
-        form = ProductoForm(request.POST, instance=producto)
+
+        form = ProductoForm(
+            request.POST,
+            instance=producto,
+            restaurante=restaurante
+        )
 
         if form.is_valid():
+
             form.save()
+
             return redirect('lista_productos')
 
+
     else:
-        form = ProductoForm(instance=producto) # Cargamos el producto existente en el formulario
+
+        form = ProductoForm(
+            instance=producto,
+            restaurante=restaurante
+        )
+
 
     return render(
         request,
         'administracion/editar_producto.html',
-        {'form': form, 'producto': producto}
+        {
+            'form': form,
+            'producto': producto
+        }
     )
 
 
@@ -200,6 +236,7 @@ def crear_categoria(request):
 
 @tiene_acceso(['administrador'])
 def configuracion_restaurante(request):
+
     restaurante = request.user.perfil.restaurante
 
     if request.method == "POST":
@@ -213,8 +250,12 @@ def configuracion_restaurante(request):
         )
 
         restaurante.porcentaje_propina = (
-            request.POST.get('porcentaje_propina', 10)
+            request.POST.get(
+                'porcentaje_propina',
+                10
+            )
         )
+
 
         # =========================
         # PEDIDOS ONLINE
@@ -232,49 +273,96 @@ def configuracion_restaurante(request):
             'acepta_retiro' in request.POST
         )
 
+
         # =========================
-        # MÉTODOS DE PAGO
+        # PAGOS RETIRO
         # =========================
 
-        restaurante.acepta_pago_local = (
-            'acepta_pago_local' in request.POST
+        restaurante.acepta_efectivo_retiro = (
+            'acepta_efectivo_retiro' in request.POST
         )
 
-        restaurante.acepta_pago_transferencia = (
-            'acepta_pago_transferencia' in request.POST
+        restaurante.acepta_tarjeta_retiro = (
+            'acepta_tarjeta_retiro' in request.POST
         )
+
+        restaurante.acepta_transferencia_retiro = (
+            'acepta_transferencia_retiro' in request.POST
+        )
+
+
+        # =========================
+        # PAGOS DELIVERY
+        # =========================
+
+        restaurante.acepta_efectivo_delivery = (
+            'acepta_efectivo_delivery' in request.POST
+        )
+
+        restaurante.acepta_tarjeta_delivery = (
+            'acepta_tarjeta_delivery' in request.POST
+        )
+
+        restaurante.acepta_transferencia_delivery = (
+            'acepta_transferencia_delivery' in request.POST
+        )
+
 
         # =========================
         # DATOS TRANSFERENCIA
         # =========================
 
         restaurante.banco_transferencia = (
-            request.POST.get('banco_transferencia', '')
+            request.POST.get(
+                'banco_transferencia',
+                ''
+            )
         )
 
         restaurante.tipo_cuenta_transferencia = (
-            request.POST.get('tipo_cuenta_transferencia', '')
+            request.POST.get(
+                'tipo_cuenta_transferencia',
+                ''
+            )
         )
 
         restaurante.numero_cuenta_transferencia = (
-            request.POST.get('numero_cuenta_transferencia', '')
+            request.POST.get(
+                'numero_cuenta_transferencia',
+                ''
+            )
         )
 
         restaurante.titular_transferencia = (
-            request.POST.get('titular_transferencia', '')
+            request.POST.get(
+                'titular_transferencia',
+                ''
+            )
         )
 
         restaurante.rut_transferencia = (
-            request.POST.get('rut_transferencia', '')
+            request.POST.get(
+                'rut_transferencia',
+                ''
+            )
         )
 
         restaurante.correo_transferencia = (
-            request.POST.get('correo_transferencia', '')
+            request.POST.get(
+                'correo_transferencia',
+                ''
+            )
         )
+
+
+        # =========================
+        # GUARDAR
+        # =========================
 
         restaurante.save()
 
         return redirect('menu_admin')
+
 
     return render(
         request,

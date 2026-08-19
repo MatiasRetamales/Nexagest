@@ -88,14 +88,21 @@ button,
 input,
 textarea,
 select {
-
     font: inherit;
 }
 
 
 button {
-
     -webkit-tap-highlight-color: transparent;
+}
+
+
+/* =========================================================
+   CLASE OCULTO
+   ========================================================= */
+
+.oculto {
+    display: none !important;
 }
 
 
@@ -280,6 +287,67 @@ button {
     font-size: 14px;
 
     line-height: 1.6;
+}
+
+
+/* =========================================================
+   AVISO LOCAL CERRADO
+   ========================================================= */
+
+.aviso-local-cerrado {
+
+    margin: 24px 0;
+
+    padding: 20px 18px;
+
+    background: #fef2f2;
+
+    border: 1px solid #fecaca;
+
+    border-radius: var(--radio);
+
+    text-align: center;
+
+    box-shadow:
+        0 4px 14px rgba(15, 23, 42, 0.04);
+}
+
+
+.aviso-local-cerrado-icono {
+
+    display: block;
+
+    margin-bottom: 8px;
+
+    font-size: 28px;
+
+    line-height: 1;
+}
+
+
+.aviso-local-cerrado strong {
+
+    display: block;
+
+    margin-bottom: 5px;
+
+    color: #991b1b;
+
+    font-size: 16px;
+
+    font-weight: 800;
+}
+
+
+.aviso-local-cerrado p {
+
+    margin: 0;
+
+    color: #b91c1c;
+
+    font-size: 13px;
+
+    line-height: 1.5;
 }
 
 
@@ -613,6 +681,36 @@ button {
 
 
 /* =========================================================
+   PRODUCTO CERRADO
+   ========================================================= */
+
+.producto-cerrado {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    min-height: 38px;
+
+    padding: 7px 11px;
+
+    border-radius: 10px;
+
+    background: #f1f5f9;
+
+    color: var(--color-texto-suave);
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================================
    BOTÓN +
    ========================================================= */
 
@@ -829,12 +927,6 @@ button {
 }
 
 
-.modal.oculto {
-
-    display: none;
-}
-
-
 /* =========================================================
    CONTENIDO DE MODALES
    ========================================================= */
@@ -1015,11 +1107,6 @@ button {
 }
 
 
-/*
-   Estas clases quedan preparadas para
-   los elementos que genera carta.js.
-*/
-
 .item-pedido {
 
     display: flex;
@@ -1040,25 +1127,39 @@ button {
 }
 
 
+/* =========================================================
+   INFORMACIÓN ITEM PEDIDO
+   ========================================================= */
+
 .item-pedido-info {
 
     flex: 1;
 
     min-width: 0;
+
+    display: flex;
+
+    flex-direction: column;
 }
 
 
-.item-pedido-nombre {
+.item-pedido-info strong {
 
     font-size: 14px;
 
     font-weight: 700;
 
     margin-bottom: 3px;
+
+    line-height: 1.35;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
 }
 
 
-.item-pedido-precio {
+.item-pedido-info span {
 
     font-size: 13px;
 
@@ -1066,27 +1167,45 @@ button {
 }
 
 
-.controles-cantidad {
+/* =========================================================
+   CONTROLES DEL ITEM
+   ========================================================= */
+
+.item-pedido-controles {
 
     display: flex;
 
     align-items: center;
 
-    gap: 8px;
+    justify-content: flex-end;
+
+    gap: 7px;
+
+    flex-shrink: 0;
 }
 
 
+/* =========================================================
+   BOTONES + / -
+   ========================================================= */
+
 .btn-cantidad {
 
-    width: 32px;
+    width: 34px;
 
-    height: 32px;
+    height: 34px;
+
+    min-width: 34px;
+
+    padding: 0;
 
     border: 1px solid var(--color-borde);
 
     border-radius: 9px;
 
     background: white;
+
+    color: var(--color-texto);
 
     display: flex;
 
@@ -1096,19 +1215,125 @@ button {
 
     cursor: pointer;
 
+    font-size: 18px;
+
     font-weight: 700;
+
+    line-height: 1;
+
+    transition:
+        background 0.15s ease,
+        border-color 0.15s ease,
+        transform 0.12s ease;
 }
 
 
-.cantidad {
+.btn-cantidad:hover {
 
-    min-width: 20px;
+    background: #f8fafc;
+
+    border-color: #cbd5e1;
+}
+
+
+.btn-cantidad:active {
+
+    transform: scale(0.88);
+}
+
+
+/* =========================================================
+   CANTIDAD
+   ========================================================= */
+
+.cantidad-producto {
+
+    min-width: 24px;
 
     text-align: center;
 
     font-size: 14px;
 
-    font-weight: 750;
+    font-weight: 800;
+
+    color: var(--color-texto);
+}
+
+
+/* =========================================================
+   SUBTOTAL DEL PRODUCTO
+   ========================================================= */
+
+.subtotal-producto {
+
+    min-width: 76px;
+
+    text-align: right;
+
+    font-size: 14px;
+
+    font-weight: 800;
+
+    color: var(--color-texto);
+
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   BOTÓN ELIMINAR
+   ========================================================= */
+
+.btn-eliminar-producto {
+
+    width: 32px;
+
+    height: 32px;
+
+    min-width: 32px;
+
+    padding: 0;
+
+    border: none;
+
+    border-radius: 9px;
+
+    background: #fee2e2;
+
+    color: #dc2626;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    cursor: pointer;
+
+    font-size: 21px;
+
+    font-weight: 500;
+
+    line-height: 1;
+
+    transition:
+        background 0.15s ease,
+        color 0.15s ease,
+        transform 0.12s ease;
+}
+
+
+.btn-eliminar-producto:hover {
+
+    background: #fecaca;
+
+    color: #b91c1c;
+}
+
+
+.btn-eliminar-producto:active {
+
+    transform: scale(0.88);
 }
 
 
@@ -1192,6 +1417,16 @@ button {
 }
 
 
+.btn-continuar:disabled {
+
+    opacity: 0.65;
+
+    cursor: not-allowed;
+
+    transform: none;
+}
+
+
 /* =========================================================
    FORMULARIOS
    ========================================================= */
@@ -1257,7 +1492,7 @@ button {
 
 
 /* =========================================================
-   OPCIONES DELIVERY / PAGO
+   OPCIONES DELIVERY / RETIRO / PAGO
    ========================================================= */
 
 .opciones {
@@ -1348,12 +1583,6 @@ button {
 }
 
 
-.datos-transferencia.oculto {
-
-    display: none;
-}
-
-
 .datos-transferencia h4 {
 
     font-size: 14px;
@@ -1414,7 +1643,7 @@ button {
 
 #direccion-container.oculto {
 
-    display: none;
+    display: none !important;
 }
 
 
@@ -1605,63 +1834,203 @@ button {
 
 
 /* =========================================================
-   AVISO LOCAL CERRADO
+   MOBILE PEQUEÑO
    ========================================================= */
 
-.aviso-local-cerrado {
+@media (max-width: 480px) {
 
-    margin: 24px 0;
+    .item-pedido {
 
-    padding: 20px 18px;
+        align-items: flex-start;
 
-    background: #fef2f2;
+        padding: 12px;
 
-    border: 1px solid #fecaca;
+        gap: 10px;
+    }
 
-    border-radius: var(--radio);
 
-    text-align: center;
+    .item-pedido-info {
 
-    box-shadow:
-        0 4px 14px rgba(15, 23, 42, 0.04);
+        padding-top: 2px;
+    }
+
+
+    .item-pedido-controles {
+
+        gap: 5px;
+    }
+
+
+    .btn-cantidad {
+
+        width: 32px;
+
+        height: 32px;
+
+        min-width: 32px;
+    }
+
+
+    .cantidad-producto {
+
+        min-width: 20px;
+    }
+
+
+    .subtotal-producto {
+
+        min-width: auto;
+
+        font-size: 13px;
+    }
+
+
+    .btn-eliminar-producto {
+
+        width: 30px;
+
+        height: 30px;
+
+        min-width: 30px;
+
+        font-size: 19px;
+    }
+
 }
 
 
-.aviso-local-cerrado-icono {
+/* =========================================================
+   MOBILE MUY PEQUEÑO
+   ========================================================= */
 
-    display: block;
+@media (max-width: 380px) {
 
-    margin-bottom: 8px;
+    .carta-app {
 
-    font-size: 28px;
+        padding-left: 12px;
 
-    line-height: 1;
-}
-
-
-.aviso-local-cerrado strong {
-
-    display: block;
-
-    margin-bottom: 5px;
-
-    color: #991b1b;
-
-    font-size: 16px;
-
-    font-weight: 800;
-}
+        padding-right: 12px;
+    }
 
 
-.aviso-local-cerrado p {
+    .categorias-nav {
 
-    margin: 0;
+        margin-left: -12px;
 
-    color: #b91c1c;
+        margin-right: -12px;
 
-    font-size: 13px;
+        padding-left: 12px;
 
-    line-height: 1.5;
+        padding-right: 12px;
+    }
+
+
+    .producto {
+
+        gap: 10px;
+
+        padding: 10px;
+    }
+
+
+    .producto-imagen {
+
+        width: 92px;
+
+        min-width: 92px;
+
+        height: 92px;
+    }
+
+
+    .producto-info h3 {
+
+        font-size: 15px;
+    }
+
+
+    .producto-descripcion {
+
+        font-size: 12px;
+    }
+
+
+    .precio {
+
+        font-size: 15px;
+    }
+
+
+    .btn-agregar {
+
+        width: 38px;
+
+        height: 38px;
+
+        min-width: 38px;
+
+        border-radius: 10px;
+
+        font-size: 23px;
+    }
+
+
+    .carrito {
+
+        width: calc(100% - 20px);
+
+        bottom: 10px;
+
+        padding-left: 14px;
+
+        padding-right: 9px;
+    }
+
+
+    .btn-ver-pedido {
+
+        min-height: 44px;
+
+        padding: 0 14px;
+
+        font-size: 13px;
+    }
+
+
+    .resumen-contenido,
+    .datos-contenido {
+
+        padding-left: 14px;
+
+        padding-right: 14px;
+    }
+
+
+    .item-pedido {
+
+        flex-direction: column;
+
+        align-items: stretch;
+
+        gap: 11px;
+    }
+
+
+    .item-pedido-controles {
+
+        justify-content: space-between;
+
+        width: 100%;
+    }
+
+
+    .subtotal-producto {
+
+        margin-left: auto;
+
+        min-width: 65px;
+    }
+
 }
 
 
@@ -1736,6 +2105,7 @@ button {
 
         border-radius: 24px;
     }
+
 }
 
 
@@ -1791,6 +2161,7 @@ button {
 
         bottom: 22px;
     }
+
 }
 
 
@@ -1826,4 +2197,5 @@ a:focus-visible {
 
         transition-duration: 0.01ms !important;
     }
+
 }

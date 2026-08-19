@@ -17,15 +17,23 @@
         href="{% static 'administracion/css/configuracion_restaurante.css' %}"
     >
 
-    <title>Configuración del Restaurante</title>
+    <title>
+        Configuración del Restaurante
+    </title>
 
 </head>
 
+
 <body>
+
 
     <div class="card">
 
-        <h3>Configuración del Restaurante</h3>
+
+        <h3>
+            Configuración del Restaurante
+        </h3>
+
 
         <form method="post">
 
@@ -36,7 +44,10 @@
             <!-- PROPINA -->
             <!-- ========================= -->
 
-            <h4>Propina</h4>
+            <h4>
+                Propina
+            </h4>
+
 
             <label>
 
@@ -52,12 +63,14 @@
 
             </label>
 
+
             <br><br>
 
 
             <label>
                 Porcentaje de propina:
             </label>
+
 
             <input
                 placeholder="Solo números"
@@ -77,7 +90,10 @@
             <!-- PEDIDOS ONLINE -->
             <!-- ========================= -->
 
-            <h4>Pedidos Online</h4>
+            <h4>
+                Pedidos Online
+            </h4>
+
 
             <label>
 
@@ -92,6 +108,7 @@
                 Activar pedidos online
 
             </label>
+
 
             <br><br>
 
@@ -109,6 +126,7 @@
                 Permitir Delivery
 
             </label>
+
 
             <br><br>
 
@@ -135,21 +153,40 @@
             <!-- MÉTODOS DE PAGO -->
             <!-- ========================= -->
 
-            <h4>Métodos de pago</h4>
+            <h4>
+                Métodos de pago
+            </h4>
+
+
+            <p>
+                Configura los métodos de pago disponibles
+                según la modalidad del pedido.
+            </p>
+
+
+            <!-- ========================= -->
+            <!-- RETIRO EN LOCAL -->
+            <!-- ========================= -->
+
+            <h5>
+                🏪 Retiro en local
+            </h5>
+
 
             <label>
 
                 <input
                     type="checkbox"
-                    name="acepta_pago_local"
-                    {% if restaurante.acepta_pago_local %}
+                    name="acepta_efectivo_retiro"
+                    {% if restaurante.acepta_efectivo_retiro %}
                         checked
                     {% endif %}
                 >
 
-                Efectivo/Tarjeta
+                💵 Efectivo
 
             </label>
+
 
             <br><br>
 
@@ -158,13 +195,31 @@
 
                 <input
                     type="checkbox"
-                    name="acepta_pago_transferencia"
-                    {% if restaurante.acepta_pago_transferencia %}
+                    name="acepta_tarjeta_retiro"
+                    {% if restaurante.acepta_tarjeta_retiro %}
                         checked
                     {% endif %}
                 >
 
-                Transferencia bancaria
+                💳 Tarjeta
+
+            </label>
+
+
+            <br><br>
+
+
+            <label>
+
+                <input
+                    type="checkbox"
+                    name="acepta_transferencia_retiro"
+                    {% if restaurante.acepta_transferencia_retiro %}
+                        checked
+                    {% endif %}
+                >
+
+                🏦 Transferencia bancaria
 
             </label>
 
@@ -173,14 +228,87 @@
 
 
             <!-- ========================= -->
-            <!-- DATOS TRANSFERENCIA -->
+            <!-- DELIVERY -->
             <!-- ========================= -->
 
-            <h4>Datos de transferencia</h4>
+            <h5>
+                🛵 Delivery
+            </h5>
+
+
+            <label>
+
+                <input
+                    type="checkbox"
+                    name="acepta_efectivo_delivery"
+                    {% if restaurante.acepta_efectivo_delivery %}
+                        checked
+                    {% endif %}
+                >
+
+                💵 Efectivo
+
+            </label>
+
+
+            <br><br>
+
+
+            <label>
+
+                <input
+                    type="checkbox"
+                    name="acepta_tarjeta_delivery"
+                    {% if restaurante.acepta_tarjeta_delivery %}
+                        checked
+                    {% endif %}
+                >
+
+                💳 Tarjeta
+
+            </label>
+
+
+            <br><br>
+
+
+            <label>
+
+                <input
+                    type="checkbox"
+                    name="acepta_transferencia_delivery"
+                    {% if restaurante.acepta_transferencia_delivery %}
+                        checked
+                    {% endif %}
+                >
+
+                🏦 Transferencia bancaria
+
+            </label>
+
+
+            <hr>
+
+
+            <!-- ========================= -->
+            <!-- DATOS DE TRANSFERENCIA -->
+            <!-- ========================= -->
+
+            <h4>
+                Datos de transferencia
+            </h4>
+
+
+            <p>
+                Estos datos se mostrarán al cliente
+                cuando seleccione transferencia bancaria.
+            </p>
+
 
             <label>
                 Banco:
             </label>
+
 
             <input
                 type="text"
@@ -194,6 +322,7 @@
                 Tipo de cuenta:
             </label>
 
+
             <input
                 type="text"
                 name="tipo_cuenta_transferencia"
@@ -205,6 +334,7 @@
             <label>
                 Número de cuenta:
             </label>
+
 
             <input
                 type="text"
@@ -218,6 +348,7 @@
                 Titular:
             </label>
 
+
             <input
                 type="text"
                 name="titular_transferencia"
@@ -230,6 +361,7 @@
                 RUT:
             </label>
 
+
             <input
                 type="text"
                 name="rut_transferencia"
@@ -241,6 +373,7 @@
             <label>
                 Correo:
             </label>
+
 
             <input
                 type="email"
@@ -273,9 +406,12 @@
 
             </a>
 
+
         </form>
 
+
     </div>
+
 
 </body>
 

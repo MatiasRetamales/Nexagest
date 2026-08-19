@@ -1,151 +1,1012 @@
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f0f8ff;
-    margin: 0;
-    padding: 20px;
+/* =========================================================
+   NEXAGEST
+   GESTIÓN DE PRODUCTOS
+   ========================================================= */
+
+
+/* =========================================================
+   VARIABLES
+   ========================================================= */
+
+:root {
+
+    --color-principal: #0f83f8;
+    --color-principal-hover: #0ea5e9;
+
+    --color-celeste-suave: #e0f2fe;
+    --color-celeste-muy-suave: #f0f9ff;
+
+    --color-texto: #0f172a;
+    --color-texto-secundario: #64748b;
+    --color-texto-suave: #94a3b8;
+
+    --color-fondo: #f8fafc;
+    --color-superficie: #ffffff;
+
+    --color-borde: #e2e8f0;
+
+    --color-exito: #16a34a;
+    --color-exito-fondo: #dcfce7;
+
+    --color-peligro: #dc2626;
+    --color-peligro-hover: #b91c1c;
+    --color-peligro-fondo: #fee2e2;
+
+    --sombra-suave:
+        0 4px 15px rgba(15, 23, 42, 0.06);
+
+    --sombra-media:
+        0 10px 30px rgba(15, 23, 42, 0.10);
+
+    --radio: 14px;
+    --radio-pequeno: 10px;
+
+    --ancho-maximo: 1200px;
 }
+
+
+/* =========================================================
+   RESET
+   ========================================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+html {
+    scroll-behavior: smooth;
+}
+
+
+body {
+
+    min-height: 100vh;
+
+    background: var(--color-fondo);
+
+    color: var(--color-texto);
+
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        Helvetica,
+        Arial,
+        sans-serif;
+
+    line-height: 1.5;
+
+    -webkit-font-smoothing: antialiased;
+
+    overflow-x: hidden;
+}
+
+
+a {
+    text-decoration: none;
+}
+
+
+button,
+input,
+textarea,
+select {
+
+    font: inherit;
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
 
 .header {
-    text-align: center;
-    margin-bottom: 25px;
+
+    width: 100%;
+
+    background: white;
+
+    border-bottom: 1px solid var(--color-borde);
+
+    padding: 18px 24px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 18px;
+
+    position: sticky;
+
+    top: 0;
+
+    z-index: 100;
+
+    box-shadow:
+        0 2px 10px rgba(15, 23, 42, 0.04);
 }
+
+
+/* =========================================================
+   LOGO
+   ========================================================= */
+
+.logo-container {
+
+    width: 52px;
+
+    height: 52px;
+
+    min-width: 52px;
+
+    border-radius: 13px;
+
+    background: var(--color-celeste-muy-suave);
+
+    border: 1px solid #bae6fd;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    overflow: hidden;
+}
+
 
 .logo-admin {
-    width: 300px;
-    height: auto;
-}
 
-h1 {
-    color: #007BFF;
-    margin-top: 10px;
-}
-
-.productos-container {
-    max-width: 1200px;
-    margin: auto;
-}
-
-/* TABLA */
-
-table {
     width: 100%;
-    border-collapse: collapse;
-    background: white;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+
+    height: 100%;
+
+    object-fit: contain;
+
+    padding: 6px;
 }
 
-thead {
-    background-color: #007BFF;
-    color: white;
+
+/* =========================================================
+   TÍTULO
+   ========================================================= */
+
+.header h1 {
+
+    flex: 1;
+
+    font-size: 22px;
+
+    font-weight: 800;
+
+    letter-spacing: -0.4px;
+
+    color: var(--color-texto);
 }
 
-th,
-td {
-    padding: 14px;
-    text-align: left;
-}
 
-tbody tr {
-    border-bottom: 1px solid #eee;
-}
-
-tbody tr:hover {
-    background-color: #f8fbff;
-}
-
-/* BOTONES */
+/* =========================================================
+   BOTONES GENERALES
+   ========================================================= */
 
 .btn {
-    display: inline-block;
-    text-decoration: none;
-    border-radius: 8px;
-    font-weight: bold;
-    transition: 0.2s;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 6px;
+
+    min-height: 42px;
+
+    padding: 0 15px;
+
+    border-radius: 10px;
+
+    font-size: 14px;
+
+    font-weight: 700;
+
+    white-space: nowrap;
+
+    transition:
+        background 0.15s ease,
+        transform 0.15s ease,
+        box-shadow 0.15s ease;
+
+    cursor: pointer;
 }
 
-.btn:hover {
-    transform: translateY(-2px);
+
+.btn:active {
+
+    transform: scale(0.97);
 }
 
-/* Nuevo producto */
+
+/* =========================================================
+   BOTÓN PRINCIPAL
+   ========================================================= */
 
 .btn-primary {
-    background-color: #007BFF;
+
+    background: var(--color-principal);
+
     color: white;
-    padding: 12px 20px;
-    margin-top: 10px;
+
+    border: 1px solid var(--color-principal);
+
+    box-shadow:
+        0 4px 10px rgba(56, 189, 248, 0.20);
 }
+
 
 .btn-primary:hover {
-    background-color: #0056b3;
+
+    background: var(--color-principal-hover);
+
+    border-color: var(--color-principal-hover);
+
+    box-shadow:
+        0 6px 15px rgba(14, 165, 233, 0.25);
 }
 
-/* Editar */
+
+/* =========================================================
+   CONTENEDOR PRODUCTOS
+   ========================================================= */
+
+.productos-container {
+
+    width: 100%;
+
+    max-width: var(--ancho-maximo);
+
+    margin: 0 auto;
+
+    padding: 30px 24px 50px;
+}
+
+
+/* =========================================================
+   TABLA
+   ========================================================= */
+
+table {
+
+    width: 100%;
+
+    border-collapse: separate;
+
+    border-spacing: 0;
+
+    background: white;
+
+    border: 1px solid var(--color-borde);
+
+    border-radius: var(--radio);
+
+    overflow: hidden;
+
+    box-shadow: var(--sombra-suave);
+}
+
+
+/* =========================================================
+   CABECERA TABLA
+   ========================================================= */
+
+thead {
+
+    background: var(--color-celeste-muy-suave);
+}
+
+
+th {
+
+    padding: 15px 16px;
+
+    text-align: left;
+
+    font-size: 13px;
+
+    font-weight: 800;
+
+    color: #0369a1;
+
+    border-bottom: 1px solid #bae6fd;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   FILAS
+   ========================================================= */
+
+td {
+
+    padding: 15px 16px;
+
+    font-size: 14px;
+
+    color: var(--color-texto);
+
+    border-bottom: 1px solid #f1f5f9;
+
+    vertical-align: middle;
+}
+
+
+tbody tr:last-child td {
+
+    border-bottom: none;
+}
+
+
+tbody tr {
+
+    transition:
+        background 0.15s ease;
+}
+
+
+tbody tr:hover {
+
+    background: #f8fafc;
+}
+
+
+/* =========================================================
+   PRECIO
+   ========================================================= */
+
+td:nth-child(2) {
+
+    font-weight: 800;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   DISPONIBILIDAD
+   ========================================================= */
+
+td:nth-child(3) {
+
+    font-weight: 700;
+
+    white-space: nowrap;
+}
+
+
+td:nth-child(3) {
+
+    color: var(--color-exito);
+}
+
+
+/* =========================================================
+   CATEGORÍA
+   ========================================================= */
+
+td:nth-child(4) {
+
+    color: var(--color-texto-secundario);
+
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   ACCIONES
+   ========================================================= */
+
+td:last-child {
+
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   BOTÓN EDITAR
+   ========================================================= */
 
 .btn-secondary {
-    background-color: #007BFF;
-    color: white;
-    padding: 8px 12px;
+
+    background: var(--color-celeste-suave);
+
+    color: #0369a1;
+
+    border: 1px solid #bae6fd;
+
+    margin-right: 6px;
 }
+
 
 .btn-secondary:hover {
-    background-color: #0056b3;
+
+    background: #bae6fd;
+
+    color: #075985;
 }
 
-/* Eliminar */
+
+/* =========================================================
+   BOTÓN ELIMINAR
+   ========================================================= */
 
 .btn-danger {
-    background-color: #dc3545;
-    color: white;
-    padding: 8px 12px;
+
+    background: var(--color-peligro-fondo);
+
+    color: var(--color-peligro);
+
+    border: 1px solid #fecaca;
 }
+
 
 .btn-danger:hover {
-    background-color: #b02a37;
+
+    background: #fecaca;
+
+    color: var(--color-peligro-hover);
 }
 
-/* Volver */
+
+/* =========================================================
+   ESTADO VACÍO
+   ========================================================= */
+
+tbody tr td[colspan] {
+
+    padding: 45px 20px;
+
+    text-align: center;
+
+    color: var(--color-texto-secundario);
+
+    font-size: 14px;
+}
+
+
+/* =========================================================
+   BOTÓN VOLVER
+   ========================================================= */
 
 .btn-volver {
-    display: inline-block;
-    margin-top: 20px;
-    padding: 12px 20px;
-    background-color: #007BFF;
-    color: white;
-    text-decoration: none;
-    border-radius: 8px;
-    font-weight: bold;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    min-height: 44px;
+
+    padding: 0 17px;
+
+    border-radius: 10px;
+
+    background: white;
+
+    border: 1px solid var(--color-borde);
+
+    color: var(--color-texto-secundario);
+
+    font-size: 14px;
+
+    font-weight: 700;
+
+    box-shadow:
+        0 2px 7px rgba(15, 23, 42, 0.04);
+
+    transition:
+        background 0.15s ease,
+        border-color 0.15s ease,
+        color 0.15s ease,
+        transform 0.15s ease;
 }
+
 
 .btn-volver:hover {
-    background-color: #0056b3;
+
+    background: var(--color-celeste-muy-suave);
+
+    border-color: #bae6fd;
+
+    color: #0369a1;
 }
 
-/* RESPONSIVE */
 
-@media (max-width: 768px) {
+.btn-volver:active {
 
-    body {
-        padding: 10px;
+    transform: scale(0.97);
+}
+
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 850px) {
+
+    .header {
+
+        padding: 16px 18px;
+
+        flex-wrap: wrap;
+
+        gap: 12px;
     }
+
+
+    .header h1 {
+
+        font-size: 20px;
+
+        order: 2;
+
+        width: 100%;
+
+        flex: none;
+    }
+
+
+    .logo-container {
+
+        width: 48px;
+
+        height: 48px;
+
+        min-width: 48px;
+    }
+
+
+    .header .btn {
+
+        margin-left: auto;
+    }
+
+
+    .productos-container {
+
+        padding: 24px 18px 45px;
+    }
+
 
     table {
-        font-size: 14px;
+
+        font-size: 13px;
     }
+
 
     th,
     td {
-        padding: 10px;
+
+        padding: 13px 11px;
     }
 
-    .btn-secondary,
-    .btn-danger {
-    display: inline-block;
-    padding: 6px 10px;
-    font-size: 12px;
-    margin: 2px;
-    text-align: center;
+}
+
+
+/* =========================================================
+   MÓVIL
+   ========================================================= */
+
+@media (max-width: 650px) {
+
+    body {
+
+        background: var(--color-fondo);
     }
+
+
+    /* -----------------------------------------
+       HEADER
+       ----------------------------------------- */
+
+    .header {
+
+        position: relative;
+
+        padding: 16px;
+
+        display: grid;
+
+        grid-template-columns: 48px 1fr;
+
+        gap: 12px;
+
+        align-items: center;
+    }
+
+
+    .logo-container {
+
+        grid-column: 1;
+
+        grid-row: 1;
+
+        width: 48px;
+
+        height: 48px;
+
+        min-width: 48px;
+    }
+
+
+    .header h1 {
+
+        grid-column: 2;
+
+        grid-row: 1;
+
+        width: auto;
+
+        font-size: 18px;
+
+        line-height: 1.2;
+
+        margin: 0;
+    }
+
+
+    .header .btn {
+
+        width: 100%;
+
+        min-height: 46px;
+
+        margin: 0;
+
+        font-size: 14px;
+    }
+
+
+    .header .btn-primary:nth-of-type(1) {
+
+        grid-column: 1 / -1;
+
+        grid-row: 2;
+    }
+
+
+    .header .btn-primary:nth-of-type(2) {
+
+        grid-column: 1 / -1;
+
+        grid-row: 3;
+    }
+
+
+    /* -----------------------------------------
+       CONTENEDOR
+       ----------------------------------------- */
+
+    .productos-container {
+
+        padding: 18px 12px 35px;
+    }
+
+
+    /* -----------------------------------------
+       TABLA → TARJETAS
+       ----------------------------------------- */
+
+    table {
+
+        display: block;
+
+        border: none;
+
+        background: transparent;
+
+        box-shadow: none;
+
+        overflow: visible;
+    }
+
+
+    thead {
+
+        display: none;
+    }
+
+
+    tbody {
+
+        display: flex;
+
+        flex-direction: column;
+
+        gap: 12px;
+    }
+
+
+    tr {
+
+        display: grid;
+
+        grid-template-columns: 1fr 1fr;
+
+        gap: 10px;
+
+        padding: 16px;
+
+        background: white;
+
+        border: 1px solid var(--color-borde);
+
+        border-radius: var(--radio);
+
+        box-shadow: var(--sombra-suave);
+    }
+
+
+    tbody tr:hover {
+
+        background: white;
+    }
+
+
+    td {
+
+        display: block;
+
+        padding: 0;
+
+        border: none;
+
+        font-size: 13px;
+    }
+
+
+    /* -----------------------------------------
+       NOMBRE
+       ----------------------------------------- */
+
+    td:nth-child(1) {
+
+        grid-column: 1 / -1;
+
+        padding-bottom: 5px;
+
+        font-size: 16px;
+
+        font-weight: 800;
+
+        color: var(--color-texto);
+    }
+
+
+    td:nth-child(1)::before {
+
+        content: "Producto";
+
+        display: block;
+
+        margin-bottom: 3px;
+
+        color: var(--color-texto-suave);
+
+        font-size: 11px;
+
+        font-weight: 700;
+
+        text-transform: uppercase;
+
+        letter-spacing: 0.5px;
+    }
+
+
+    /* -----------------------------------------
+       PRECIO
+       ----------------------------------------- */
+
+    td:nth-child(2)::before {
+
+        content: "Precio";
+
+        display: block;
+
+        margin-bottom: 3px;
+
+        color: var(--color-texto-suave);
+
+        font-size: 11px;
+
+        font-weight: 700;
+
+        text-transform: uppercase;
+
+        letter-spacing: 0.5px;
+    }
+
+
+    /* -----------------------------------------
+       DISPONIBILIDAD
+       ----------------------------------------- */
+
+    td:nth-child(3)::before {
+
+        content: "Estado";
+
+        display: block;
+
+        margin-bottom: 3px;
+
+        color: var(--color-texto-suave);
+
+        font-size: 11px;
+
+        font-weight: 700;
+
+        text-transform: uppercase;
+
+        letter-spacing: 0.5px;
+    }
+
+
+    /* -----------------------------------------
+       CATEGORÍA
+       ----------------------------------------- */
+
+    td:nth-child(4) {
+
+        grid-column: 1 / -1;
+
+        padding-top: 4px;
+
+        padding-bottom: 3px;
+    }
+
+
+    td:nth-child(4)::before {
+
+        content: "Categoría";
+
+        display: block;
+
+        margin-bottom: 3px;
+
+        color: var(--color-texto-suave);
+
+        font-size: 11px;
+
+        font-weight: 700;
+
+        text-transform: uppercase;
+
+        letter-spacing: 0.5px;
+    }
+
+
+    /* -----------------------------------------
+       ACCIONES
+       ----------------------------------------- */
+
+    td:nth-child(5) {
+
+        grid-column: 1 / -1;
+
+        display: grid;
+
+        grid-template-columns: 1fr 1fr;
+
+        gap: 8px;
+
+        padding-top: 8px;
+
+        border-top: 1px solid var(--color-borde);
+    }
+
+
+    td:nth-child(5) .btn {
+
+        width: 100%;
+
+        min-height: 42px;
+
+        margin: 0;
+
+        padding: 0 8px;
+
+        font-size: 13px;
+    }
+
+
+    /* -----------------------------------------
+       VOLVER
+       ----------------------------------------- */
+
+    .btn-volver {
+
+        width: 100%;
+
+        min-height: 46px;
+    }
+
+}
+
+
+/* =========================================================
+   MÓVILES PEQUEÑOS
+   ========================================================= */
+
+@media (max-width: 380px) {
+
+    .header {
+
+        padding: 14px 12px;
+    }
+
+
+    .header h1 {
+
+        font-size: 17px;
+    }
+
+
+    .productos-container {
+
+        padding-left: 10px;
+
+        padding-right: 10px;
+    }
+
+
+    tr {
+
+        padding: 14px;
+    }
+
+
+    td:nth-child(5) .btn {
+
+        font-size: 12px;
+    }
+
+}
+
+
+/* =========================================================
+   ACCESIBILIDAD
+   ========================================================= */
+
+.btn:focus-visible,
+.btn-volver:focus-visible {
+
+    outline: 3px solid rgba(56, 189, 248, 0.35);
+
+    outline-offset: 2px;
+}
+
+
+/* =========================================================
+   REDUCIR ANIMACIONES
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+
+        scroll-behavior: auto !important;
+
+        animation-duration: 0.01ms !important;
+
+        animation-iteration-count: 1 !important;
+
+        transition-duration: 0.01ms !important;
+    }
+
 }

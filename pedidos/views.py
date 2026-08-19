@@ -423,128 +423,396 @@ def aceptar_pedido_online(request, id):
 @require_POST
 def crear_pedido_online(request, restaurante_id):
 
-    restaurante = get_object_or_404(Restaurante, id=restaurante_id)
-    if restaurante.estado != 'abierto':
-     return JsonResponse(
-        {
-            "error": "Este local está cerrado y no acepta pedidos en este momento."
-        },
-        status=400,
+    restaurante = get_object_or_404(
+        Restaurante,
+        id=restaurante_id
     )
- 
+
+
+    # ========================================
+    # VERIFICAR ESTADO DEL LOCAL
+    # ========================================
+
+    if restaurante.estado != 'abierto':
+
+        return JsonResponse(
+            {
+                "error": (
+                    "Este local está cerrado y no acepta "
+                    "pedidos en este momento."
+                )
+            },
+            status=400
+        )
+
+
     # ========================================
     # VERIFICAR PEDIDOS ONLINE
     # ========================================
 
     if not restaurante.pedidos_online_activos:
+
         return JsonResponse(
-            {"error": "Los pedidos online no están disponibles en este momento."},
-            status=400,
+            {
+                "error": (
+                    "Los pedidos online no están "
+                    "disponibles en este momento."
+                )
+            },
+            status=400
         )
+
 
     # ========================================
     # DATOS DEL CLIENTE
     # ========================================
 
-    nombre_cliente = request.POST.get("nombre_cliente", "").strip()
+    nombre_cliente = request.POST.get(
+        "nombre_cliente",
+        ""
+    ).strip()
 
-    telefono_cliente = request.POST.get("telefono_cliente", "").strip()
+    telefono_cliente = request.POST.get(
+        "telefono_cliente",
+        ""
+    ).strip()
+
 
     # ========================================
     # TIPO DE ENTREGA
     # ========================================
 
-    tipo_entrega = request.POST.get("tipo_entrega", "")
+    tipo_entrega = request.POST.get(
+        "tipo_entrega",
+        ""
+    )
 
-    if tipo_entrega not in ["retiro", "delivery"]:
-        return JsonResponse({"error": "Tipo de entrega no válido."}, status=400)
+
+    if tipo_entrega not in [
+        "retiro",
+        "delivery"
+    ]:
+
+        return JsonResponse(
+            {
+                "error": "Tipo de entrega no válido."
+            },
+            status=400
+        )
+
 
     # ========================================
     # VALIDAR RETIRO / DELIVERY
     # ========================================
 
-    if tipo_entrega == "retiro" and not restaurante.acepta_retiro:
+    if (
+        tipo_entrega == "retiro"
+        and not restaurante.acepta_retiro
+    ):
+
         return JsonResponse(
-            {"error": "Este local no permite retiro en este momento."}, status=400
+            {
+                "error": (
+                    "Este local no permite retiro "
+                    "en este momento."
+                )
+            },
+            status=400
         )
 
-    if tipo_entrega == "delivery" and not restaurante.acepta_delivery:
+
+    if (
+        tipo_entrega == "delivery"
+        and not restaurante.acepta_delivery
+    ):
+
         return JsonResponse(
-            {"error": "Este local no tiene delivery disponible."}, status=400
+            {
+                "error": (
+                    "Este local no tiene delivery "
+                    "disponible."
+                )
+            },
+            status=400
         )
+
 
     # ========================================
     # DIRECCIÓN
     # ========================================
 
-    direccion_entrega = request.POST.get("direccion_entrega", "").strip()
+    direccion_entrega = request.POST.get(
+        "direccion_entrega",
+        ""
+    ).strip()
 
-    if tipo_entrega == "delivery" and not direccion_entrega:
+
+    if (
+        tipo_entrega == "delivery"
+        and not direccion_entrega
+    ):
+
         return JsonResponse(
-            {"error": "Debes ingresar una dirección de entrega."}, status=400
+            {
+                "error": (
+                    "Debes ingresar una dirección "
+                    "de entrega."
+                )
+            },
+            status=400
         )
+
 
     # ========================================
     # MÉTODO DE PAGO
     # ========================================
 
-    metodo_pago = request.POST.get("metodo_pago", "")
+    metodo_pago = request.POST.get(
+        "metodo_pago",
+        ""
+    )
+
 
     if not metodo_pago:
+
         return JsonResponse(
-            {"error": "Debes seleccionar un método de pago."}, status=400
+            {
+                "error": (
+                    "Debes seleccionar un método "
+                    "de pago."
+                )
+            },
+            status=400
         )
+
 
     # ========================================
     # VALIDAR MÉTODO DE PAGO
     # ========================================
 
-    if metodo_pago == "efectivo" and not restaurante.acepta_pago_local:
+    # ========================================
+    # RETIRO
+    # ========================================
+
+    if tipo_entrega == "retiro":
+
+
+        # ------------------------------------
+        # EFECTIVO
+        # ------------------------------------
+
+        if (
+            metodo_pago == "efectivo"
+            and not restaurante.acepta_efectivo_retiro
+        ):
+
+            return JsonResponse(
+                {
+                    "error": (
+                        "El pago en efectivo no está "
+                        "disponible para retiro."
+                    )
+                },
+                status=400
+            )
+
+
+        # ------------------------------------
+        # TARJETA
+        # ------------------------------------
+
+        if (
+            metodo_pago == "tarjeta"
+            and not restaurante.acepta_tarjeta_retiro
+        ):
+
+            return JsonResponse(
+                {
+                    "error": (
+                        "El pago con tarjeta no está "
+                        "disponible para retiro."
+                    )
+                },
+                status=400
+            )
+
+
+        # ------------------------------------
+        # TRANSFERENCIA
+        # ------------------------------------
+
+        if (
+            metodo_pago == "transferencia"
+            and not restaurante.acepta_transferencia_retiro
+        ):
+
+            return JsonResponse(
+                {
+                    "error": (
+                        "La transferencia bancaria no "
+                        "está disponible para retiro."
+                    )
+                },
+                status=400
+            )
+
+
+    # ========================================
+    # DELIVERY
+    # ========================================
+
+    if tipo_entrega == "delivery":
+
+
+        # ------------------------------------
+        # EFECTIVO
+        # ------------------------------------
+
+        if (
+            metodo_pago == "efectivo"
+            and not restaurante.acepta_efectivo_delivery
+        ):
+
+            return JsonResponse(
+                {
+                    "error": (
+                        "El pago en efectivo no está "
+                        "disponible para delivery."
+                    )
+                },
+                status=400
+            )
+
+
+        # ------------------------------------
+        # TARJETA
+        # ------------------------------------
+
+        if (
+            metodo_pago == "tarjeta"
+            and not restaurante.acepta_tarjeta_delivery
+        ):
+
+            return JsonResponse(
+                {
+                    "error": (
+                        "El pago con tarjeta no está "
+                        "disponible para delivery."
+                    )
+                },
+                status=400
+            )
+
+
+        # ------------------------------------
+        # TRANSFERENCIA
+        # ------------------------------------
+
+        if (
+            metodo_pago == "transferencia"
+            and not restaurante.acepta_transferencia_delivery
+        ):
+
+            return JsonResponse(
+                {
+                    "error": (
+                        "La transferencia bancaria no "
+                        "está disponible para delivery."
+                    )
+                },
+                status=400
+            )
+
+
+    # ========================================
+    # MÉTODO VÁLIDO
+    # ========================================
+
+    if metodo_pago not in [
+        "efectivo",
+        "tarjeta",
+        "transferencia"
+    ]:
+
         return JsonResponse(
-            {"error": "El pago en local no está disponible."}, status=400
+            {
+                "error": "Método de pago no válido."
+            },
+            status=400
         )
 
-    if metodo_pago == "transferencia" and not restaurante.acepta_pago_transferencia:
-        return JsonResponse(
-            {"error": "La transferencia bancaria no está disponible."}, status=400
-        )
-
-    if metodo_pago not in ["efectivo", "transferencia"]:
-        return JsonResponse({"error": "Método de pago no válido."}, status=400)
 
     # ========================================
     # PRODUCTOS
     # ========================================
 
-    productos_json = request.POST.get("productos", "[]")
+    productos_json = request.POST.get(
+        "productos",
+        "[]"
+    )
+
 
     import json
 
+
     try:
-        productos = json.loads(productos_json)
+
+        productos = json.loads(
+            productos_json
+        )
 
     except json.JSONDecodeError:
-        return JsonResponse({"error": "El pedido no es válido."}, status=400)
+
+        return JsonResponse(
+            {
+                "error": "El pedido no es válido."
+            },
+            status=400
+        )
+
 
     if not productos:
-        return JsonResponse({"error": "El carrito está vacío."}, status=400)
+
+        return JsonResponse(
+            {
+                "error": "El carrito está vacío."
+            },
+            status=400
+        )
+
 
     # ========================================
     # CREAR PEDIDO
     # ========================================
 
     pedido = Pedido.objects.create(
+
         restaurante=restaurante,
+
         origen="online",
+
         estado="pendiente",
+
         nombre_cliente=nombre_cliente,
+
         telefono_cliente=telefono_cliente,
+
         tipo_entrega=tipo_entrega,
-        direccion_entrega=(direccion_entrega if tipo_entrega == "delivery" else ""),
+
+        direccion_entrega=(
+            direccion_entrega
+            if tipo_entrega == "delivery"
+            else ""
+        ),
+
         metodo_pago=metodo_pago,
+
         estado_pago="pendiente",
+
         esta_pagado=False,
+
     )
+
 
     # ========================================
     # CREAR PRODUCTOS DEL PEDIDO
@@ -552,27 +820,51 @@ def crear_pedido_online(request, restaurante_id):
 
     total = 0
 
+
     for producto_data in productos:
+
+
         producto = get_object_or_404(
+
             Producto,
+
             id=producto_data["id"],
+
             restaurante=restaurante,
+
             disponibilidad="disponible",
+
         )
 
-        cantidad = int(producto_data["cantidad"])
+
+        cantidad = int(
+            producto_data["cantidad"]
+        )
+
 
         if cantidad <= 0:
+
             continue
 
+
         PedidoItem.objects.create(
+
             pedido=pedido,
+
             producto=producto,
+
             cantidad=cantidad,
+
             precio_unitario=producto.precio,
+
         )
 
-        total += producto.precio * cantidad
+
+        total += (
+            producto.precio
+            * cantidad
+        )
+
 
     # ========================================
     # GUARDAR TOTAL
@@ -582,20 +874,36 @@ def crear_pedido_online(request, restaurante_id):
 
     pedido.save()
 
+
     # ========================================
     # RESPUESTA
     # ========================================
 
     return JsonResponse(
+
         {
             "success": True,
-            "pedido_id": pedido.id,
-            "seguimiento_url": request.build_absolute_uri(
-                reverse("seguimiento_pedido", args=[pedido.token_seguimiento])
-            ),
-        }
-    )
 
+            "pedido_id": pedido.id,
+
+            "seguimiento_url":
+                request.build_absolute_uri(
+
+                    reverse(
+
+                        "seguimiento_pedido",
+
+                        args=[
+                            pedido.token_seguimiento
+                        ]
+
+                    )
+
+                ),
+
+        }
+
+    )
 
 @tiene_acceso(["garzon", "encargado", "operador"])
 def marcar_pedido_entregado(request, id):

@@ -12,9 +12,26 @@ def carta_publica(request, restaurante_id):
     )
 
     categorias = Categoria.objects.filter(
-        restaurante=restaurante,
-        producto__disponibilidad='disponible'
-    ).distinct()
+        restaurante=restaurante
+    )
+
+    print("\n==============================")
+    print("RESTAURANTE ID:", restaurante.id)
+    print("TOTAL CATEGORIAS:", categorias.count())
+
+    for categoria in categorias:
+
+        print(
+            "CATEGORIA:",
+            categoria.nombre,
+            "| ID:",
+            categoria.id,
+            "| RESTAURANTE ID:",
+            categoria.restaurante.id
+        )
+
+    print("==============================\n")
+
 
     caja = Caja.objects.filter(
         restaurante=restaurante,

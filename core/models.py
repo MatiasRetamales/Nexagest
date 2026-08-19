@@ -1,6 +1,8 @@
 from django.db import models
 
+
 class Restaurante(models.Model):
+
     ESTADOS = (
         ('abierto', 'Abierto'),
         ('cerrado', 'Cerrado'),
@@ -11,7 +13,9 @@ class Restaurante(models.Model):
         ('local', 'Local'),
     )
 
-    nombre = models.CharField(max_length=100)
+    nombre = models.CharField(
+        max_length=100
+    )
 
     estado = models.CharField(
         max_length=10,
@@ -24,6 +28,7 @@ class Restaurante(models.Model):
         choices=TIPO_LOCAL,
         default='restaurante'
     )
+
 
     # =========================
     # PROPINA
@@ -39,6 +44,7 @@ class Restaurante(models.Model):
         default=10
     )
 
+
     # =========================
     # PEDIDOS ONLINE
     # =========================
@@ -51,19 +57,44 @@ class Restaurante(models.Model):
         default=False
     )
 
-    acepta_pago_local = models.BooleanField(default=True)
-
-    # =========================
-    # PAGOS PEDIDOS ONLINE
-    # =========================
-
     acepta_retiro = models.BooleanField(
         default=True
     )
 
-    acepta_pago_transferencia = models.BooleanField(
+
+    # =========================
+    # PAGOS RETIRO
+    # =========================
+
+    acepta_efectivo_retiro = models.BooleanField(
+        default=True
+    )
+
+    acepta_tarjeta_retiro = models.BooleanField(
+        default=True
+    )
+
+    acepta_transferencia_retiro = models.BooleanField(
         default=False
     )
+
+
+    # =========================
+    # PAGOS DELIVERY
+    # =========================
+
+    acepta_efectivo_delivery = models.BooleanField(
+        default=True
+    )
+
+    acepta_tarjeta_delivery = models.BooleanField(
+        default=True
+    )
+
+    acepta_transferencia_delivery = models.BooleanField(
+        default=False
+    )
+
 
     # =========================
     # DATOS TRANSFERENCIA
@@ -97,6 +128,7 @@ class Restaurante(models.Model):
     correo_transferencia = models.EmailField(
         blank=True
     )
+
 
     def __str__(self):
         return f"{self.nombre} - ({self.estado})"

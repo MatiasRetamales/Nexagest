@@ -265,11 +265,11 @@
             <!-- ======================================== -->
             <!-- PEDIDOS ONLINE -->
             <!-- ======================================== -->
-
+        {% if restaurante.pedidos_online_activos %}
             <section
                 class="pedidos-online"
                 aria-labelledby="titulo-pedidos-online"
-            >
+             >
 
 
                 <div class="pedidos-online-titulo">
@@ -563,6 +563,7 @@
 
 
             </section>
+        {% endif %}
 
 
         </main>
