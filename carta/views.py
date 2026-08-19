@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404
-from core.models import Caja, Restaurante
+from core.models import Restaurante
 from .models import Categoria
+from administracion.models import Caja
 
 
 def carta_publica(request, restaurante_id):
