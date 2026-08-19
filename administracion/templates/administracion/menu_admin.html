@@ -21,16 +21,23 @@
     <!-- ESTADO DEL LOCAL -->
 
     <form action="{% url 'toggle_estado_local' %}" method="post">
-      {% csrf_token %} {% if restaurante.estado == 'abierto' %}
+     {% csrf_token %}
 
-      <button type="submit" class="btn-estado abierto">🟢 Local abierto</button>
+     {% if restaurante.estado == 'abierto' %}
 
-      {% else %}
+        <button type="submit" class="btn-estado cerrar">
+            🔴 Cerrar local
+        </button>
 
-      <button type="submit" class="btn-estado cerrado">🔴 Local cerrado</button>
+     {% else %}
 
-      {% endif %}
-    </form>
+        <button type="submit" class="btn-estado abrir">
+            🟢 Abrir local
+        </button>
+
+     {% endif %}
+
+     </form>
     <form action="{% url 'logout' %}" method="post" style="display: inline">
       {% csrf_token %}
       <button type="submit" class="btn-logout">Cerrar Sesión</button>
