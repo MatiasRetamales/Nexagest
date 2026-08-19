@@ -137,24 +137,14 @@ form {
 
 /* Local abierto */
 
-.btn-estado.abierto {
-    background-color: #5cb85c;
+.btn-estado.abrir {
+    background: #16a34a;
+    color: white;
 }
 
-.btn-estado.abierto:hover {
-    background-color: #449d44;
-    transform: translateY(-2px);
-}
-
-/* Local cerrado */
-
-.btn-estado.cerrado {
-    background-color: #d9534f;
-}
-
-.btn-estado.cerrado:hover {
-    background-color: #c9302c;
-    transform: translateY(-2px);
+.btn-estado.cerrar {
+    background: #dc2626;
+    color: white;
 }
 
 /* Colores específicos para que se diferencien */
