@@ -6,20 +6,24 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Prueba</title>
+    <title>{{ restaurante.nombre }} | Carta</title>
 </head>
 
 <body>
 
     <h1>{{ restaurante.nombre }}</h1>
 
-    <p>ID: {{ restaurante.id }}</p>
-
-    <p>Categorías: {{ categorias.count }}</p>
-
     {% for categoria in categorias %}
 
         <h2>{{ categoria.nombre }}</h2>
+
+        {% for producto in categoria.producto_set.all %}
+
+            <p>
+                {{ producto.nombre }}
+            </p>
+
+        {% endfor %}
 
     {% endfor %}
 
