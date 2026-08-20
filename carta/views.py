@@ -23,6 +23,9 @@ def carta_publica(request, restaurante_id):
     ).first()
 
     caja_abierta = caja is not None
+    
+    print("TOTAL CATEGORIAS:", categorias.count())
+    print("LISTA CATEGORIAS:", list(categorias.values_list("id", "nombre")))
 
     return render(
         request,

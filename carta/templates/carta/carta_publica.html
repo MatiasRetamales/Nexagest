@@ -1,32 +1,5 @@
-{% load static %}
-
-<!doctype html>
-
-<html lang="es">
-
-<head>
-    <meta charset="UTF-8">
-    <title>{{ restaurante.nombre }} | Carta</title>
-</head>
-
-<body>
-
-    <h1>{{ restaurante.nombre }}</h1>
-
-    {% for categoria in categorias %}
-
-        <h2>{{ categoria.nombre }}</h2>
-
-        {% for producto in categoria.producto_set.all %}
-
-            <p>
-                {{ producto.nombre }}
-            </p>
-
-        {% endfor %}
-
-    {% endfor %}
-
-</body>
-
-</html>
+{% for categoria in categorias %}
+    <h2>{{ categoria.nombre }}</h2>
+{% empty %}
+    <p>NO HAY CATEGORIAS</p>
+{% endfor %}
