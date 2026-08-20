@@ -1,67 +1,38 @@
-{% load static %}
-
 <!doctype html>
 
-<html lang="es">
-
-<head>
-
-    <meta charset="UTF-8">
-
-    <title>
-        {{ restaurante.nombre }} | Carta
-    </title>
-
-    <link
-        rel="stylesheet"
-        href="{% static 'carta/css/carta.css' %}"
-    >
-
-</head>
+<html>
 
 <body>
 
-    <h1>
-        {{ restaurante.nombre }}
-    </h1>
+<h1>{{ restaurante.nombre }}</h1>
 
-    {% if restaurante.logo %}
+<p>Retiro: {{ restaurante.acepta_retiro }}</p>
 
-        <p>
-            TIENE LOGO
-        </p>
+<p>Delivery: {{ restaurante.acepta_delivery }}</p>
 
-    {% else %}
+<p>Efectivo retiro: {{ restaurante.acepta_efectivo_retiro }}</p>
 
-        <p>
-            NO TIENE LOGO
-        </p>
+<p>Efectivo delivery: {{ restaurante.acepta_efectivo_delivery }}</p>
 
-    {% endif %}
+<p>Tarjeta retiro: {{ restaurante.acepta_tarjeta_retiro }}</p>
 
-    {% if restaurante.descripcion %}
+<p>Tarjeta delivery: {{ restaurante.acepta_tarjeta_delivery }}</p>
 
-        <p>
-            {{ restaurante.descripcion }}
-        </p>
+<p>Transferencia retiro: {{ restaurante.acepta_transferencia_retiro }}</p>
 
-    {% endif %}
+<p>Transferencia delivery: {{ restaurante.acepta_transferencia_delivery }}</p>
 
-    {% if restaurante.estado == 'abierto' %}
+<p>Banco: {{ restaurante.banco_transferencia }}</p>
 
-        <p>
-            ABIERTO
-        </p>
+<p>Tipo cuenta: {{ restaurante.tipo_cuenta_transferencia }}</p>
 
-    {% endif %}
+<p>Número: {{ restaurante.numero_cuenta_transferencia }}</p>
 
-    {% if caja_abierta %}
+<p>Titular: {{ restaurante.titular_transferencia }}</p>
 
-        <p>
-            CAJA ABIERTA
-        </p>
+<p>RUT: {{ restaurante.rut_transferencia }}</p>
 
-    {% endif %}
+<p>Correo: {{ restaurante.correo_transferencia }}</p>
 
 </body>
 
