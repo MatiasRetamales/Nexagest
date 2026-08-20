@@ -46,10 +46,20 @@
 
             <div class="logo-local">
 
-                <img
-                    src= "{% if restaurante.logo %}{{ restaurante.logo.url }}{% else %}{% static 'carta/img/logo-placeholder.png' %}{% endif %}"
-                    alt="Logo {{ restaurante.nombre }}"
-                >
+                {% if restaurante.logo %}
+
+                    <img
+                        src="{{ restaurante.logo.url }}"
+                        alt="Logo {{ restaurante.nombre }}"
+                    >
+
+                {% else %}
+
+                    <div class="logo-placeholder">
+                        {{ restaurante.nombre|first }}
+                    </div>
+
+                {% endif %}
 
             </div>
 
