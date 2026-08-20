@@ -110,23 +110,56 @@
 
       <hr />
 
-      <h3>Control de efectivo</h3>
-
       <p>
-        <strong>Monto inicial:</strong>
-        ${{ caja.monto_inicial }}
-      </p>
+  <strong>Monto inicial:</strong>
+  ${{ caja.monto_inicial }}
+</p>
 
-      <p>
-        <strong>Ventas en efectivo:</strong>
-        ${{ ventas_efectivo }}
-      </p>
+<p>
+  <strong>Ventas en efectivo:</strong>
+  ${{ ventas_efectivo }}
+</p>
 
-      <p>
-        <strong>💵 Efectivo esperado:</strong>
-        ${{ efectivo_esperado }}
-      </p>
-    </div>
+<p>
+  <strong>💵 Efectivo esperado:</strong>
+  ${{ efectivo_esperado }}
+</p>
+
+ {% if not caja.esta_abierta %}
+
+  <hr />
+
+  <h3>🔐 Resultado del cierre</h3>
+
+  <p>
+    <strong>💵 Efectivo contado:</strong>
+    ${{ caja.efectivo_contado }}
+  </p>
+
+  {% if caja.diferencia_caja == 0 %}
+
+    <p>
+      <strong>🟢 Resultado:</strong>
+      Caja cuadrada
+    </p>
+
+  {% elif caja.diferencia_caja < 0 %}
+
+    <p>
+      <strong>🔴 Resultado:</strong>
+      Faltante de ${{ caja.diferencia_caja|stringformat:"s"|cut:"-" }}
+    </p>
+
+  {% else %}
+
+    <p>
+      <strong>🟡 Resultado:</strong>
+      Sobrante de ${{ caja.diferencia_caja }}
+    </p>
+
+  {% endif %}
+
+ {% endif %}
 
     <hr />
 
@@ -212,4 +245,4 @@
       <p>No hay pedidos asociados a esta caja.</p>
     {% endif %}
   </body>
-</html>```
+</html>

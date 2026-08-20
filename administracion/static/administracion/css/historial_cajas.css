@@ -3,6 +3,7 @@ body {
     background-color: #f4f6f9;
     margin: 0;
     padding: 30px;
+    box-sizing: border-box;
 }
 
 h2 {
@@ -11,13 +12,18 @@ h2 {
     color: #333;
 }
 
+/* ========================= */
+/* TABLA */
+/* ========================= */
+
 .table {
     width: 100%;
+    min-width: 750px;
     border-collapse: collapse;
     background-color: #fff;
     border-radius: 10px;
     overflow: hidden;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .table thead {
@@ -30,6 +36,7 @@ h2 {
     padding: 14px;
     text-align: center;
     border-bottom: 1px solid #e5e5e5;
+    white-space: nowrap;
 }
 
 .table tbody tr:hover {
@@ -39,6 +46,21 @@ h2 {
 .table tbody tr:last-child td {
     border-bottom: none;
 }
+
+/* ========================= */
+/* CONTENEDOR TABLA */
+/* ========================= */
+
+.tabla-container {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 10px;
+}
+
+/* ========================= */
+/* BOTÓN DETALLE */
+/* ========================= */
 
 .boton-detalle-cajas {
     display: inline-block;
@@ -61,6 +83,10 @@ h2 {
     transform: translateY(0);
 }
 
+/* ========================= */
+/* BOTÓN VOLVER */
+/* ========================= */
+
 .boton-volver {
     display: inline-block;
     margin-bottom: 20px;
@@ -76,12 +102,45 @@ h2 {
     background-color: #5c636a;
 }
 
+/* ========================= */
+/* TABLET */
+/* ========================= */
+
+@media (max-width: 992px) {
+
+    body {
+        padding: 20px;
+    }
+
+    .table th,
+    .table td {
+        padding: 12px;
+    }
+}
+
+/* ========================= */
+/* TELÉFONOS */
+/* ========================= */
+
 @media (max-width: 768px) {
+
     body {
         padding: 15px;
     }
 
+    h2 {
+        font-size: 22px;
+        margin-bottom: 20px;
+    }
+
+    .tabla-container {
+        margin-left: 0;
+        margin-right: 0;
+        overflow-x: auto;
+    }
+
     .table {
+        min-width: 700px;
         font-size: 14px;
     }
 
@@ -91,7 +150,48 @@ h2 {
     }
 
     .boton-detalle-cajas {
-        padding: 6px 10px;
+        padding: 7px 10px;
         font-size: 12px;
+    }
+
+    .boton-volver {
+        padding: 9px 14px;
+        font-size: 14px;
+    }
+}
+
+/* ========================= */
+/* TELÉFONOS PEQUEÑOS */
+/* ========================= */
+
+@media (max-width: 480px) {
+
+    body {
+        padding: 10px;
+    }
+
+    h2 {
+        font-size: 20px;
+        margin-bottom: 18px;
+    }
+
+    .table {
+        min-width: 650px;
+        font-size: 13px;
+    }
+
+    .table th,
+    .table td {
+        padding: 8px;
+    }
+
+    .boton-detalle-cajas {
+        padding: 6px 9px;
+        font-size: 11px;
+    }
+
+    .boton-volver {
+        padding: 8px 12px;
+        font-size: 13px;
     }
 }

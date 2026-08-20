@@ -465,6 +465,29 @@
                 Volver
             </a>
 
+           <!-- CANCELAR PEDIDO -->
+
+        {% if pedido.estado == 'pendiente' or pedido.estado == 'en_preparacion' %}
+
+            <form
+                method="POST"
+                action="{% url 'cancelar_pedido_online' pedido.id %}"
+                onsubmit="return confirm('¿Estás seguro de que deseas cancelar este pedido?');"
+            >
+
+                {% csrf_token %}
+
+                <button
+                    type="submit"
+                    class="btn-link btn-cancelar"
+                >
+                    ❌ Cancelar Pedido
+                </button>
+        
+            </form>
+
+        {% endif %}
+
 
         </div>
 

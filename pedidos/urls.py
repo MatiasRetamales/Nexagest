@@ -1,6 +1,6 @@
 from django.urls import path
 from .views import (
-    gestionar_pedido, cerrar_pedido, cancelar_pedido,
+    cancelar_pedido_online, gestionar_pedido, cerrar_pedido, cancelar_pedido,
     eliminar_items, eliminar_item_especifico,
     marcar_pedido_listo, cocina, enviar_cocina,
     detalle_pedido_online, aceptar_pedido_online,
@@ -22,4 +22,5 @@ urlpatterns = [
     path('online/<int:id>/cobrar/',cobrar_pedido_online,name='cobrar_pedido_online'),
     path('pedidos-online/<int:id>/marcar-pagado/',marcar_pedido_pagado,name='marcar_pedido_pagado'),
     path('seguimiento/<uuid:token>/',seguimiento_pedido,name='seguimiento_pedido'),
+    path("pedidos-online/<int:pedido_id>/cancelar/",cancelar_pedido_online,name="cancelar_pedido_online"),
 ]

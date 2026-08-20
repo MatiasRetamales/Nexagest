@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Sum
 from django.utils import timezone
 from datetime import datetime, timedelta # Necesitamos estas para los cálculos
+from decimal import Decimal, InvalidOperation
 from django.contrib import messages
 from administracion.models import Caja
 from pedidos.models import Pedido
@@ -531,6 +532,22 @@ def cerrar_caja(request):
             return redirect('caja')
 
         # ==========================================
+        # EFECTIVO CONTADO POR EL CAJERO
+        # ==========================================
+
+        try:
+            efectivo_contado = Decimal(
+                request.POST.get('efectivo_contado')
+            )
+        except (TypeError, InvalidOperation):
+            messages.error(
+                request,
+                "El efectivo contado no es válido."
+            )
+
+            return redirect('caja')
+
+        # ==========================================
         # PEDIDOS PAGADOS DE ESTA SESIÓN
         # ==========================================
 
@@ -541,7 +558,6 @@ def cerrar_caja(request):
 
         cantidad_pedidos = pedidos_pagados.count()
 
-
         # ==========================================
         # TOTAL VENDIDO
         # ==========================================
@@ -549,7 +565,6 @@ def cerrar_caja(request):
         ventas_totales = pedidos_pagados.aggregate(
             total=Sum('total')
         )['total'] or 0
-
 
         # ==========================================
         # EFECTIVO
@@ -561,7 +576,6 @@ def cerrar_caja(request):
             total=Sum('total')
         )['total'] or 0
 
-
         # ==========================================
         # TARJETA
         # ==========================================
@@ -571,7 +585,6 @@ def cerrar_caja(request):
         ).aggregate(
             total=Sum('total')
         )['total'] or 0
-
 
         # ==========================================
         # TRANSFERENCIA
@@ -583,7 +596,6 @@ def cerrar_caja(request):
             total=Sum('total')
         )['total'] or 0
 
-
         # ==========================================
         # PROPINAS
         # ==========================================
@@ -592,38 +604,64 @@ def cerrar_caja(request):
             total=Sum('monto_propina')
         )['total'] or 0
 
-
         # ==========================================
         # EFECTIVO FÍSICO ESPERADO
         # ==========================================
 
-        saldo_final = (
+        efectivo_esperado = (
             caja_abierta.monto_inicial
             + ventas_efectivo
         )
 
+        # ==========================================
+        # DIFERENCIA DE CAJA
+        # ==========================================
+
+        diferencia_caja = (
+            efectivo_contado
+            - efectivo_esperado
+        )
 
         # ==========================================
         # CERRAR CAJA
         # ==========================================
 
-        caja_abierta.saldo_actual = saldo_final
+        caja_abierta.saldo_actual = efectivo_esperado
+        caja_abierta.efectivo_contado = efectivo_contado
+        caja_abierta.diferencia_caja = diferencia_caja
         caja_abierta.esta_abierta = False
         caja_abierta.fecha_cierre = timezone.now()
 
         caja_abierta.save()
 
-
         # ==========================================
         # MENSAJE FINAL
         # ==========================================
+
+        if diferencia_caja == 0:
+
+            resultado = "Caja cuadrada."
+
+        elif diferencia_caja < 0:
+
+            resultado = (
+                f"Faltante: ${abs(diferencia_caja)}."
+            )
+
+        else:
+
+            resultado = (
+                f"Sobrante: ${diferencia_caja}."
+            )
 
         messages.success(
             request,
             f"Caja cerrada correctamente. "
             f"Pedidos: {cantidad_pedidos}. "
             f"Ventas totales: ${ventas_totales}. "
-            f"Efectivo esperado: ${saldo_final}."
+            f"Efectivo esperado: ${efectivo_esperado}. "
+            f"Efectivo contado: ${efectivo_contado}. "
+            f"{resultado}"
         )
 
         return redirect('caja')
@@ -762,6 +800,13 @@ def detalle_caja(request, caja_id):
         + ventas_efectivo
     )
 
+    # Diferencia entre efectivo contado y efectivo esperado
+    diferencia_caja = (
+        caja.efectivo_contado - efectivo_esperado
+        if caja.efectivo_contado is not None
+        else None
+    )
+
     return render(
         request,
         'administracion/detalle_historial_caja.html',
@@ -776,6 +821,7 @@ def detalle_caja(request, caja_id):
             'ventas_tarjeta': ventas_tarjeta,
             'ventas_transferencia': ventas_transferencia,
             'efectivo_esperado': efectivo_esperado,
+            'diferencia_caja': diferencia_caja,
             'restaurante': restaurante,
         }
     )

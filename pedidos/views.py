@@ -1146,3 +1146,34 @@ def seguimiento_pedido(request, token):
             "total": total,
         },
     )
+
+
+def cancelar_pedido_online(request, pedido_id):
+
+    pedido = get_object_or_404(
+        Pedido,
+        id=pedido_id,
+        origen="online"
+    )
+
+    if request.method == "POST":
+
+        # Solo se puede cancelar si está pendiente o en preparación
+        if pedido.estado not in ["pendiente", "en_preparacion"]:
+            messages.error(
+                request,
+                "Este pedido ya no puede ser cancelado."
+            )
+            return redirect("detalle_pedido_online", pedido.id)
+
+        pedido.estado = "cancelado"
+        pedido.save(update_fields=["estado"])
+
+        messages.success(
+            request,
+            "El pedido fue cancelado correctamente."
+        )
+
+        return redirect("detalle_pedido_online", pedido.id)
+
+    return redirect("detalle_pedido_online", pedido.id)

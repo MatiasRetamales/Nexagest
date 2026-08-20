@@ -51,7 +51,7 @@
       <a href="{% url 'cocina' %}" class="btn-admin">🍳 Ir a Cocina</a>
 
       {% if restaurante.tipo_local == 'restaurante' %}
-      <a href="{% url 'lista_mesas' %}" class="btn-admin">🪑 Ver Mesas</a>
+      <a href="{% url 'lista_mesas' %}" class="btn-admin">🪑 Ver Mesas y Pedidos</a>
       {% elif restaurante.tipo_local == 'local' %}
       <a href="{% url 'lista_mesas' %}" class="btn-admin">📦 Ver Pedidos</a>
       {% endif %}
