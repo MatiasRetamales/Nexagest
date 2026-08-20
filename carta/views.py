@@ -12,8 +12,9 @@ def carta_publica(request, restaurante_id):
     )
 
     categorias = Categoria.objects.filter(
-        restaurante=restaurante
-    )
+    restaurante=restaurante,
+    producto__isnull=False
+    ).distinct()
 
     print("\n==============================")
     print("RESTAURANTE ID:", restaurante.id)
