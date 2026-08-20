@@ -313,7 +313,7 @@ if USE_S3:
 
     AWS_DEFAULT_ACL = None
 
-    AWS_QUERYSTRING_AUTH = False
+    AWS_QUERYSTRING_AUTH = True
 
 
 else:
