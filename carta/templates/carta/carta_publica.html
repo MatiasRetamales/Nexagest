@@ -228,16 +228,6 @@
 
                                 <div class="producto-imagen">
 
-                                    {% if producto.imagen %}
-
-                                        <img
-                                            src="{{ producto.imagen.url }}"
-                                            alt="{{ producto.nombre }}"
-                                            loading="lazy"
-                                        >
-
-                                    {% else %}
-
                                         <div class="imagen-placeholder">
 
                                             <span>
@@ -246,7 +236,7 @@
 
                                         </div>
 
-                                    {% endif %}
+                                    
 
                                 </div>
 
