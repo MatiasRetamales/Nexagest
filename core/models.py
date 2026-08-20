@@ -16,6 +16,12 @@ class Restaurante(models.Model):
     nombre = models.CharField(
         max_length=100
     )
+    
+    logo = models.ImageField(
+    upload_to='restaurantes/logos/',
+    blank=True,
+    null=True
+    ) 
 
     estado = models.CharField(
         max_length=10,

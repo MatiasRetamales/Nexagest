@@ -13,7 +13,8 @@ class ProductoForm(forms.ModelForm):
             'descripcion',
             'precio',
             'disponibilidad',
-            'categoria'
+            'categoria',
+            'imagen',
         ]
 
         labels = {
@@ -21,7 +22,8 @@ class ProductoForm(forms.ModelForm):
             'descripcion': 'Descripción del producto',
             'precio': 'Precio ($) SIN PUNTOS NI COMAS',
             'disponibilidad': '¿Está disponible?',
-            'categoria': 'Categoría'
+            'categoria': 'Categoría',
+            'imagen': 'Imagen del producto (opcional)',
         }
 
         widgets = {

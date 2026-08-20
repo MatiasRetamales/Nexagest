@@ -22,7 +22,8 @@
 
     <div class="form-container">
 
-        <form method="post">
+        <form method="post" enctype="multipart/form-data">
+
             {% csrf_token %}
 
             {{ form.as_p }}
@@ -30,12 +31,15 @@
             <button type="submit">
                 💾 Guardar Cambios
             </button>
+
         </form>
 
         <div class="contenedor-volver">
+
             <a href="{% url 'lista_productos' %}" class="btn-volver">
                 ← Volver
             </a>
+
         </div>
 
     </div>

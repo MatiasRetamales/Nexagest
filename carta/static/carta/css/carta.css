@@ -580,11 +580,9 @@ button {
     justify-content: center;
 
     background:
-        linear-gradient(
-            135deg,
+        linear-gradient(135deg,
             #f1f5f9,
-            #e2e8f0
-        );
+            #e2e8f0);
 
     font-size: 31px;
 }
@@ -1437,7 +1435,7 @@ button {
 }
 
 
-.campo-formulario > label {
+.campo-formulario>label {
 
     display: block;
 

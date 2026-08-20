@@ -228,13 +228,25 @@
 
                                 <div class="producto-imagen">
 
-                                    <div class="imagen-placeholder">
+                                    {% if producto.imagen %}
 
-                                        <span>
-                                            🍽️
-                                        </span>
+                                        <img
+                                            src="{{ producto.imagen.url }}"
+                                            alt="{{ producto.nombre }}"
+                                            loading="lazy"
+                                        >
 
-                                    </div>
+                                    {% else %}
+
+                                        <div class="imagen-placeholder">
+
+                                            <span>
+                                                🍽️
+                                            </span>
+
+                                        </div>
+
+                                    {% endif %}
 
                                 </div>
 

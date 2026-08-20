@@ -105,8 +105,11 @@ def crear_producto(request):
 
     if request.method == 'POST':
 
+        print("FILES:", request.FILES)
+
         form = ProductoForm(
             request.POST,
+            request.FILES,
             restaurante=restaurante
         )
 
@@ -156,6 +159,7 @@ def editar_producto(request, producto_id):
 
         form = ProductoForm(
             request.POST,
+            request.FILES,
             instance=producto,
             restaurante=restaurante
         )
