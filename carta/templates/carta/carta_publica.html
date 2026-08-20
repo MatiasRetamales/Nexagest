@@ -1,5 +1,28 @@
-{% for categoria in categorias %}
-    <h2>{{ categoria.nombre }}</h2>
-{% empty %}
-    <p>NO HAY CATEGORIAS</p>
-{% endfor %}
+<!doctype html>
+
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>{{ restaurante.nombre }}</title>
+</head>
+
+<body>
+
+    <h1>{{ restaurante.nombre }}</h1>
+
+    {% for categoria in categorias %}
+
+        <h2>
+            {{ categoria.nombre }}
+        </h2>
+
+    {% empty %}
+
+        <p>NO HAY CATEGORIAS</p>
+
+    {% endfor %}
+
+</body>
+
+</html>

@@ -12,28 +12,25 @@ def carta_publica(request, restaurante_id):
     )
 
     categorias = Categoria.objects.filter(
-    restaurante=restaurante,
-    producto__isnull=False
+        restaurante=restaurante,
+        producto__isnull=False
     ).distinct()
 
-
-    caja = Caja.objects.filter(
-        restaurante=restaurante,
-        esta_abierta=True
-    ).first()
-
-    caja_abierta = caja is not None
-    
-    print("TOTAL CATEGORIAS:", categorias.count())
-    print("LISTA CATEGORIAS:", list(categorias.values_list("id", "nombre")))
+    print("\n==============================")
+    print("RESTAURANTE:", restaurante)
+    print("CATEGORIAS OBJETO:", categorias)
+    print("TOTAL:", categorias.count())
+    print(
+        "LISTA:",
+        list(categorias.values_list("id", "nombre"))
+    )
+    print("==============================\n")
 
     return render(
         request,
-        'carta/carta_publica.html',
+        "carta/carta_publica.html",
         {
-            'restaurante': restaurante,
-            'categorias': categorias,
-            'caja': caja,
-            'caja_abierta': caja_abierta,
+            "restaurante": restaurante,
+            "categorias": categorias,
         }
     )
