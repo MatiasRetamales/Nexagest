@@ -53,6 +53,24 @@ body {
     color: #111827;
 }
 
+.card h5 {
+    font-size: 15px;
+    margin-bottom: 12px;
+    color: #374151;
+}
+
+
+/* ========================================
+   PÁRRAFOS
+======================================== */
+
+.card p {
+    font-size: 13px;
+    line-height: 1.5;
+    color: #6b7280;
+    margin-bottom: 18px;
+}
+
 
 /* ========================================
    SEPARADORES
@@ -116,8 +134,10 @@ body {
     font-size: 14px;
     margin-bottom: 18px;
     outline: none;
-    transition: border-color 0.2s ease,
-                box-shadow 0.2s ease;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
 }
 
 
@@ -129,7 +149,9 @@ body {
 .card input[type="email"]:focus,
 .card input[type="number"]:focus {
     border-color: #2563eb;
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+
+    box-shadow:
+        0 0 0 3px rgba(37, 99, 235, 0.12);
 }
 
 
@@ -143,21 +165,107 @@ body {
 
 
 /* ========================================
+   LOGO ACTUAL
+======================================== */
+
+.logo-actual {
+    width: 100%;
+    min-height: 150px;
+    margin-bottom: 15px;
+    padding: 20px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+}
+
+.logo-actual img {
+    display: block;
+
+    max-width: 180px;
+    max-height: 120px;
+
+    width: auto;
+    height: auto;
+
+    object-fit: contain;
+}
+
+
+/* ========================================
+   SUBIR LOGO
+======================================== */
+
+.card input[type="file"] {
+    width: 100%;
+    padding: 11px;
+
+    border: 1px solid #d1d5db;
+    border-radius: 9px;
+
+    background: #f9fafb;
+    color: #374151;
+
+    font-size: 14px;
+    margin-bottom: 10px;
+
+    cursor: pointer;
+}
+
+.card input[type="file"]:hover {
+    border-color: #9ca3af;
+    background: #ffffff;
+}
+
+.card input[type="file"]::file-selector-button {
+    margin-right: 12px;
+    padding: 8px 14px;
+
+    border: none;
+    border-radius: 7px;
+
+    background: #2563eb;
+    color: #ffffff;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: background 0.2s ease;
+}
+
+.card input[type="file"]::file-selector-button:hover {
+    background: #1d4ed8;
+}
+
+
+/* ========================================
    BOTÓN GUARDAR
 ======================================== */
 
 .card button[type="submit"] {
     width: 100%;
     height: 48px;
+
     border: none;
     border-radius: 10px;
+
     background: #2563eb;
     color: white;
+
     font-size: 15px;
     font-weight: 700;
+
     cursor: pointer;
-    transition: background 0.2s ease,
-                transform 0.1s ease;
+
+    transition:
+        background 0.2s ease,
+        transform 0.1s ease;
 }
 
 .card button[type="submit"]:hover {
@@ -175,20 +283,28 @@ body {
 
 .btn-volver {
     display: block;
+
     width: 100%;
     height: 45px;
+
     margin-top: 12px;
+
     border: 1px solid #d1d5db;
     border-radius: 10px;
+
     background: #ffffff;
     color: #374151;
+
     text-decoration: none;
     text-align: center;
     line-height: 43px;
+
     font-size: 14px;
     font-weight: 600;
-    transition: background 0.2s ease,
-                border-color 0.2s ease;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease;
 }
 
 .btn-volver:hover {
@@ -227,4 +343,13 @@ body {
         height: 44px;
     }
 
+    .logo-actual {
+        min-height: 130px;
+        padding: 15px;
+    }
+
+    .logo-actual img {
+        max-width: 150px;
+        max-height: 100px;
+    }
 }

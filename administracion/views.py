@@ -191,15 +191,32 @@ def editar_producto(request, producto_id):
 
 @tiene_acceso(['administrador'])
 def eliminar_producto(request, producto_id):
+
     restaurante = request.user.perfil.restaurante
-    producto = restaurante.productos.filter(id=producto_id).first()
+
+    producto = restaurante.productos.filter(
+        id=producto_id
+    ).first()
 
     if not producto:
-        messages.error(request, "Producto no encontrado.")
+
+        messages.error(
+            request,
+            "Producto no encontrado."
+        )
+
         return redirect('lista_productos')
 
     if request.method == 'POST':
+
+        if producto.imagen:
+
+            producto.imagen.delete(
+                save=False
+            )
+
         producto.delete()
+
         return redirect('lista_productos')
 
     return render(
@@ -245,6 +262,23 @@ def configuracion_restaurante(request):
     restaurante = request.user.perfil.restaurante
 
     if request.method == "POST":
+
+        # =========================
+        # LOGO
+        # =========================
+
+        nuevo_logo = request.FILES.get('logo')
+
+        if nuevo_logo:
+
+            if restaurante.logo:
+
+                restaurante.logo.delete(
+                    save=False
+                )
+
+            restaurante.logo = nuevo_logo
+
 
         # =========================
         # PROPINA

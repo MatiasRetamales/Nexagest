@@ -1,6 +1,9 @@
 from django.db import models
 
 
+def ruta_logo_restaurante(instance, filename):
+    return f"restaurantes/restaurante_{instance.id}/logo/{filename}"
+
 class Restaurante(models.Model):
 
     ESTADOS = (
@@ -18,7 +21,7 @@ class Restaurante(models.Model):
     )
     
     logo = models.ImageField(
-    upload_to='restaurantes/logos/',
+    upload_to=ruta_logo_restaurante,
     blank=True,
     null=True
     ) 

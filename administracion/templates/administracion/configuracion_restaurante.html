@@ -1,417 +1,471 @@
 {% load static %}
 
 <!DOCTYPE html>
+
 <html lang="es">
 
 <head>
 
-    <meta charset="UTF-8">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+<meta charset="UTF-8">
 
-    <link
-        rel="stylesheet"
-        href="{% static 'administracion/css/configuracion_restaurante.css' %}"
-    >
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
 
-    <title>
-        Configuración del Restaurante
-    </title>
+<link
+    rel="stylesheet"
+    href="{% static 'administracion/css/configuracion_restaurante.css' %}"
+>
+
+<title>
+    Configuración del Restaurante
+</title>
+
 
 </head>
 
-
 <body>
 
-
-    <div class="card">
-
-
-        <h3>
-            Configuración del Restaurante
-        </h3>
+```
+<div class="card">
 
 
-        <form method="post">
-
-            {% csrf_token %}
-
-
-            <!-- ========================= -->
-            <!-- PROPINA -->
-            <!-- ========================= -->
-
-            <h4>
-                Propina
-            </h4>
+    <h3>
+        Configuración del Restaurante
+    </h3>
 
 
-            <label>
+    <form
+        method="post"
+        enctype="multipart/form-data"
+    >
 
-                <input
-                    type="checkbox"
-                    name="propina_activa"
-                    {% if restaurante.propina_activa %}
-                        checked
-                    {% endif %}
+        {% csrf_token %}
+
+
+        <!-- ========================= -->
+        <!-- IDENTIDAD DEL RESTAURANTE -->
+        <!-- ========================= -->
+
+        <h4>
+            Identidad del restaurante
+        </h4>
+
+
+        <label>
+            Logo del restaurante:
+        </label>
+
+
+        {% if restaurante.logo %}
+
+            <div class="logo-actual">
+
+                <img
+                    src="{{ restaurante.logo.url }}"
+                    alt="Logo {{ restaurante.nombre }}"
+                    style="
+                        max-width: 180px;
+                        max-height: 120px;
+                        object-fit: contain;
+                    "
                 >
 
-                Activar propina sugerida
+            </div>
 
-            </label>
+            <br>
+
+        {% endif %}
 
 
-            <br><br>
+        <input
+            type="file"
+            name="logo"
+            accept="image/*"
+        >
 
 
-            <label>
-                Porcentaje de propina:
-            </label>
+        <p>
+            Sube el logo que quieres mostrar en la carta del restaurante.
+        </p>
 
+
+        <hr>
+
+
+        <!-- ========================= -->
+        <!-- PROPINA -->
+        <!-- ========================= -->
+
+        <h4>
+            Propina
+        </h4>
+
+
+        <label>
 
             <input
-                placeholder="Solo números"
-                type="number"
-                name="porcentaje_propina"
-                value="{{ restaurante.porcentaje_propina }}"
-                min="0"
-                max="100"
-                step="0.1"
+                type="checkbox"
+                name="propina_activa"
+                {% if restaurante.propina_activa %}
+                    checked
+                {% endif %}
             >
 
+            Activar propina sugerida
 
-            <hr>
+        </label>
 
 
-            <!-- ========================= -->
-            <!-- PEDIDOS ONLINE -->
-            <!-- ========================= -->
+        <br><br>
 
-            <h4>
-                Pedidos Online
-            </h4>
 
+        <label>
+            Porcentaje de propina:
+        </label>
 
-            <label>
 
-                <input
-                    type="checkbox"
-                    name="pedidos_online_activos"
-                    {% if restaurante.pedidos_online_activos %}
-                        checked
-                    {% endif %}
-                >
+        <input
+            placeholder="Solo números"
+            type="number"
+            name="porcentaje_propina"
+            value="{{ restaurante.porcentaje_propina }}"
+            min="0"
+            max="100"
+            step="0.1"
+        >
 
-                Activar pedidos online
 
-            </label>
+        <hr>
 
 
-            <br><br>
+        <!-- ========================= -->
+        <!-- PEDIDOS ONLINE -->
+        <!-- ========================= -->
 
+        <h4>
+            Pedidos Online
+        </h4>
 
-            <label>
 
-                <input
-                    type="checkbox"
-                    name="acepta_delivery"
-                    {% if restaurante.acepta_delivery %}
-                        checked
-                    {% endif %}
-                >
-
-                Permitir Delivery
-
-            </label>
-
-
-            <br><br>
-
-
-            <label>
-
-                <input
-                    type="checkbox"
-                    name="acepta_retiro"
-                    {% if restaurante.acepta_retiro %}
-                        checked
-                    {% endif %}
-                >
-
-                Permitir retiro en local
-
-            </label>
-
-
-            <hr>
-
-
-            <!-- ========================= -->
-            <!-- MÉTODOS DE PAGO -->
-            <!-- ========================= -->
-
-            <h4>
-                Métodos de pago
-            </h4>
-
-
-            <p>
-                Configura los métodos de pago disponibles
-                según la modalidad del pedido.
-            </p>
-
-
-            <!-- ========================= -->
-            <!-- RETIRO EN LOCAL -->
-            <!-- ========================= -->
-
-            <h5>
-                🏪 Retiro en local
-            </h5>
-
-
-            <label>
-
-                <input
-                    type="checkbox"
-                    name="acepta_efectivo_retiro"
-                    {% if restaurante.acepta_efectivo_retiro %}
-                        checked
-                    {% endif %}
-                >
-
-                💵 Efectivo
-
-            </label>
-
-
-            <br><br>
-
-
-            <label>
-
-                <input
-                    type="checkbox"
-                    name="acepta_tarjeta_retiro"
-                    {% if restaurante.acepta_tarjeta_retiro %}
-                        checked
-                    {% endif %}
-                >
-
-                💳 Tarjeta
-
-            </label>
-
-
-            <br><br>
-
-
-            <label>
-
-                <input
-                    type="checkbox"
-                    name="acepta_transferencia_retiro"
-                    {% if restaurante.acepta_transferencia_retiro %}
-                        checked
-                    {% endif %}
-                >
-
-                🏦 Transferencia bancaria
-
-            </label>
-
-
-            <br><br>
-
-
-            <!-- ========================= -->
-            <!-- DELIVERY -->
-            <!-- ========================= -->
-
-            <h5>
-                🛵 Delivery
-            </h5>
-
-
-            <label>
-
-                <input
-                    type="checkbox"
-                    name="acepta_efectivo_delivery"
-                    {% if restaurante.acepta_efectivo_delivery %}
-                        checked
-                    {% endif %}
-                >
-
-                💵 Efectivo
-
-            </label>
-
-
-            <br><br>
-
-
-            <label>
-
-                <input
-                    type="checkbox"
-                    name="acepta_tarjeta_delivery"
-                    {% if restaurante.acepta_tarjeta_delivery %}
-                        checked
-                    {% endif %}
-                >
-
-                💳 Tarjeta
-
-            </label>
-
-
-            <br><br>
-
-
-            <label>
-
-                <input
-                    type="checkbox"
-                    name="acepta_transferencia_delivery"
-                    {% if restaurante.acepta_transferencia_delivery %}
-                        checked
-                    {% endif %}
-                >
-
-                🏦 Transferencia bancaria
-
-            </label>
-
-
-            <hr>
-
-
-            <!-- ========================= -->
-            <!-- DATOS DE TRANSFERENCIA -->
-            <!-- ========================= -->
-
-            <h4>
-                Datos de transferencia
-            </h4>
-
-
-            <p>
-                Estos datos se mostrarán al cliente
-                cuando seleccione transferencia bancaria.
-            </p>
-
-
-            <label>
-                Banco:
-            </label>
-
+        <label>
 
             <input
-                type="text"
-                name="banco_transferencia"
-                value="{{ restaurante.banco_transferencia }}"
-                placeholder="Ej: Banco Estado"
+                type="checkbox"
+                name="pedidos_online_activos"
+                {% if restaurante.pedidos_online_activos %}
+                    checked
+                {% endif %}
             >
 
+            Activar pedidos online
 
-            <label>
-                Tipo de cuenta:
-            </label>
+        </label>
 
+
+        <br><br>
+
+
+        <label>
 
             <input
-                type="text"
-                name="tipo_cuenta_transferencia"
-                value="{{ restaurante.tipo_cuenta_transferencia }}"
-                placeholder="Ej: Cuenta RUT"
+                type="checkbox"
+                name="acepta_delivery"
+                {% if restaurante.acepta_delivery %}
+                    checked
+                {% endif %}
             >
 
+            Permitir Delivery
 
-            <label>
-                Número de cuenta:
-            </label>
+        </label>
 
+
+        <br><br>
+
+
+        <label>
 
             <input
-                type="text"
-                name="numero_cuenta_transferencia"
-                value="{{ restaurante.numero_cuenta_transferencia }}"
-                placeholder="Número de cuenta"
+                type="checkbox"
+                name="acepta_retiro"
+                {% if restaurante.acepta_retiro %}
+                    checked
+                {% endif %}
             >
 
+            Permitir retiro en local
 
-            <label>
-                Titular:
-            </label>
+        </label>
 
+
+        <hr>
+
+
+        <!-- ========================= -->
+        <!-- MÉTODOS DE PAGO -->
+        <!-- ========================= -->
+
+        <h4>
+            Métodos de pago
+        </h4>
+
+
+        <p>
+            Configura los métodos de pago disponibles
+            según la modalidad del pedido.
+        </p>
+
+
+        <!-- ========================= -->
+        <!-- RETIRO EN LOCAL -->
+        <!-- ========================= -->
+
+        <h5>
+            🏪 Retiro en local
+        </h5>
+
+
+        <label>
 
             <input
-                type="text"
-                name="titular_transferencia"
-                value="{{ restaurante.titular_transferencia }}"
-                placeholder="Nombre del titular"
+                type="checkbox"
+                name="acepta_efectivo_retiro"
+                {% if restaurante.acepta_efectivo_retiro %}
+                    checked
+                {% endif %}
             >
 
+            💵 Efectivo
 
-            <label>
-                RUT:
-            </label>
+        </label>
 
+
+        <br><br>
+
+
+        <label>
 
             <input
-                type="text"
-                name="rut_transferencia"
-                value="{{ restaurante.rut_transferencia }}"
-                placeholder="12.345.678-9"
+                type="checkbox"
+                name="acepta_tarjeta_retiro"
+                {% if restaurante.acepta_tarjeta_retiro %}
+                    checked
+                {% endif %}
             >
 
+            💳 Tarjeta
 
-            <label>
-                Correo:
-            </label>
+        </label>
 
+
+        <br><br>
+
+
+        <label>
 
             <input
-                type="email"
-                name="correo_transferencia"
-                value="{{ restaurante.correo_transferencia }}"
-                placeholder="correo@ejemplo.cl"
+                type="checkbox"
+                name="acepta_transferencia_retiro"
+                {% if restaurante.acepta_transferencia_retiro %}
+                    checked
+                {% endif %}
             >
 
+            🏦 Transferencia bancaria
 
-            <br><br>
-
-
-            <!-- ========================= -->
-            <!-- GUARDAR -->
-            <!-- ========================= -->
-
-            <button type="submit">
-
-                Guardar configuración
-
-            </button>
+        </label>
 
 
-            <a
-                href="{% url 'menu_admin' %}"
-                class="btn-volver"
+        <br><br>
+
+
+        <!-- ========================= -->
+        <!-- DELIVERY -->
+        <!-- ========================= -->
+
+        <h5>
+            🛵 Delivery
+        </h5>
+
+
+        <label>
+
+            <input
+                type="checkbox"
+                name="acepta_efectivo_delivery"
+                {% if restaurante.acepta_efectivo_delivery %}
+                    checked
+                {% endif %}
             >
 
-                Volver al Menú
+            💵 Efectivo
 
-            </a>
-
-
-        </form>
+        </label>
 
 
-    </div>
+        <br><br>
 
+
+        <label>
+
+            <input
+                type="checkbox"
+                name="acepta_tarjeta_delivery"
+                {% if restaurante.acepta_tarjeta_delivery %}
+                    checked
+                {% endif %}
+            >
+
+            💳 Tarjeta
+
+        </label>
+
+
+        <br><br>
+
+
+        <label>
+
+            <input
+                type="checkbox"
+                name="acepta_transferencia_delivery"
+                {% if restaurante.acepta_transferencia_delivery %}
+                    checked
+                {% endif %}
+            >
+
+            🏦 Transferencia bancaria
+
+        </label>
+
+
+        <hr>
+
+
+        <!-- ========================= -->
+        <!-- DATOS DE TRANSFERENCIA -->
+        <!-- ========================= -->
+
+        <h4>
+            Datos de transferencia
+        </h4>
+
+
+        <p>
+            Estos datos se mostrarán al cliente
+            cuando seleccione transferencia bancaria.
+        </p>
+
+
+        <label>
+            Banco:
+        </label>
+
+
+        <input
+            type="text"
+            name="banco_transferencia"
+            value="{{ restaurante.banco_transferencia }}"
+            placeholder="Ej: Banco Estado"
+        >
+
+
+        <label>
+            Tipo de cuenta:
+        </label>
+
+
+        <input
+            type="text"
+            name="tipo_cuenta_transferencia"
+            value="{{ restaurante.tipo_cuenta_transferencia }}"
+            placeholder="Ej: Cuenta RUT"
+        >
+
+
+        <label>
+            Número de cuenta:
+        </label>
+
+
+        <input
+            type="text"
+            name="numero_cuenta_transferencia"
+            value="{{ restaurante.numero_cuenta_transferencia }}"
+            placeholder="Número de cuenta"
+        >
+
+
+        <label>
+            Titular:
+        </label>
+
+
+        <input
+            type="text"
+            name="titular_transferencia"
+            value="{{ restaurante.titular_transferencia }}"
+            placeholder="Nombre del titular"
+        >
+
+
+        <label>
+            RUT:
+        </label>
+
+
+        <input
+            type="text"
+            name="rut_transferencia"
+            value="{{ restaurante.rut_transferencia }}"
+            placeholder="12.345.678-9"
+        >
+
+
+        <label>
+            Correo:
+        </label>
+
+
+        <input
+            type="email"
+            name="correo_transferencia"
+            value="{{ restaurante.correo_transferencia }}"
+            placeholder="correo@ejemplo.cl"
+        >
+
+
+        <br><br>
+
+
+        <!-- ========================= -->
+        <!-- GUARDAR -->
+        <!-- ========================= -->
+
+        <button type="submit">
+
+            Guardar configuración
+
+        </button>
+
+
+        <a
+            href="{% url 'menu_admin' %}"
+            class="btn-volver"
+        >
+
+            Volver al Menú
+
+        </a>
+
+
+    </form>
+
+
+</div>
 
 </body>
 

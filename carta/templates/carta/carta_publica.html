@@ -47,7 +47,7 @@
             <div class="logo-local">
 
                 <img
-                    src="{% static 'core/img/logo_nexagest.png' %}"
+                    src= "{% if restaurante.logo %}{{ restaurante.logo.url }}{% else %}{% static 'carta/img/logo-placeholder.png' %}{% endif %}"
                     alt="Logo {{ restaurante.nombre }}"
                 >
 
