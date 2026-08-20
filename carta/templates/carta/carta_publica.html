@@ -1,16 +1,67 @@
+{% load static %}
+
 <!doctype html>
 
-<html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>
+        {{ restaurante.nombre }} | Carta
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="{% static 'carta/css/carta.css' %}"
+    >
+
+</head>
 
 <body>
 
-<h1>{{ restaurante.nombre }}</h1>
+    <h1>
+        {{ restaurante.nombre }}
+    </h1>
 
-<p>{{ restaurante.estado }}</p>
+    {% if restaurante.logo %}
 
-<p>{{ restaurante.descripcion }}</p>
+        <p>
+            TIENE LOGO
+        </p>
 
-<p>{{ restaurante.pedidos_online_activos }}</p>
+    {% else %}
+
+        <p>
+            NO TIENE LOGO
+        </p>
+
+    {% endif %}
+
+    {% if restaurante.descripcion %}
+
+        <p>
+            {{ restaurante.descripcion }}
+        </p>
+
+    {% endif %}
+
+    {% if restaurante.estado == 'abierto' %}
+
+        <p>
+            ABIERTO
+        </p>
+
+    {% endif %}
+
+    {% if caja_abierta %}
+
+        <p>
+            CAJA ABIERTA
+        </p>
+
+    {% endif %}
 
 </body>
 
