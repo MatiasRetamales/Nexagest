@@ -9,10 +9,7 @@ from PIL import Image, ImageOps  # type: ignore[reportMissingImports]
 class Categoria(models.Model):
     nombre = models.CharField(max_length=100)
 
-    restaurante = models.ForeignKey(
-        "core.Restaurante",
-        on_delete=models.CASCADE,
-    )
+    restaurante = models.ForeignKey("core.Restaurante",on_delete=models.CASCADE,)
 
     def __str__(self):
         return self.nombre

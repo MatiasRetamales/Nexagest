@@ -30,11 +30,7 @@ def dashboard(request):
         fecha_actual = timezone.now().date()
     
     # 3. El Filtro: Usamos fecha_actual (que puede ser hoy, ayer o cualquier día)
-    pedidos_dia = Pedido.objects.filter(
-        restaurante=restaurante,
-        fecha_pago__date=fecha_actual,
-        esta_pagado=True
-    )
+    pedidos_dia = Pedido.objects.filter(restaurante=restaurante,fecha_pago__date=fecha_actual,esta_pagado=True)
     
     total_ventas = pedidos_dia.aggregate(Sum('total'))['total__sum'] or 0
     cantidad_pedidos = pedidos_dia.count()

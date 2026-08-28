@@ -70,9 +70,8 @@ def gestionar_pedido(request, id):
                 )
 
         # El redirect es obligatorio aquí
-        return redirect("gestionar_pedido", id=mesa.id)
+        return redirect("detalle_mesa", id=mesa.id)
 
-    # ESTE ES EL RETURN QUE FALTABA
     # Se ejecuta cuando es un GET o cuando el POST no agregó nada
     return render(
         request,
