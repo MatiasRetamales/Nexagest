@@ -319,7 +319,10 @@ def cocina(request):
     )
 
     for pedido in pedidos_pendientes:
-        pedido.items_cocina = pedido.items.filter(numero_envio=pedido.total_envios)
+     pedido.items_cocina = pedido.items.filter(
+        numero_envio=pedido.total_envios,
+        producto__requiere_cocina=True
+    )
 
     return render(
         request,

@@ -1,45 +1,25 @@
-
 {% load static %}
 
 <!doctype html>
 <html lang="es">
-
-<head>
-
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
 
     <title>Detalle de Mesa</title>
 
-    <link
-        rel="stylesheet"
-        href="{% static 'mesas/css/detalle_mesas.css' %}"
-    >
+    <link rel="stylesheet" href="{% static 'mesas/css/detalle_mesas.css' %}" />
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
 
-</head>
-
-
-<body>
-
-
+  <body>
     <!-- ======================================== -->
     <!-- LOGO -->
     <!-- ======================================== -->
 
     <div class="logo-container">
-
-        <img
-            src="{% static 'core/img/logo_nexagest.png' %}"
-            alt="Logo Nexagest"
-            class="logo-admin"
-        >
-
+      <img src="{% static 'core/img/logo_nexagest.png' %}" alt="Logo Nexagest" class="logo-admin" />
     </div>
-
 
     <!-- ======================================== -->
     <!-- TÍTULO -->
@@ -47,388 +27,191 @@
 
     {% if restaurante.tipo_local == 'restaurante' %}
 
-        <h1 id="titulo_lista_mesas">
-            Detalle de Mesa {{ mesa.numero }}
-        </h1>
+    <h1 id="titulo_lista_mesas">Detalle de Mesa {{ mesa.numero }}</h1>
 
     {% elif restaurante.tipo_local == 'local' %}
 
-        <h1 id="titulo_lista_mesas">
-            Detalle de Pedido {{ mesa.numero }}
-        </h1>
+    <h1 id="titulo_lista_mesas">Detalle de Pedido {{ mesa.numero }}</h1>
 
     {% endif %}
 
-
     <div class="mesa-detalle">
+      <!-- ======================================== -->
+      <!-- INFORMACIÓN DE LA MESA -->
+      <!-- ======================================== -->
 
+      <div class="mesa-info">
+        <p>
+          <strong>Número:</strong>
+          {{ mesa.numero }}
+        </p>
 
-        <!-- ======================================== -->
-        <!-- INFORMACIÓN DE LA MESA -->
-        <!-- ======================================== -->
+        <p>
+          <strong>Estado:</strong>
+          {{ mesa.get_estado_display }}
+        </p>
 
-        <div class="mesa-info">
+        {% if restaurante.tipo_local == 'local' %}
 
-            <p>
-                <strong>Número:</strong>
-                {{ mesa.numero }}
-            </p>
+        <p>
+          <strong> Nombre del Cliente: </strong>
 
-            <p>
-                <strong>Estado:</strong>
-                {{ mesa.get_estado_display }}
-            </p>
+          {{ pedido_actual.nombre_cliente|default:"Sin nombre" }}
+        </p>
 
+        {% endif %}
+      </div>
 
-            {% if restaurante.tipo_local == 'local' %}
+      <!-- ======================================== -->
+      <!-- PEDIDO ACTUAL -->
+      <!-- ======================================== -->
 
-                <p>
+      {% if pedido_actual %}
 
-                    <strong>
-                        Nombre del Cliente:
-                    </strong>
+      <div class="pedido-items">
+        <h2>Pedido Actual</h2>
 
-                    {{ pedido_actual.nombre_cliente|default:"Sin nombre" }}
+        <ul>
+          {% for item in items %}
 
-                </p>
+          <li>
+            <strong class="{% if not item.producto.requiere_cocina %}sin-cocina{% endif %}"> {{ item.cantidad }} × {{ item.producto }} </strong>
 
+            <br />
+
+            Precio Unitario: ${{ item.precio_unitario }}
+
+            <br />
+
+            Subtotal: ${{ item.subtotal }} {% if item.observacion %}
+            <br />
+            <small>📝 {{ item.observacion }}</small>
             {% endif %}
+          </li>
 
-        </div>
+          {% empty %}
 
+          <li>No hay productos en este pedido.</li>
 
+          {% endfor %}
+        </ul>
 
+        <p>
+          <strong> Total: </strong>
+
+          ${{ total }}
+        </p>
+
+        <p>
+          <strong> Personal: </strong>
+
+          {{ pedido_actual.garzon }}
+        </p>
+      </div>
+
+      {% else %}
+
+      <p>No hay pedidos actualmente.</p>
+
+      {% endif %}
+
+      <!-- ======================================== -->
+      <!-- ENVIAR A COCINA -->
+      <!-- ======================================== -->
+
+      {% if pedido_actual %}
+
+      <button class="enviar-a-cocina" onclick="enviarPedidoACocina({{ pedido_actual.id }})">Enviar Pedido a Cocina</button>
+
+      {% else %}
+
+      <button class="enviar-a-cocina" disabled>No hay pedido para enviar</button>
+
+      {% endif %}
+
+      <!-- ======================================== -->
+      <!-- ACCIONES -->
+      <!-- ======================================== -->
+
+      <div class="acciones-mesa">
         <!-- ======================================== -->
-        <!-- PEDIDO ACTUAL -->
+        <!-- CAMBIO DE ESTADO DE MESA -->
         <!-- ======================================== -->
 
-        {% if pedido_actual %}
+        {% if restaurante.tipo_local == 'restaurante' %}
 
-            <div class="pedido-items">
+        <form action="{% url 'detalle_mesa' mesa.id %}" method="POST">
+          {% csrf_token %}
 
-                <h2>
-                    Pedido Actual
-                </h2>
+          <label for="estados"> Cambiar Estado de Mesa: </label>
 
+          <select id="estados" name="estado">
+            <option value="libre">Libre</option>
 
-                <ul>
+            <option value="ocupada">Ocupada</option>
+          </select>
 
-                    {% for item in items %}
-
-                        <li>
-
-                            <strong>
-                                {{ item.cantidad }} ×
-                                {{ item.producto }}
-                            </strong>
-
-                            <br>
-
-                            Precio Unitario:
-                            ${{ item.precio_unitario }}
-
-                            <br>
-
-                            Subtotal:
-                            ${{ item.subtotal }}
-
-
-                            {% if item.observacion %}
-
-                                <br>
-
-                                <small>
-                                    📝 {{ item.observacion }}
-                                </small>
-
-                            {% endif %}
-
-                        </li>
-
-                    {% empty %}
-
-                        <li>
-                            No hay productos en este pedido.
-                        </li>
-
-                    {% endfor %}
-
-                </ul>
-
-
-                <p>
-
-                    <strong>
-                        Total:
-                    </strong>
-
-                    ${{ total }}
-
-                </p>
-
-
-                <p>
-
-                    <strong>
-                        Personal:
-                    </strong>
-
-                    {{ pedido_actual.garzon }}
-
-                </p>
-
-            </div>
-
-
-        {% else %}
-
-            <p>
-                No hay pedidos actualmente.
-            </p>
+          <button type="submit">Cambiar Estado</button>
+        </form>
 
         {% endif %}
 
-
-
         <!-- ======================================== -->
-        <!-- ENVIAR A COCINA -->
+        <!-- LINKS DE PEDIDOS -->
         <!-- ======================================== -->
 
-        {% if pedido_actual %}
+        <div class="links-pedidos">
+          {% if restaurante.estado == 'abierto' %}
 
-            <button
-                class="enviar-a-cocina"
-                onclick="enviarPedidoACocina({{ pedido_actual.id }})"
-            >
+          <a href="{% url 'gestionar_pedido' mesa.id %}" class="btn-link"> Gestionar Pedido </a>
 
-                Enviar Pedido a Cocina
+          <a href="{% url 'cerrar_pedido' mesa.id %}" class="btn-link"> Cobrar Pedido </a>
 
-            </button>
+          {% if user.perfil.rol == 'administrador' or user.perfil.rol == 'encargado' %}
 
-        {% else %}
+          <a href="{% url 'cancelar_pedido' mesa.id %}" class="btn-link btn-cancelar"> Cancelar Pedido </a>
 
-            <button
-                class="enviar-a-cocina"
-                disabled
-            >
+          {% endif %}
 
-                No hay pedido para enviar
+          <a href="{% url 'eliminar_items_a_pedido' mesa.id %}" class="btn-link"> Eliminar Productos </a>
 
-            </button>
+          <a href="{% url 'lista_mesas' %}" class="btn-link btn-volver"> Volver </a>
 
-        {% endif %}
+          {% elif restaurante.estado == 'cerrado' %}
 
+          <div class="aviso-cerrado">
+            <strong> AVISO: </strong>
 
+            Local cerrado. Acciones limitadas.
+          </div>
 
-        <!-- ======================================== -->
-        <!-- ACCIONES -->
-        <!-- ======================================== -->
+          <a href="{% url 'cerrar_pedido' mesa.id %}" class="btn-link"> Cobrar Pedido </a>
 
-        <div class="acciones-mesa">
+          <a href="{% url 'eliminar_items_a_pedido' mesa.id %}" class="btn-link"> Eliminar Productos </a>
 
+          <a href="{% url 'lista_mesas' %}" class="btn-link btn-volver"> Volver </a>
 
-            <!-- ======================================== -->
-            <!-- CAMBIO DE ESTADO DE MESA -->
-            <!-- ======================================== -->
-
-            {% if restaurante.tipo_local == 'restaurante' %}
-
-                <form
-                    action="{% url 'detalle_mesa' mesa.id %}"
-                    method="POST"
-                >
-
-                    {% csrf_token %}
-
-
-                    <label for="estados">
-
-                        Cambiar Estado de Mesa:
-
-                    </label>
-
-
-                    <select
-                        id="estados"
-                        name="estado"
-                    >
-
-                        <option value="libre">
-                            Libre
-                        </option>
-
-                        <option value="ocupada">
-                            Ocupada
-                        </option>
-
-                    </select>
-
-
-                    <button type="submit">
-
-                        Cambiar Estado
-
-                    </button>
-
-                </form>
-
-            {% endif %}
-
-
-
-            <!-- ======================================== -->
-            <!-- LINKS DE PEDIDOS -->
-            <!-- ======================================== -->
-
-            <div class="links-pedidos">
-
-
-                {% if restaurante.estado == 'abierto' %}
-
-
-                    <a
-                        href="{% url 'gestionar_pedido' mesa.id %}"
-                        class="btn-link"
-                    >
-
-                        Gestionar Pedido
-
-                    </a>
-
-
-                    <a
-                        href="{% url 'cerrar_pedido' mesa.id %}"
-                        class="btn-link"
-                    >
-
-                        Cerrar Pedido
-
-                    </a>
-
-
-                    {% if user.perfil.rol == 'administrador' or user.perfil.rol == 'encargado' %}
-
-                        <a
-                            href="{% url 'cancelar_pedido' mesa.id %}"
-                            class="btn-link btn-cancelar"
-                        >
-
-                            Cancelar Pedido
-
-                        </a>
-
-                    {% endif %}
-
-
-                    <a
-                        href="{% url 'eliminar_items_a_pedido' mesa.id %}"
-                        class="btn-link"
-                    >
-
-                        Eliminar Productos
-
-                    </a>
-
-
-                    <a
-                        href="{% url 'lista_mesas' %}"
-                        class="btn-link btn-volver"
-                    >
-
-                        Volver
-
-                    </a>
-
-
-
-                {% elif restaurante.estado == 'cerrado' %}
-
-
-                    <div class="aviso-cerrado">
-
-                        <strong>
-                            AVISO:
-                        </strong>
-
-                        Local cerrado.
-                        Acciones limitadas.
-
-                    </div>
-
-
-                    <a
-                        href="{% url 'cerrar_pedido' mesa.id %}"
-                        class="btn-link"
-                    >
-
-                        Cerrar Pedido
-
-                    </a>
-
-
-                    <a
-                        href="{% url 'eliminar_items_a_pedido' mesa.id %}"
-                        class="btn-link"
-                    >
-
-                        Eliminar Productos
-
-                    </a>
-
-
-                    <a
-                        href="{% url 'lista_mesas' %}"
-                        class="btn-link btn-volver"
-                    >
-
-                        Volver
-
-                    </a>
-
-
-                {% endif %}
-
-
-            </div>
-
-
+          {% endif %}
         </div>
-
-
+      </div>
     </div>
-
-
 
     <!-- ======================================== -->
     <!-- JAVASCRIPT -->
     <!-- ======================================== -->
 
-    <script
-        src="{% static 'mesas/js/enviar_a_cocina.js' %}"
-    ></script>
-
+    <script src="{% static 'mesas/js/enviar_a_cocina.js' %}"></script>
 
     <script>
+      /*
+       * Actualizar la página cada 10 segundos
+       * para mantener actualizado el estado
+       * de la mesa y del pedido.
+       */
 
-        /*
-         * Actualizar la página cada 10 segundos
-         * para mantener actualizado el estado
-         * de la mesa y del pedido.
-         */
-
-        setInterval(
-            function () {
-
-                location.reload();
-
-            },
-            10000
-        );
-
+      setInterval(function () {
+        location.reload();
+      }, 10000);
     </script>
-
-
-</body>
-
+  </body>
 </html>
-

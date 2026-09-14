@@ -66,6 +66,8 @@ class Producto(models.Model):
         blank=True,
         null=True,
     )
+    
+    requiere_cocina = models.BooleanField(default=True)
 
     def save(self, *args, **kwargs):
         imagen_anterior = None

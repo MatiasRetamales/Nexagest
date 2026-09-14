@@ -2,61 +2,30 @@
 
 <!doctype html>
 <html lang="es">
+  <head>
+    <meta charset="UTF-8" />
 
-<head>
-
-    <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <title>Lista de mesas</title>
 
-    <link
-        rel="stylesheet"
-        href="{% static 'mesas/css/lista_mesas.css' %}"
-    >
+    <link rel="stylesheet" href="{% static 'mesas/css/lista_mesas.css' %}" />
+  </head>
 
-</head>
-
-
-<body>
-
-
+  <body>
     <!-- ======================================== -->
     <!-- HEADER -->
     <!-- ======================================== -->
 
     <header class="logo-container">
+      <img class="logo-admin" src="{% static 'core/img/logo_nexagest.png' %}" alt="Logo Nexagest" />
 
-        <img
-            class="logo-admin"
-            src="{% static 'core/img/logo_nexagest.png' %}"
-            alt="Logo Nexagest"
-        >
+      <form action="{% url 'logout' %}" method="post">
+        {% csrf_token %}
 
-
-        <form
-            action="{% url 'logout' %}"
-            method="post"
-        >
-
-            {% csrf_token %}
-
-            <button
-                class="btn-logout"
-                type="submit"
-            >
-                Cerrar sesión
-            </button>
-
-        </form>
-
+        <button class="btn-logout" type="submit">Cerrar sesión</button>
+      </form>
     </header>
-
-
 
     <!-- ======================================== -->
     <!-- TÍTULO -->
@@ -64,25 +33,17 @@
 
     {% if restaurante.tipo_local == 'restaurante' %}
 
-        <h1 id="titulo_lista_mesas">
-            Mesas
-        </h1>
+    <h1 id="titulo_lista_mesas">Mesas</h1>
 
     {% elif restaurante.tipo_local == 'local' %}
 
-        <h1 id="titulo_lista_mesas">
-            Pedidos
-        </h1>
+    <h1 id="titulo_lista_mesas">Pedidos</h1>
 
     {% else %}
 
-        <h1 id="titulo_lista_mesas">
-            Gestión
-        </h1>
+    <h1 id="titulo_lista_mesas">Gestión</h1>
 
     {% endif %}
-
-
 
     <!-- ======================================== -->
     <!-- VOLVER -->
@@ -90,33 +51,17 @@
 
     {% if user.perfil.rol == 'administrador' or user.perfil.rol == 'encargado' %}
 
-        <div class="contenedor-volver">
-
-            <a
-                class="btn-volver"
-                href="{% url 'menu_admin' %}"
-            >
-                Volver al panel maestro
-            </a>
-
-        </div>
+    <div class="contenedor-volver">
+      <a class="btn-volver" href="{% url 'menu_admin' %}"> Volver al panel maestro </a>
+    </div>
 
     {% elif user.perfil.rol == 'operador' %}
 
-        <div class="contenedor-volver">
-
-            <a
-                class="btn-volver"
-                href="{% url 'cocina' %}"
-            >
-                Ir a cocina
-            </a>
-
-        </div>
+    <div class="contenedor-volver">
+      <a class="btn-volver" href="{% url 'cocina' %}"> Ir a cocina </a>
+    </div>
 
     {% endif %}
-
-
 
     <!-- ======================================== -->
     <!-- LOCAL ABIERTO -->
@@ -124,450 +69,237 @@
 
     {% if restaurante.estado == 'abierto' and caja and caja.esta_abierta %}
 
-        <main>
+    <main>
+      <!-- ======================================== -->
+      <!-- MESAS / PEDIDOS PRESENCIALES -->
+      <!-- ======================================== -->
 
+      <section id="mesas-live" class="mesas-container" aria-label="Mesas y pedidos presenciales">
+        {% for mesa in mesas %}
+
+        <article class="mesa{% if mesa.estado == 'ocupada' %} mesa--ocupada{% endif %}">
+          {% if restaurante.tipo_local == 'restaurante' %}
+
+          <span class="numero"> Mesa {{ mesa.numero }} </span>
+
+          <span class="estado"> {{ mesa.get_estado_display }} </span>
+
+          {% else %}
+
+          <span class="numero"> Pedido {{ mesa.numero }} </span>
+
+          <span class="estado">
+            {% if mesa.estado == 'ocupada' %} {% if mesa.pedido_activo and mesa.pedido_activo.nombre_cliente %} {{ mesa.pedido_activo.nombre_cliente }} {% else %} En espera {% endif %} {% else %}
+            Disponible {% endif %}
+          </span>
+
+          {% endif %}
+
+          <!-- ======================================== -->
+          <!-- CRONÓMETRO -->
+          <!-- ======================================== -->
+
+          {% if mesa.pedido_activo and mesa.pedido_activo.enviado_a_cocina and mesa.pedido_activo.estado == 'en_preparacion' %}
+
+          <div class="cronometro" data-desde="{{ mesa.pedido_activo.enviado_a_cocina.isoformat }}">
+            <span aria-hidden="true"> Tiempo: </span>
+
+            <span class="tiempo"> --:-- </span>
+          </div>
+
+          {% endif %}
+
+          <!-- ======================================== -->
+          <!-- DETALLES -->
+          <!-- ======================================== -->
+
+          <a href="{% url 'detalle_mesa' mesa.id %}"> Ver detalles </a>
+
+          <!-- ======================================== -->
+          <!-- LIBERAR PEDIDO -->
+          <!-- ======================================== -->
+
+          {% if mesa.pedido_activo and mesa.pedido_activo.esta_pagado %}
+
+          <form method="post" action="{% url 'liberar_pedido' mesa.id %}">
+            {% csrf_token %}
+
+            <button class="btn-liberar" type="submit">Liberar pedido</button>
+          </form>
+
+          {% endif %}
+        </article>
+
+        {% empty %}
+
+        <p class="sin-pedidos-online">No hay mesas configuradas.</p>
+
+        {% endfor %}
+      </section>
+
+      <!-- ======================================== -->
+      <!-- PEDIDOS ONLINE -->
+      <!-- ======================================== -->
+      {% if restaurante.pedidos_online_activos %}
+      <section class="pedidos-online" aria-labelledby="titulo-pedidos-online">
+        <div class="pedidos-online-titulo">
+          <h2 id="titulo-pedidos-online">Pedidos online</h2>
+
+          {% if pedidos_online %}
+
+          <span class="contador-online"> {{ pedidos_online|length }} activo{{ pedidos_online|length|pluralize }} </span>
+
+          {% endif %}
+        </div>
+
+        {% if pedidos_online %}
+
+        <div class="pedidos-online-container">
+          {% for pedido in pedidos_online %}
+
+          <article class="pedido-online">
+            <!-- ======================================== -->
+            <!-- CABECERA -->
+            <!-- ======================================== -->
+
+            <div class="pedido-online-cabecera">
+              <strong> Pedido #{{ pedido.id }} </strong>
+
+              {% if pedido.estado == 'pendiente' %}
+
+              <span class="estado-online pendiente"> Pendiente </span>
+
+              {% elif pedido.estado == 'aceptado' %}
+
+              <span class="estado-online aceptado"> Aceptado </span>
+
+              {% elif pedido.estado == 'en_preparacion' %}
+
+              <span class="estado-online preparando"> En preparación </span>
+
+              {% elif pedido.estado == 'listo' %}
+
+              <span class="estado-online listo"> Listo </span>
+
+              {% elif pedido.estado == 'en_camino' %}
+
+              <span class="estado-online listo"> En camino </span>
+
+              {% endif %}
+            </div>
 
             <!-- ======================================== -->
-            <!-- MESAS / PEDIDOS PRESENCIALES -->
+            <!-- INFORMACIÓN -->
             <!-- ======================================== -->
 
-            <section
-                id="mesas-live"
-                class="mesas-container"
-                aria-label="Mesas y pedidos presenciales"
-            >
+            <div class="pedido-online-info">
+              <p>
+                <strong> Cliente: </strong>
 
-                {% for mesa in mesas %}
+                {{ pedido.nombre_cliente|default:'Sin nombre' }}
+              </p>
 
-                    <article
-                        class="mesa{% if mesa.estado == 'ocupada' %} mesa--ocupada{% endif %}"
-                    >
+              {% if pedido.telefono_cliente %}
 
+              <p>
+                <strong> Teléfono: </strong>
 
-                        {% if restaurante.tipo_local == 'restaurante' %}
+                {{ pedido.telefono_cliente }}
+              </p>
 
-                            <span class="numero">
-                                Mesa {{ mesa.numero }}
-                            </span>
+              {% endif %}
 
-                            <span class="estado">
-                                {{ mesa.get_estado_display }}
-                            </span>
+              <p>
+                <strong> Entrega: </strong>
 
+                {{ pedido.get_tipo_entrega_display|default:'No informado' }}
+              </p>
 
-                        {% else %}
+              <p>
+                <strong> Método de pago: </strong>
 
-                            <span class="numero">
-                                Pedido {{ mesa.numero }}
-                            </span>
+                {{ pedido.get_metodo_pago_display|default:'No informado' }}
+              </p>
 
-                            <span class="estado">
+              <p>
+                <strong> Total: </strong>
 
-                                {% if mesa.estado == 'ocupada' %}
+                ${{ pedido.total }}
+              </p>
 
-                                    {% if mesa.pedido_activo and mesa.pedido_activo.nombre_cliente %}
+              <p>
+                <strong> Estado de pago: </strong>
 
-                                        {{ mesa.pedido_activo.nombre_cliente }}
-
-                                    {% else %}
-
-                                        En espera
-
-                                    {% endif %}
-
-                                {% else %}
-
-                                    Disponible
-
-                                {% endif %}
-
-                            </span>
-
-                        {% endif %}
-
-
-
-                        <!-- ======================================== -->
-                        <!-- CRONÓMETRO -->
-                        <!-- ======================================== -->
-
-                        {% if mesa.pedido_activo and mesa.pedido_activo.enviado_a_cocina and mesa.pedido_activo.estado == 'en_preparacion' %}
-
-                            <div
-                                class="cronometro"
-                                data-desde="{{ mesa.pedido_activo.enviado_a_cocina.isoformat }}"
-                            >
-
-                                <span aria-hidden="true">
-                                    Tiempo:
-                                </span>
-
-                                <span class="tiempo">
-                                    --:--
-                                </span>
-
-                            </div>
-
-                        {% endif %}
-
-
-
-                        <!-- ======================================== -->
-                        <!-- DETALLES -->
-                        <!-- ======================================== -->
-
-                        <a href="{% url 'detalle_mesa' mesa.id %}">
-                            Ver detalles
-                        </a>
-
-
-
-                        <!-- ======================================== -->
-                        <!-- LIBERAR PEDIDO -->
-                        <!-- ======================================== -->
-
-                        {% if mesa.pedido_activo and mesa.pedido_activo.esta_pagado %}
-
-                            <form
-                                method="post"
-                                action="{% url 'liberar_pedido' mesa.id %}"
-                            >
-
-                                {% csrf_token %}
-
-                                <button
-                                    class="btn-liberar"
-                                    type="submit"
-                                >
-                                    Liberar pedido
-                                </button>
-
-                            </form>
-
-                        {% endif %}
-
-
-                    </article>
-
-
-                {% empty %}
-
-                    <p class="sin-pedidos-online">
-                        No hay mesas configuradas.
-                    </p>
-
-                {% endfor %}
-
-            </section>
-
-
+                {{ pedido.get_estado_pago_display }}
+              </p>
+            </div>
 
             <!-- ======================================== -->
-            <!-- PEDIDOS ONLINE -->
+            <!-- PEDIDO LISTO -->
             <!-- ======================================== -->
-        {% if restaurante.pedidos_online_activos %}
-            <section
-                class="pedidos-online"
-                aria-labelledby="titulo-pedidos-online"
-             >
 
+            {% if pedido.estado == 'listo' %} {% if pedido.esta_pagado %}
 
-                <div class="pedidos-online-titulo">
+            <div class="pedido-pagado">
+              <p>
+                <strong> Pedido pagado. </strong>
+              </p>
 
-                    <h2 id="titulo-pedidos-online">
-                        Pedidos online
-                    </h2>
+              <p>Listo para entregar.</p>
+            </div>
 
+            {% elif pedido.tipo_entrega == 'delivery' and pedido.metodo_pago == 'transferencia' %}
 
-                    {% if pedidos_online %}
+            <div class="pedido-pendiente-pago">
+              <p>
+                <strong> Transferencia pendiente de verificación. </strong>
+              </p>
 
-                        <span class="contador-online">
+              <a class="btn-link" href="{% url 'cobrar_pedido_online' pedido.id %}"> Verificar pago </a>
+            </div>
 
-                            {{ pedidos_online|length }}
-                            activo{{ pedidos_online|length|pluralize }}
+            {% elif pedido.tipo_entrega == 'delivery' %}
 
-                        </span>
+            <div class="pedido-pendiente-pago">
+              <p>
+                <strong> Listo para enviar. </strong>
+              </p>
 
-                    {% endif %}
+              <a class="btn-link" href="{% url 'detalle_pedido_online' pedido.id %}"> Ver pedido </a>
+            </div>
 
-                </div>
+            {% else %}
 
+            <div class="pedido-pendiente-pago">
+              <p>
+                <strong> Listo para entregar. </strong>
+              </p>
 
+              <a class="btn-link" href="{% url 'cobrar_pedido_online' pedido.id %}"> Cobrar pedido </a>
+            </div>
 
-                {% if pedidos_online %}
+            {% endif %} {% endif %}
 
-                    <div class="pedidos-online-container">
+            <!-- ======================================== -->
+            <!-- VER PEDIDO -->
+            <!-- ======================================== -->
 
+            <a class="btn-ver-online" href="{% url 'detalle_pedido_online' pedido.id %}"> Ver pedido </a>
+          </article>
 
-                        {% for pedido in pedidos_online %}
+          {% endfor %}
+        </div>
 
-                            <article class="pedido-online">
+        {% else %}
 
+        <div class="sin-pedidos-online">
+          <p>No hay pedidos online activos.</p>
+        </div>
 
-                                <!-- ======================================== -->
-                                <!-- CABECERA -->
-                                <!-- ======================================== -->
-
-                                <div class="pedido-online-cabecera">
-
-                                    <strong>
-                                        Pedido #{{ pedido.id }}
-                                    </strong>
-
-
-                                    {% if pedido.estado == 'pendiente' %}
-
-                                        <span class="estado-online pendiente">
-                                            Pendiente
-                                        </span>
-
-                                    {% elif pedido.estado == 'aceptado' %}
-
-                                        <span class="estado-online aceptado">
-                                            Aceptado
-                                        </span>
-
-                                    {% elif pedido.estado == 'en_preparacion' %}
-
-                                        <span class="estado-online preparando">
-                                            En preparación
-                                        </span>
-
-                                    {% elif pedido.estado == 'listo' %}
-
-                                        <span class="estado-online listo">
-                                            Listo
-                                        </span>
-
-                                    {% elif pedido.estado == 'en_camino' %}
-
-                                        <span class="estado-online listo">
-                                            En camino
-                                        </span>
-
-                                    {% endif %}
-
-                                </div>
-
-
-
-                                <!-- ======================================== -->
-                                <!-- INFORMACIÓN -->
-                                <!-- ======================================== -->
-
-                                <div class="pedido-online-info">
-
-                                    <p>
-
-                                        <strong>
-                                            Cliente:
-                                        </strong>
-
-                                        {{ pedido.nombre_cliente|default:'Sin nombre' }}
-
-                                    </p>
-
-
-                                    {% if pedido.telefono_cliente %}
-
-                                        <p>
-
-                                            <strong>
-                                                Teléfono:
-                                            </strong>
-
-                                            {{ pedido.telefono_cliente }}
-
-                                        </p>
-
-                                    {% endif %}
-
-
-                                    <p>
-
-                                        <strong>
-                                            Entrega:
-                                        </strong>
-
-                                        {{ pedido.get_tipo_entrega_display|default:'No informado' }}
-
-                                    </p>
-
-
-                                    <p>
-
-                                        <strong>
-                                            Método de pago:
-                                        </strong>
-
-                                        {{ pedido.get_metodo_pago_display|default:'No informado' }}
-
-                                    </p>
-
-
-                                    <p>
-
-                                        <strong>
-                                            Total:
-                                        </strong>
-
-                                        ${{ pedido.total }}
-
-                                    </p>
-
-
-                                    <p>
-
-                                        <strong>
-                                            Estado de pago:
-                                        </strong>
-
-                                        {{ pedido.get_estado_pago_display }}
-
-                                    </p>
-
-                                </div>
-
-
-
-                                <!-- ======================================== -->
-                                <!-- PEDIDO LISTO -->
-                                <!-- ======================================== -->
-
-                                {% if pedido.estado == 'listo' %}
-
-
-                                    {% if pedido.esta_pagado %}
-
-                                        <div class="pedido-pagado">
-
-                                            <p>
-
-                                                <strong>
-                                                    Pedido pagado.
-                                                </strong>
-
-                                            </p>
-
-                                            <p>
-                                                Listo para entregar.
-                                            </p>
-
-                                        </div>
-
-
-                                    {% elif pedido.tipo_entrega == 'delivery' and pedido.metodo_pago == 'transferencia' %}
-
-                                        <div class="pedido-pendiente-pago">
-
-                                            <p>
-
-                                                <strong>
-                                                    Transferencia pendiente de verificación.
-                                                </strong>
-
-                                            </p>
-
-
-                                            <a
-                                                class="btn-link"
-                                                href="{% url 'cobrar_pedido_online' pedido.id %}"
-                                            >
-                                                Verificar pago
-                                            </a>
-
-                                        </div>
-
-
-                                    {% elif pedido.tipo_entrega == 'delivery' %}
-
-                                        <div class="pedido-pendiente-pago">
-
-                                            <p>
-
-                                                <strong>
-                                                    Listo para enviar.
-                                                </strong>
-
-                                            </p>
-
-
-                                            <a
-                                                class="btn-link"
-                                                href="{% url 'detalle_pedido_online' pedido.id %}"
-                                            >
-                                                Ver pedido
-                                            </a>
-
-                                        </div>
-
-
-                                    {% else %}
-
-                                        <div class="pedido-pendiente-pago">
-
-                                            <p>
-
-                                                <strong>
-                                                    Listo para entregar.
-                                                </strong>
-
-                                            </p>
-
-
-                                            <a
-                                                class="btn-link"
-                                                href="{% url 'cobrar_pedido_online' pedido.id %}"
-                                            >
-                                                Cobrar pedido
-                                            </a>
-
-                                        </div>
-
-                                    {% endif %}
-
-                                {% endif %}
-
-
-
-                                <!-- ======================================== -->
-                                <!-- VER PEDIDO -->
-                                <!-- ======================================== -->
-
-                                <a
-                                    class="btn-ver-online"
-                                    href="{% url 'detalle_pedido_online' pedido.id %}"
-                                >
-                                    Ver pedido
-                                </a>
-
-
-                            </article>
-
-                        {% endfor %}
-
-                    </div>
-
-
-                {% else %}
-
-                    <div class="sin-pedidos-online">
-
-                        <p>
-                            No hay pedidos online activos.
-                        </p>
-
-                    </div>
-
-                {% endif %}
-
-
-            </section>
         {% endif %}
-
-
-        </main>
-
+      </section>
+      {% endif %}
+    </main>
 
     <!-- ======================================== -->
     <!-- LOCAL CERRADO -->
@@ -575,40 +307,19 @@
 
     {% else %}
 
-        <div
-            class="alerta-caja"
-            role="alert"
-        >
-
-            Abre el local y la caja para poder ver los pedidos/mesas
-
-        </div>
+    <div class="alerta-caja" role="alert">Abre el local y la caja para poder ver los pedidos/mesas</div>
 
     {% endif %}
-
-
 
     <!-- ======================================== -->
     <!-- JAVASCRIPT -->
     <!-- ======================================== -->
 
     <script src="{% static 'mesas/js/cronometro.js' %}"></script>
-
-
     <script>
-
-        window.setInterval(
-            function () {
-
-                window.location.reload();
-
-            },
-            10000
-        );
-
+      window.setInterval(function () {
+        window.location.reload();
+      }, 10000);
     </script>
-
-
-</body>
-
+  </body>
 </html>

@@ -4,83 +4,40 @@
 <html>
   <head>
     <title>Cocina</title>
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="{% static 'pedidos/css/cocina.css' %}"
-    />
+    <link rel="stylesheet" type="text/css" href="{% static 'pedidos/css/cocina.css' %}" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   </head>
   <body>
     <div class="logo-container">
-      <img
-        src="{% static 'core/img/logo_nexagest.png' %}"
-        alt="Logo Nexagest"
-        class="logo-admin"
-      />
-      <form action="{% url 'logout' %}" method="post" style="display: inline;">
-          {% csrf_token %}
-           <button type="submit" class="btn-logout">Cerrar Sesión</button>
+      <img src="{% static 'core/img/logo_nexagest.png' %}" alt="Logo Nexagest" class="logo-admin" />
+      <form action="{% url 'logout' %}" method="post" style="display: inline">
+        {% csrf_token %}
+        <button type="submit" class="btn-logout">Cerrar Sesión</button>
       </form>
     </div>
     <h1>Pedidos Cocina</h1>
 
-    {% if user.perfil.rol == 'administrador' or user.perfil.rol == 'encargado'  %}
+    {% if user.perfil.rol == 'administrador' or user.perfil.rol == 'encargado' %}
     <div class="contenedor-volver">
-      <a href="{% url 'menu_admin' %}" class="btn-volver">
-        ⚙️ Volver al Panel Maestro
-      </a>
+      <a href="{% url 'menu_admin' %}" class="btn-volver"> ⚙️ Volver al Panel Maestro </a>
     </div>
-    {% endif %}
-
-    {% if user.perfil.rol == 'operador' %}
+    {% endif %} {% if user.perfil.rol == 'operador' %}
     <div class="contenedor-volver">
-      <a href="{% url 'lista_mesas' %}" class="btn-volver">
-        Volver a Pedidos
-      </a>
+      <a href="{% url 'lista_mesas' %}" class="btn-volver"> Volver a Pedidos </a>
     </div>
     {% endif %}
 
     <div class="cocina-container">
       {% for pedido in pedidos_pendientes %}
-      <div
-        class="pedido prioridad-verde"
-        id="pedido-{{ pedido.id }}"
-        {%
-        if
-        pedido.enviado_a_cocina
-        %}
-        data-desde="{{ pedido.enviado_a_cocina.isoformat }}"
-        {%
-        endif
-        %}
-      >
+      <div class="pedido prioridad-verde" id="pedido-{{ pedido.id }}" {% if pedido.enviado_a_cocina %} data-desde="{{ pedido.enviado_a_cocina.isoformat }}" {% endif %}>
         <div class="pedido-header">
-        <h3>
+          <h3>
+            {% if pedido.origen == 'online' %} 🌐 Pedido Online #{{ pedido.id }} {% if pedido.nombre_cliente %} - <strong>{{ pedido.nombre_cliente }}</strong> {% endif %} {% elif
+            restaurante.tipo_local == 'local' %} Pedido: {{ pedido.mesa.numero }} - <strong>{{ pedido.nombre_cliente|default:"Sin nombre" }}</strong>
 
-    {% if pedido.origen == 'online' %}
-
-        🌐 Pedido Online #{{ pedido.id }}
-
-        {% if pedido.nombre_cliente %}
-            - <strong>{{ pedido.nombre_cliente }}</strong>
-        {% endif %}
-
-    {% elif restaurante.tipo_local == 'local' %}
-
-        Pedido: {{ pedido.mesa.numero }}
-        - <strong>{{ pedido.nombre_cliente|default:"Sin nombre" }}</strong>
-
-    {% else %}
-
-        Mesa {{ pedido.mesa.numero }}
-
-    {% endif %}
-
-</h3>
-         <div class="cronometro-cocina">
-           ⏱ <span class="tiempo">--:--</span>
-         </div>
+            {% else %} Mesa {{ pedido.mesa.numero }} {% endif %}
+          </h3>
+          <div class="cronometro-cocina">⏱ <span class="tiempo">--:--</span></div>
         </div>
 
         <ul>
@@ -94,12 +51,7 @@
           {% endfor %}
         </ul>
 
-        <button
-          class="btn-cocina-listo"
-          onclick="marcarPedidoListo({{ pedido.id }})"
-        >
-          ✅ Listo
-        </button>
+        <button class="btn-cocina-listo" onclick="marcarPedidoListo({{ pedido.id }})">✅ Listo</button>
       </div>
       {% empty %}
       <p class="sin-pedidos">No hay pedidos en cocina por el momento.</p>
